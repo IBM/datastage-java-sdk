@@ -1,0 +1,44 @@
+---
+language: java
+dist: xenial
+
+jdk:
+  - openjdk8
+
+notifications:
+  email: true
+
+env:
+  global:
+    - MVN_ARGS="--settings build/.travis.settings.xml"
+
+branches:
+  except:
+  - gh-pages
+
+cache:
+  directories:
+  - "$HOME/.m2"
+
+jobs:
+  include:
+    - stage: Build and run tests
+    - stage: Run system test with template
+      script:
+        - git clone https://github.ibm.com/CloudEngineering/sdkgen-systest.git
+        - cd sdkgen-systest
+        - ./install_scripts/install_deps_ubuntu.sh
+        - ./setup_and_generate.sh -l ibm-java -t $TRAVIS_BRANCH -s
+
+before_install:
+- sudo apt-get update
+- sudo apt-get install python
+- nvm install 12
+- npm install -g npm@6.x
+- echo -e "machine github.ibm.com\n  login $GITHUB_OAUTH_TOKEN" > ~/.netrc
+
+install:
+- curl -s https://codecov.io/bash > $HOME/codecov-bash.sh && chmod +x $HOME/codecov-bash.sh
+
+script:
+-  mvn clean verify $MVN_ARGS
