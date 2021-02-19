@@ -1,8 +1,8 @@
-[![Build Status](https://travis.ibm.com/CloudEngineering/java-sdk-template.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis.ibm.com/CloudEngineering/java-sdk-template)
+[![Build Status](https://travis-ci.com/ibmcloud/datastage-java-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis-ci.com/ibmcloud/datastage-java-sdk)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-# IBM Cloud My Services Java SDK Version 0.0.1
-Java client library to interact with various [IBM Cloud My Services](https://cloud.ibm.com/apidocs?category=<service-category>).
+# DataStage Java SDK Version 0.0.1
+Java client library to interact with various [IBM Cloud DataStage](https://cloud.ibm.com/apidocs?category=datastage).
 
 Disclaimer: this SDK is being released initially as a **pre-release** version.
 Changes might occur which impact applications that use this SDK.
@@ -35,11 +35,11 @@ Changes might occur which impact applications that use this SDK.
 
 ## Overview
 
-The IBM Cloud My Services Java SDK allows developers to programmatically interact with the following IBM Cloud services:
+The IBM Cloud DataStage Java SDK allows developers to programmatically interact with the following IBM Cloud services:
 
 Service Name | Artifact Coordinates
 --- | ---
-[Example Service](https://cloud.ibm.com/apidocs/example-service) | com.ibm.cloud:example-service:0.0.1
+<!-- [Example Service](https://cloud.ibm.com/apidocs/example-service) | com.ibm.cloud:example-service:0.0.1 -->
 
 ## Prerequisites
 
@@ -88,7 +88,7 @@ please ask a question at
 
 ## Issues
 If you encounter an issue with the project, you are welcome to submit a
-[bug report](<github-repo-url>/issues).
+[bug report](https://github.ibm.com/ibmcloud/datastage-java-sdk/issues).
 Before that, please search for similar issues. It's possible that someone has already reported the problem.
 
 ## Open source @ IBM
@@ -99,5 +99,5 @@ See [CONTRIBUTING](CONTRIBUTING.md).
 
 ## License
 
-The IBM Cloud MySDK Java SDK is released under the Apache 2.0 license.
+The IBM Cloud DataStage Java SDK is released under the Apache 2.0 license.
 The license's full text can be found in [LICENSE](LICENSE).

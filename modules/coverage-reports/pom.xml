@@ -3,7 +3,7 @@
     <!-- Update this section to reflect the correct values for your SDK project -->
     <parent>
         <!-- >>> Update this to reflect your parent project's artifact id -->
-        <artifactId>my-services</artifactId>
+        <artifactId>datastage</artifactId>
         <groupId>com.ibm.cloud</groupId>
         <version>99-SNAPSHOT</version>
         <relativePath>../..</relativePath>
@@ -11,10 +11,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- >>> Replace this with the coverage-report module's artifactId (e.g. platform-services-coverage-reports) -->
-    <artifactId>my-services-coverage-reports</artifactId>
+    <artifactId>datastage-coverage-reports</artifactId>
 
     <!-- >>> Replace this with the coverage-report module's description -->
-    <name>My Services Coverage Reports</name>
+    <name>DataStage Coverage Reports</name>
 
     <properties>
 	<!-- There is no need to publish this module's artifacts on maven central -->
@@ -32,18 +32,18 @@
         -->
         <dependency>
             <!-- >>> Replace this with the common module's artifactId -->
-            <artifactId>my-services-common</artifactId>
+            <artifactId>datastage-common</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- Copy and update this section for each service added to the project. -->
-        <dependency>
+<!--        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>example-service</artifactId>
             <version>${project.version}</version>
         </dependency>
-    </dependencies>
+-->    </dependencies>
 
     <build>
         <plugins>

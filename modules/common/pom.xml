@@ -5,17 +5,17 @@
 
     <parent>
         <!-- >>> Replace this with the parent pom's artifactId -->
-        <artifactId>my-services</artifactId>
+        <artifactId>datastage</artifactId>
         <groupId>com.ibm.cloud</groupId>
         <version>99-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
 
     <!-- >>> Replace this with the common module's artifactId (e.g. platform-services-common) -->
-    <artifactId>my-services-common</artifactId>
+    <artifactId>datastage-common</artifactId>
 
     <!-- >>> Replace this with the common module's description (e.g. Platform Services Common Library) -->
-    <name>My Services Common Library</name>
+    <name>DataStage Common Library</name>
     <packaging>jar</packaging>
 
     <dependencies>

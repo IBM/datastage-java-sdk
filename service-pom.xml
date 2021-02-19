@@ -4,7 +4,7 @@
 
     <parent>
         <!-- >>> Replace this with the parent pom's artifactId -->
-        <artifactId>PARENT-ARTIFACTID</artifactId>
+        <artifactId>datastage</artifactId>
         <groupId>com.ibm.cloud</groupId>
         <version>99-SNAPSHOT</version>
         <relativePath>../..</relativePath>
@@ -24,11 +24,11 @@
         </dependency>
         <dependency>
             <!-- >>> Replace this with the "common" module's artifactId (e.g. my-services-common) -->
-            <artifactId>COMMON-ARTIFACTID</artifactId>
+            <artifactId>datastage-common</artifactId>
             <groupId>${project.groupId}</groupId>
         </dependency>
         <dependency>
-            <artifactId>COMMON-ARTIFACTID</artifactId>
+            <artifactId>datastage-common</artifactId>
             <groupId>${project.groupId}</groupId>
             <type>test-jar</type>
             <classifier>tests</classifier>

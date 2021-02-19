@@ -3,16 +3,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- >>> Replace this with your service category (e.g. "platform-services") -->
-    <artifactId>my-services</artifactId>
+    <artifactId>datastage</artifactId>
 
     <!-- >>> Update this field to reflect your project -->
-    <name>IBM Cloud My Services Java SDK</name>
+    <name>DataStage Java SDK</name>
 
     <!-- >>> Update this field to reflect your project -->
-    <description>Java Client Library to access the IBM Cloud My Services</description>
+    <description>Java Client Library to access the IBM Cloud DataStage</description>
 
     <!-- >>> Update this field to reflect your project's github URL -->
-    <url>https://github.ibm.com/CloudEngineering/java-sdk-template</url>
+    <url>https://github.ibm.com/ibmcloud/datastage-java-sdk</url>
 
     <groupId>com.ibm.cloud</groupId>
     <version>99-SNAPSHOT</version>
@@ -29,7 +29,7 @@
         <sdk-core-version>9.5.4</sdk-core-version>
 
         <!-- >>> Replace this with the name of your SDK's github repository -->
-        <git-repository-name>my-services-java-sdk</git-repository-name>
+        <git-repository-name>datastage-java-sdk</git-repository-name>
 
         <testng-version>7.1.0</testng-version>
         <okhttp3-version>4.9.0</okhttp3-version>
@@ -58,7 +58,7 @@
         <module>modules/common</module>
 
         <!-- >>> List each service's module here -->
-        <module>modules/example-service</module>
+        <!-- i.e. <module>modules/example-service</module> -->
 
         <!-- This module should be listed after all the service-related modules above -->
         <module>modules/coverage-reports</module>
@@ -81,21 +81,21 @@
 
     <!-- >>> Update these values to reflect your project -->
     <scm>
-        <connection>scm:git:https://github.ibm.com/CloudEngineering/java-sdk-template</connection>
-        <developerConnection>scm:git:https://github.ibm.com/CloudEngineering/java-sdk-template</developerConnection>
-        <url>https://github.ibm.com/CloudEngineering/java-sdk-template/tree/main</url>
+        <connection>scm:git:https://github.ibm.com/ibmcloud/datastage-java-sdk</connection>
+        <developerConnection>scm:git:https://github.ibm.com/ibmcloud/datastage-java-sdk</developerConnection>
+        <url>https://github.ibm.com/ibmcloud/datastage-java-sdk/tree/main</url>
     </scm>
 
     <!-- >>> Update these values to reflect your project -->
     <issueManagement>
         <system>Github</system>
-        <url>https://github.ibm.com/CloudEngineering/java-sdk-template/issues</url>
+        <url>https://github.ibm.com/ibmcloud/datastage-java-sdk/issues</url>
     </issueManagement>
 
     <!-- >>> Update these values to reflect your project -->
     <ciManagement>
         <system>Travis-CI</system>
-        <url>https://travis.ibm.com/CloudEngineering/java-sdk-template/</url>
+        <url>https://travis.ibm.com/ibmcloud/datastage-java-sdk/</url>
     </ciManagement>
 
     <repositories>
@@ -123,13 +123,13 @@
             <!-- Each module (except "common") should depend on this artifact -->
             <dependency>
                 <!-- >>> Replace this with the common module's artifactId -->
-                <artifactId>my-services-common</artifactId>
+                <artifactId>datastage-common</artifactId>
                 <groupId>${project.groupId}</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <!-- >>> Replace this with the common module's artifactId -->
-                <artifactId>my-services-common</artifactId>
+                <artifactId>datastage-common</artifactId>
                 <groupId>${project.groupId}</groupId>
                 <version>${project.version}</version>
                 <type>test-jar</type>
