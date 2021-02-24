@@ -65,7 +65,7 @@
 
         <!-- This module should always be listed last -->
         <!-- >>> Uncomment the following line if you want to build the examples -->
-        <!-- <module>modules/examples</module> -->
+        <module>modules/ibm-api-for-data-flow-service</module>
     </modules>
 
     <licenses>
