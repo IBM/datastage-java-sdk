@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- >>> Replace this with your service category (e.g. "platform-services") -->
-    <artifactId>datastage</artifactId>
+    <artifactId>datastage-sdk</artifactId>
 
     <!-- >>> Update this field to reflect your project -->
     <name>DataStage Java SDK</name>
@@ -65,7 +65,7 @@
 
         <!-- This module should always be listed last -->
         <!-- >>> Uncomment the following line if you want to build the examples -->
-        <module>modules/ibm-api-for-data-flow-service</module>
+        <module>modules/datastage</module>
     </modules>
 
     <licenses>

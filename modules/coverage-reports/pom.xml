@@ -3,7 +3,7 @@
     <!-- Update this section to reflect the correct values for your SDK project -->
     <parent>
         <!-- >>> Update this to reflect your parent project's artifact id -->
-        <artifactId>datastage</artifactId>
+        <artifactId>datastage-sdk</artifactId>
         <groupId>com.ibm.cloud</groupId>
         <version>99-SNAPSHOT</version>
         <relativePath>../..</relativePath>

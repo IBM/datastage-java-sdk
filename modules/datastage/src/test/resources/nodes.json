@@ -1,0 +1,93 @@
+[{
+	"outputs": [{
+		"id": "3d01fe66-e675-4e7f-ad7b-3ba9a9cff30d",
+		"app_data": {
+			"datastage": {
+				"is_source_of_link": "73a5fb2c-f499-4c75-a8a7-71cea90f5105"
+			},
+			"ui_data": {
+				"label": "outPort"
+			}
+		},
+		"schema_ref": "0e04b1b8-60c2-4b36-bae6-d0c7ae03dd8d",
+		"parameters": {
+			"records": 10
+		}
+	}],
+	"op": "PxRowGenerator",
+	"id": "9fc2ec49-87ed-49c7-bdfc-abb06a46af37",
+	"type": "binding",
+	"app_data": {
+		"ui_data": {
+			"image": "/data-intg/flows/graphics/palette/PxRowGenerator.svg",
+			"description": "Produce a set of mock data based on the specified metadata",
+			"x_pos": 108,
+			"label": "Row_Generator_1",
+			"y_pos": 162
+		}
+	},
+	"parameters": {
+		"output_count": 1,
+		"input_count": 0
+	}
+}, {
+	"outputs": [{
+		"id": "",
+		"app_data": {
+			"ui_data": {
+				"label": "outPort"
+			}
+		}
+	}],
+	"op": "PxPeek",
+	"inputs": [{
+		"links": [{
+			"node_id_ref": "9fc2ec49-87ed-49c7-bdfc-abb06a46af37",
+			"type_attr": "PRIMARY",
+			"id": "73a5fb2c-f499-4c75-a8a7-71cea90f5105",
+			"app_data": {
+				"ui_data": {
+					"decorations": [{
+						"path": "",
+						"outline": true,
+						"hotspot": false,
+						"id": "Link_1",
+						"position": "middle",
+						"label": "Link_1",
+						"class_name": ""
+					}]
+				}
+			},
+			"link_name": "Link_1",
+			"port_id_ref": "3d01fe66-e675-4e7f-ad7b-3ba9a9cff30d"
+		}],
+		"id": "c4195b34-8b4a-473f-b987-fa6d028f3968",
+		"app_data": {
+			"ui_data": {
+				"label": "inPort"
+			}
+		},
+		"schema_ref": "0e04b1b8-60c2-4b36-bae6-d0c7ae03dd8d"
+	}],
+	"id": "4195b012-d3e7-4f74-8099-e7b23ec6ebb9",
+	"type": "execution_node",
+	"app_data": {
+		"ui_data": {
+			"image": "/data-intg/flows/graphics/palette/PxPeek.svg",
+			"description": "Print row column values to either the job log or to a separate output link",
+			"x_pos": 342,
+			"label": "Peek_1",
+			"y_pos": 162
+		}
+	},
+	"parameters": {
+		"all": " ",
+		"columns": " ",
+		"nrecs": 10,
+		"selection": " ",
+		"output_count": 0,
+		"input_count": 1,
+		"name": "name",
+		"dataset": " "
+	}
+}]
