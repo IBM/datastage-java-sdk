@@ -47,9 +47,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +68,11 @@ public class DatastageIT extends SdkIntegrationTestBase {
   public static Map<String, String> config = null;
   private static String PROJECT_ID = null;
   private static String DATASTAGE_FLOW_ID = null;
+  private static String DATASTAGE_FLOW_ID_CLONE = null;
+  private static Object nodes = null;
+  private static Object appData = null;
+  private static Object schemas = null;
+  private static Object schemasUpdated = null;
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
   /**
@@ -77,7 +84,7 @@ public class DatastageIT extends SdkIntegrationTestBase {
   }
 
   @BeforeClass
-  public void constructService() {
+  public void constructService() throws IOException {
     // Ask super if we should skip the tests.
     if (skipTests()) {
       return;
@@ -94,6 +101,19 @@ public class DatastageIT extends SdkIntegrationTestBase {
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
 
+    ObjectMapper mapper = new ObjectMapper();
+    InputStream nodeStream = this.getClass().getClassLoader().getResourceAsStream("nodes.json");
+    InputStream appDataStream = this.getClass().getClassLoader().getResourceAsStream("appdata.json");
+    InputStream schemaStream = this.getClass().getClassLoader().getResourceAsStream("schemas.json");
+    InputStream schemaStreamForUpdate = this.getClass().getClassLoader().getResourceAsStream("schemas_updated.json");
+    String nodesStr = IOUtils.toString(nodeStream, StandardCharsets.UTF_8);
+    String appDataStr = IOUtils.toString(appDataStream, StandardCharsets.UTF_8);
+    String schemaStr = IOUtils.toString(schemaStream, StandardCharsets.UTF_8);
+    String schemaStrForUpdate = IOUtils.toString(schemaStreamForUpdate, StandardCharsets.UTF_8);
+    nodes = mapper.readValue(nodesStr, Object.class);
+    appData = mapper.readValue(appDataStr, Object.class);
+    schemas = mapper.readValue(schemaStr, Object.class);
+    schemasUpdated = mapper.readValue(schemaStrForUpdate, Object.class);
     System.out.println("Setup complete.");
   }
 
@@ -121,17 +141,6 @@ public class DatastageIT extends SdkIntegrationTestBase {
 
   @Test
   public void test02DatastageFlowsCreate() throws Exception {
-    ObjectMapper mapper = new ObjectMapper();
-    InputStream nodeStream = this.getClass().getClassLoader().getResourceAsStream("nodes.json");
-    InputStream appDataStream = this.getClass().getClassLoader().getResourceAsStream("appdata.json");
-    InputStream schemaStream = this.getClass().getClassLoader().getResourceAsStream("schemas.json");
-    String nodesStr = IOUtils.toString(nodeStream, StandardCharsets.UTF_8);
-    String appDataStr = IOUtils.toString(appDataStream, StandardCharsets.UTF_8);
-    String schemaStr = IOUtils.toString(schemaStream, StandardCharsets.UTF_8);
-
-    Object nodes = mapper.readValue(nodesStr, Object.class);
-    Object appData = mapper.readValue(appDataStr, Object.class);
-    Object schemas = mapper.readValue(schemaStr, Object.class);
     try {
       Pipelines pipelinesModel = new Pipelines.Builder()
       .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
@@ -199,50 +208,48 @@ public class DatastageIT extends SdkIntegrationTestBase {
     }
   }
 
-//  @Test
-//  public void test04DatastageFlowsUpdate() throws Exception {
-//    try {
-//      Pipelines pipelinesModel = new Pipelines.Builder()
-//      .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-//      .description("A test DataStage flow updated")
-//      .runtimeRef("pxOsh")
-//      //.nodes(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-//      //.appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-//      .build();
-//
-//      PipelineJson pipelineJsonModel = new PipelineJson.Builder()
-//      .docType("pipeline")
-//      .version("3.0")
-//      .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
-//      .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
-//      .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-//      .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-//      .schemas(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-//      .runtimes(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-//      .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-//      .build();
-//
-//      DatastageFlowsUpdateOptions datastageFlowsUpdateOptions = new DatastageFlowsUpdateOptions.Builder()
-//      .dataIntgFlowId(DATASTAGE_FLOW_ID)
-//      .dataIntgFlowName("testString" + UUID.randomUUID().toString())
-//      //.pipelineFlows(pipelineJsonModel)
-//      .projectId(PROJECT_ID)
-//      .build();
-//
-//      // Invoke operation
-//      Response<DataIntgFlow> response = service.datastageFlowsUpdate(datastageFlowsUpdateOptions).execute();
-//      // Validate response
-//      assertNotNull(response);
-//      assertEquals(response.getStatusCode(), 201);
-//
-//      DataIntgFlow dataIntgFlowResult = response.getResult();
-//
-//      assertNotNull(dataIntgFlowResult);
-//    } catch (ServiceResponseException e) {
-//        fail(String.format("Service returned status code %d: %s\nError details: %s",
-//          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
-//    }
-//  }
+  @Test
+  public void test04DatastageFlowsUpdate() throws Exception {
+    try {
+      Pipelines pipelinesModel = new Pipelines.Builder()
+      .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+      .description("A test DataStage flow updated")
+      .runtimeRef("pxOsh")
+      .nodes(nodes)
+      .appData(appData)
+      .build();
+
+      PipelineJson pipelineJsonModel = new PipelineJson.Builder()
+      .docType("pipeline")
+      .version("3.0")
+      .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
+      .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
+      .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+      .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
+      .schemas(schemasUpdated)
+      .build();
+
+      DatastageFlowsUpdateOptions datastageFlowsUpdateOptions = new DatastageFlowsUpdateOptions.Builder()
+      .dataIntgFlowId(DATASTAGE_FLOW_ID)
+      .dataIntgFlowName("testString" + UUID.randomUUID().toString())
+      .pipelineFlows(pipelineJsonModel)
+      .projectId(PROJECT_ID)
+      .build();
+
+      // Invoke operation
+      Response<DataIntgFlow> response = service.datastageFlowsUpdate(datastageFlowsUpdateOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      DataIntgFlow dataIntgFlowResult = response.getResult();
+
+      assertNotNull(dataIntgFlowResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
 
   @Test
   public void test05DatastageFlowsClone() throws Exception {
@@ -261,6 +268,9 @@ public class DatastageIT extends SdkIntegrationTestBase {
       DataIntgFlow dataIntgFlowResult = response.getResult();
 
       assertNotNull(dataIntgFlowResult);
+      assertNotNull(dataIntgFlowResult.getMetadata());
+      DATASTAGE_FLOW_ID_CLONE = dataIntgFlowResult.getMetadata().getAssetId();
+      assertNotNull(DATASTAGE_FLOW_ID_CLONE);
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s\nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
@@ -364,9 +374,10 @@ public class DatastageIT extends SdkIntegrationTestBase {
 
   @Test
   public void test10DatastageFlowsDelete() throws Exception {
+    String ids[] = new String[] {DATASTAGE_FLOW_ID};
     try {
       DatastageFlowsDeleteOptions datastageFlowsDeleteOptions = new DatastageFlowsDeleteOptions.Builder()
-      .id(new java.util.ArrayList<String>(java.util.Arrays.asList(DATASTAGE_FLOW_ID)))
+      .id(Arrays.asList(ids))
       .projectId(PROJECT_ID)
       .force(true)
       .build();

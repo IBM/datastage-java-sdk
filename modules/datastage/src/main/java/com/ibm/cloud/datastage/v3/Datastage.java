@@ -330,6 +330,7 @@ public class Datastage extends BaseService {
     builder.bodyJson(contentJson);
     ResponseConverter<DataIntgFlow> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataIntgFlow>() { }.getType());
+    System.out.println("update " + contentJson.toString());
     return createServiceCall(builder.build(), responseConverter);
   }
 

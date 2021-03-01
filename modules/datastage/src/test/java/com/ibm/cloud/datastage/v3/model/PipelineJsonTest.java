@@ -13,6 +13,7 @@
 
 package com.ibm.cloud.datastage.v3.model;
 
+import com.google.gson.JsonObject;
 import com.ibm.cloud.datastage.v3.model.PipelineJson;
 import com.ibm.cloud.datastage.v3.model.Pipelines;
 import com.ibm.cloud.datastage.v3.utils.TestUtilities;
@@ -34,6 +35,12 @@ public class PipelineJsonTest {
 
   @Test
   public void testPipelineJson() throws Throwable {
+    JsonObject schemas = new JsonObject();
+    schemas.addProperty("foo", "testString");
+    JsonObject runtimes = new JsonObject();
+    runtimes.addProperty("foo", "testString");
+    JsonObject appData = new JsonObject();
+    appData.addProperty("foo", "testString");
     Pipelines pipelinesModel = new Pipelines.Builder()
       .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
       .description("A test DataStage flow")
@@ -54,9 +61,9 @@ public class PipelineJsonTest {
       .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
       .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
       .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-      .schemas(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-      .runtimes(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-      .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .schemas(schemas)
+      .runtimes(runtimes)
+      .appData(appData)
       .build();
     assertEquals(pipelineJsonModel.docType(), "pipeline");
     assertEquals(pipelineJsonModel.version(), "3.0");
@@ -64,9 +71,9 @@ public class PipelineJsonTest {
     assertEquals(pipelineJsonModel.id(), "84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff");
     assertEquals(pipelineJsonModel.primaryPipeline(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
     assertEquals(pipelineJsonModel.pipelines(), new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)));
-    assertEquals(pipelineJsonModel.schemas(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
-    assertEquals(pipelineJsonModel.runtimes(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
-    assertEquals(pipelineJsonModel.appData(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
+    assertEquals(pipelineJsonModel.schemas().toString(), schemas.toString());
+    assertEquals(pipelineJsonModel.runtimes().toString(), runtimes.toString());
+    assertEquals(pipelineJsonModel.appData().toString(), appData.toString());
 
     String json = TestUtilities.serialize(pipelineJsonModel);
 
