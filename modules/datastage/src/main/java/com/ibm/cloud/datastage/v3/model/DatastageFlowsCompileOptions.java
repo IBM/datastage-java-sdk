@@ -163,7 +163,7 @@ public class DatastageFlowsCompileOptions extends GenericModel {
   /**
    * Gets the runtimeType.
    *
-   * The Type of the runtime to use. e.g. dspxosh or Spark etc. If not provided queried from within pipeline flow if
+   * The type of the runtime to use. e.g. dspxosh or Spark etc. If not provided queried from within pipeline flow if
    * available otherwise default of dspxosh is used.
    *
    * @return the runtimeType

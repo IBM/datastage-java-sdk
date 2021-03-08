@@ -14,6 +14,7 @@ package com.ibm.cloud.datastage.v3.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
@@ -32,10 +33,13 @@ public class PipelineJson extends GenericModel {
   @SerializedName("primary_pipeline")
   protected String primaryPipeline;
   protected List<Pipelines> pipelines;
-  protected Object schemas;
-  protected Object runtimes;
+  protected List<Object> schemas;
+  protected List<Object> runtimes;
   @SerializedName("app_data")
-  protected Object appData;
+  protected Map<String, Object> appData;
+  protected Map<String, Object> parameters;
+  @SerializedName("external_paramsets")
+  protected List<Object> externalParamsets;
 
   /**
    * Builder.
@@ -47,9 +51,11 @@ public class PipelineJson extends GenericModel {
     private String id;
     private String primaryPipeline;
     private List<Pipelines> pipelines;
-    private Object schemas;
-    private Object runtimes;
-    private Object appData;
+    private List<Object> schemas;
+    private List<Object> runtimes;
+    private Map<String, Object> appData;
+    private Map<String, Object> parameters;
+    private List<Object> externalParamsets;
 
     private Builder(PipelineJson pipelineJson) {
       this.docType = pipelineJson.docType;
@@ -61,6 +67,8 @@ public class PipelineJson extends GenericModel {
       this.schemas = pipelineJson.schemas;
       this.runtimes = pipelineJson.runtimes;
       this.appData = pipelineJson.appData;
+      this.parameters = pipelineJson.parameters;
+      this.externalParamsets = pipelineJson.externalParamsets;
     }
 
     /**
@@ -91,6 +99,54 @@ public class PipelineJson extends GenericModel {
         this.pipelines = new ArrayList<Pipelines>();
       }
       this.pipelines.add(pipelines);
+      return this;
+    }
+
+    /**
+     * Adds an schemas to schemas.
+     *
+     * @param schemas the new schemas
+     * @return the PipelineJson builder
+     */
+    public Builder addSchemas(Object schemas) {
+      com.ibm.cloud.sdk.core.util.Validator.notNull(schemas,
+        "schemas cannot be null");
+      if (this.schemas == null) {
+        this.schemas = new ArrayList<Object>();
+      }
+      this.schemas.add(schemas);
+      return this;
+    }
+
+    /**
+     * Adds an runtimes to runtimes.
+     *
+     * @param runtimes the new runtimes
+     * @return the PipelineJson builder
+     */
+    public Builder addRuntimes(Object runtimes) {
+      com.ibm.cloud.sdk.core.util.Validator.notNull(runtimes,
+        "runtimes cannot be null");
+      if (this.runtimes == null) {
+        this.runtimes = new ArrayList<Object>();
+      }
+      this.runtimes.add(runtimes);
+      return this;
+    }
+
+    /**
+     * Adds an externalParamsets to externalParamsets.
+     *
+     * @param externalParamsets the new externalParamsets
+     * @return the PipelineJson builder
+     */
+    public Builder addExternalParamsets(Object externalParamsets) {
+      com.ibm.cloud.sdk.core.util.Validator.notNull(externalParamsets,
+        "externalParamsets cannot be null");
+      if (this.externalParamsets == null) {
+        this.externalParamsets = new ArrayList<Object>();
+      }
+      this.externalParamsets.add(externalParamsets);
       return this;
     }
 
@@ -163,22 +219,24 @@ public class PipelineJson extends GenericModel {
 
     /**
      * Set the schemas.
+     * Existing schemas will be replaced.
      *
      * @param schemas the schemas
      * @return the PipelineJson builder
      */
-    public Builder schemas(Object schemas) {
+    public Builder schemas(List<Object> schemas) {
       this.schemas = schemas;
       return this;
     }
 
     /**
      * Set the runtimes.
+     * Existing runtimes will be replaced.
      *
      * @param runtimes the runtimes
      * @return the PipelineJson builder
      */
-    public Builder runtimes(Object runtimes) {
+    public Builder runtimes(List<Object> runtimes) {
       this.runtimes = runtimes;
       return this;
     }
@@ -189,8 +247,31 @@ public class PipelineJson extends GenericModel {
      * @param appData the appData
      * @return the PipelineJson builder
      */
-    public Builder appData(Object appData) {
+    public Builder appData(Map<String, Object> appData) {
       this.appData = appData;
+      return this;
+    }
+
+    /**
+     * Set the parameters.
+     *
+     * @param parameters the parameters
+     * @return the PipelineJson builder
+     */
+    public Builder parameters(Map<String, Object> parameters) {
+      this.parameters = parameters;
+      return this;
+    }
+
+    /**
+     * Set the externalParamsets.
+     * Existing externalParamsets will be replaced.
+     *
+     * @param externalParamsets the externalParamsets
+     * @return the PipelineJson builder
+     */
+    public Builder externalParamsets(List<Object> externalParamsets) {
+      this.externalParamsets = externalParamsets;
       return this;
     }
   }
@@ -205,6 +286,8 @@ public class PipelineJson extends GenericModel {
     schemas = builder.schemas;
     runtimes = builder.runtimes;
     appData = builder.appData;
+    parameters = builder.parameters;
+    externalParamsets = builder.externalParamsets;
   }
 
   /**
@@ -241,7 +324,7 @@ public class PipelineJson extends GenericModel {
   /**
    * Gets the jsonSchema.
    *
-   * Pipeline flow schema used.
+   * Refers to the JSON schema used to validate documents of this type.
    *
    * @return the jsonSchema
    */
@@ -252,7 +335,7 @@ public class PipelineJson extends GenericModel {
   /**
    * Gets the id.
    *
-   * Pipeline flow ID.
+   * Document identifier, GUID recommended.
    *
    * @return the id
    */
@@ -263,7 +346,7 @@ public class PipelineJson extends GenericModel {
   /**
    * Gets the primaryPipeline.
    *
-   * Primary pipeline ID.
+   * Reference to the primary (main) pipeline flow within the document.
    *
    * @return the primaryPipeline
    */
@@ -287,7 +370,7 @@ public class PipelineJson extends GenericModel {
    *
    * @return the schemas
    */
-  public Object schemas() {
+  public List<Object> schemas() {
     return schemas;
   }
 
@@ -298,19 +381,41 @@ public class PipelineJson extends GenericModel {
    *
    * @return the runtimes
    */
-  public Object runtimes() {
+  public List<Object> runtimes() {
     return runtimes;
   }
 
   /**
    * Gets the appData.
    *
-   * Additional parameters for pipeline flow.
+   * Object containing app-specific data.
    *
    * @return the appData
    */
-  public Object appData() {
+  public Map<String, Object> appData() {
     return appData;
+  }
+
+  /**
+   * Gets the parameters.
+   *
+   * Parameters for the flow document.
+   *
+   * @return the parameters
+   */
+  public Map<String, Object> parameters() {
+    return parameters;
+  }
+
+  /**
+   * Gets the externalParamsets.
+   *
+   * Array of parameter set references.
+   *
+   * @return the externalParamsets
+   */
+  public List<Object> externalParamsets() {
+    return externalParamsets;
   }
 }
 

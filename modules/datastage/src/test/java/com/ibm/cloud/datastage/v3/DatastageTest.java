@@ -179,7 +179,7 @@ public class DatastageTest extends PowerMockTestCase {
     .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
     .description("A test DataStage flow")
     .runtimeRef("pxOsh")
-    .nodes(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
     .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
     .build();
 
@@ -191,9 +191,11 @@ public class DatastageTest extends PowerMockTestCase {
     .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
     .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
     .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-    .schemas(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-    .runtimes(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .schemas(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .runtimes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
     .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .parameters(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .externalParamsets(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
     .build();
 
     // Construct an instance of the DatastageFlowsCreateOptions model
@@ -370,7 +372,7 @@ public class DatastageTest extends PowerMockTestCase {
     .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
     .description("A test DataStage flow")
     .runtimeRef("pxOsh")
-    .nodes(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
     .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
     .build();
 
@@ -382,9 +384,11 @@ public class DatastageTest extends PowerMockTestCase {
     .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
     .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
     .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-    .schemas(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-    .runtimes(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .schemas(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .runtimes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
     .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .parameters(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .externalParamsets(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
     .build();
 
     // Construct an instance of the DatastageFlowsUpdateOptions model

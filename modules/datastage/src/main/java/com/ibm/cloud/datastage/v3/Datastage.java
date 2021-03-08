@@ -330,7 +330,6 @@ public class Datastage extends BaseService {
     builder.bodyJson(contentJson);
     ResponseConverter<DataIntgFlow> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataIntgFlow>() { }.getType());
-    System.out.println("update " + contentJson.toString());
     return createServiceCall(builder.build(), responseConverter);
   }
 
@@ -366,7 +365,7 @@ public class Datastage extends BaseService {
   }
 
   /**
-   * Compile DataStage Flow to generate runtime assets.
+   * Compile DataStage flow to generate runtime assets.
    *
    * Generate the runtime assets for a DataStage flow in the specified project or catalog (either project_id or
    * catalog_id must be set) for specified runtime type.

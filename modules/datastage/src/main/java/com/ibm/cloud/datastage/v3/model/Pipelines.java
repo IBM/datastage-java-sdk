@@ -12,6 +12,10 @@
  */
 package com.ibm.cloud.datastage.v3.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
@@ -24,9 +28,9 @@ public class Pipelines extends GenericModel {
   protected String description;
   @SerializedName("runtime_ref")
   protected String runtimeRef;
-  protected Object nodes;
+  protected List<Object> nodes;
   @SerializedName("app_data")
-  protected Object appData;
+  protected Map<String, Object> appData;
 
   /**
    * Builder.
@@ -35,8 +39,8 @@ public class Pipelines extends GenericModel {
     private String id;
     private String description;
     private String runtimeRef;
-    private Object nodes;
-    private Object appData;
+    private List<Object> nodes;
+    private Map<String, Object> appData;
 
     private Builder(Pipelines pipelines) {
       this.id = pipelines.id;
@@ -59,6 +63,22 @@ public class Pipelines extends GenericModel {
      */
     public Pipelines build() {
       return new Pipelines(this);
+    }
+
+    /**
+     * Adds an nodes to nodes.
+     *
+     * @param nodes the new nodes
+     * @return the Pipelines builder
+     */
+    public Builder addNodes(Object nodes) {
+      com.ibm.cloud.sdk.core.util.Validator.notNull(nodes,
+        "nodes cannot be null");
+      if (this.nodes == null) {
+        this.nodes = new ArrayList<Object>();
+      }
+      this.nodes.add(nodes);
+      return this;
     }
 
     /**
@@ -96,11 +116,12 @@ public class Pipelines extends GenericModel {
 
     /**
      * Set the nodes.
+     * Existing nodes will be replaced.
      *
      * @param nodes the nodes
      * @return the Pipelines builder
      */
-    public Builder nodes(Object nodes) {
+    public Builder nodes(List<Object> nodes) {
       this.nodes = nodes;
       return this;
     }
@@ -111,7 +132,7 @@ public class Pipelines extends GenericModel {
      * @param appData the appData
      * @return the Pipelines builder
      */
-    public Builder appData(Object appData) {
+    public Builder appData(Map<String, Object> appData) {
       this.appData = appData;
       return this;
     }
@@ -137,7 +158,7 @@ public class Pipelines extends GenericModel {
   /**
    * Gets the id.
    *
-   * Pipeline ID.
+   * Unique identifier.
    *
    * @return the id
    */
@@ -174,18 +195,18 @@ public class Pipelines extends GenericModel {
    *
    * @return the nodes
    */
-  public Object nodes() {
+  public List<Object> nodes() {
     return nodes;
   }
 
   /**
    * Gets the appData.
    *
-   * additional parameters for pipeline flow.
+   * Object containing app-specific data.
    *
    * @return the appData
    */
-  public Object appData() {
+  public Map<String, Object> appData() {
     return appData;
   }
 }
