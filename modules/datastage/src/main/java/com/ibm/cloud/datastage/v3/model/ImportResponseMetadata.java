@@ -22,76 +22,21 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class ImportResponseMetadata extends GenericModel {
 
-  protected String id;
-  protected String name;
-  protected String url;
-  @SerializedName("project_id")
-  protected String projectId;
-  @SerializedName("project_name")
-  protected String projectName;
   @SerializedName("catalog_id")
   protected String catalogId;
   @SerializedName("created_at")
   protected Date createdAt;
-  @SerializedName("modified_at")
-  protected Date modifiedAt;
   @SerializedName("created_by")
   protected String createdBy;
-
-  /**
-   * Gets the id.
-   *
-   * The unique import id.
-   *
-   * @return the id
-   */
-  public String getId() {
-    return id;
-  }
-
-  /**
-   * Gets the name.
-   *
-   * import file name.
-   *
-   * @return the name
-   */
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * Gets the url.
-   *
-   * The URL which can be used to get the status of the import request right after it is submitted.
-   *
-   * @return the url
-   */
-  public String getUrl() {
-    return url;
-  }
-
-  /**
-   * Gets the projectId.
-   *
-   * Project id.
-   *
-   * @return the projectId
-   */
-  public String getProjectId() {
-    return projectId;
-  }
-
-  /**
-   * Gets the projectName.
-   *
-   * Project name.
-   *
-   * @return the projectName
-   */
-  public String getProjectName() {
-    return projectName;
-  }
+  protected String id;
+  @SerializedName("modified_at")
+  protected Date modifiedAt;
+  protected String name;
+  @SerializedName("project_id")
+  protected String projectId;
+  @SerializedName("project_name")
+  protected String projectName;
+  protected String url;
 
   /**
    * Gets the catalogId.
@@ -117,6 +62,28 @@ public class ImportResponseMetadata extends GenericModel {
   }
 
   /**
+   * Gets the createdBy.
+   *
+   * Account ID of the user who submitted the import request.
+   *
+   * @return the createdBy
+   */
+  public String getCreatedBy() {
+    return createdBy;
+  }
+
+  /**
+   * Gets the id.
+   *
+   * The unique import id.
+   *
+   * @return the id
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
    * Gets the modifiedAt.
    *
    * The timestamp when the import status was last updated. In format YYYY-MM-DDTHH:mm:ssZ or YYYY-MM-DDTHH:mm:ss.sssZ,
@@ -129,14 +96,47 @@ public class ImportResponseMetadata extends GenericModel {
   }
 
   /**
-   * Gets the createdBy.
+   * Gets the name.
    *
-   * Account ID of the user who submitted the import request.
+   * import file name.
    *
-   * @return the createdBy
+   * @return the name
    */
-  public String getCreatedBy() {
-    return createdBy;
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Gets the projectId.
+   *
+   * Project id.
+   *
+   * @return the projectId
+   */
+  public String getProjectId() {
+    return projectId;
+  }
+
+  /**
+   * Gets the projectName.
+   *
+   * Project name.
+   *
+   * @return the projectName
+   */
+  public String getProjectName() {
+    return projectName;
+  }
+
+  /**
+   * Gets the url.
+   *
+   * The URL which can be used to get the status of the import request right after it is submitted.
+   *
+   * @return the url
+   */
+  public String getUrl() {
+    return url;
   }
 }
 

@@ -22,38 +22,26 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class AssetSystemMetadataUsage extends GenericModel {
 
-  @SerializedName("last_modification_time")
-  protected Date lastModificationTime;
-  @SerializedName("last_modifier_id")
-  protected String lastModifierId;
+  @SerializedName("access_count")
+  protected Long accessCount;
   @SerializedName("last_access_time")
   protected Date lastAccessTime;
   @SerializedName("last_accessor_id")
   protected String lastAccessorId;
-  @SerializedName("access_count")
-  protected Long accessCount;
+  @SerializedName("last_modification_time")
+  protected Date lastModificationTime;
+  @SerializedName("last_modifier_id")
+  protected String lastModifierId;
 
   /**
-   * Gets the lastModificationTime.
+   * Gets the accessCount.
    *
-   * The timestamp when the asset was last modified (in format YYYY-MM-DDTHH:mm:ssZ or YYYY-MM-DDTHH:mm:ss.sssZ,
-   * matching the date-time format as specified by RFC 3339).
+   * Number of times this asset has been accessed.
    *
-   * @return the lastModificationTime
+   * @return the accessCount
    */
-  public Date getLastModificationTime() {
-    return lastModificationTime;
-  }
-
-  /**
-   * Gets the lastModifierId.
-   *
-   * The IAM ID of the user that last modified the asset.
-   *
-   * @return the lastModifierId
-   */
-  public String getLastModifierId() {
-    return lastModifierId;
+  public Long getAccessCount() {
+    return accessCount;
   }
 
   /**
@@ -80,14 +68,26 @@ public class AssetSystemMetadataUsage extends GenericModel {
   }
 
   /**
-   * Gets the accessCount.
+   * Gets the lastModificationTime.
    *
-   * Number of times this asset has been accessed.
+   * The timestamp when the asset was last modified (in format YYYY-MM-DDTHH:mm:ssZ or YYYY-MM-DDTHH:mm:ss.sssZ,
+   * matching the date-time format as specified by RFC 3339).
    *
-   * @return the accessCount
+   * @return the lastModificationTime
    */
-  public Long getAccessCount() {
-    return accessCount;
+  public Date getLastModificationTime() {
+    return lastModificationTime;
+  }
+
+  /**
+   * Gets the lastModifierId.
+   *
+   * The IAM ID of the user that last modified the asset.
+   *
+   * @return the lastModifierId
+   */
+  public String getLastModifierId() {
+    return lastModifierId;
   }
 }
 

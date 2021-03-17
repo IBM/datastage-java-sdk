@@ -21,8 +21,19 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class AssetEntityROV extends GenericModel {
 
-  protected Long mode;
   protected List<String> members;
+  protected Long mode;
+
+  /**
+   * Gets the members.
+   *
+   * An array of members belonging to AssetEntityROV.
+   *
+   * @return the members
+   */
+  public List<String> getMembers() {
+    return members;
+  }
 
   /**
    * Gets the mode.
@@ -34,17 +45,6 @@ public class AssetEntityROV extends GenericModel {
    */
   public Long getMode() {
     return mode;
-  }
-
-  /**
-   * Gets the members.
-   *
-   * An array of members belonging to AssetEntityROV.
-   *
-   * @return the members
-   */
-  public List<String> getMembers() {
-    return members;
   }
 }
 

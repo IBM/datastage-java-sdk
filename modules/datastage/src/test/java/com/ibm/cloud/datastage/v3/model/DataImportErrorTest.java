@@ -32,8 +32,8 @@ public class DataImportErrorTest {
   @Test
   public void testDataImportError() throws Throwable {
     DataImportError dataImportErrorModel = new DataImportError();
-    assertNull(dataImportErrorModel.getType());
-    assertNull(dataImportErrorModel.getName());
     assertNull(dataImportErrorModel.getDescription());
+    assertNull(dataImportErrorModel.getName());
+    assertNull(dataImportErrorModel.getType());
   }
 }

@@ -21,6 +21,7 @@ import com.google.gson.JsonObject;
 import com.ibm.cloud.datastage.common.SdkCommon;
 import com.ibm.cloud.datastage.v3.model.DataFlowPagedCollection;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlow;
+import com.ibm.cloud.datastage.v3.model.DataIntgFlowJson;
 import com.ibm.cloud.datastage.v3.model.DatastageFlowsCloneOptions;
 import com.ibm.cloud.datastage.v3.model.DatastageFlowsCompileOptions;
 import com.ibm.cloud.datastage.v3.model.DatastageFlowsCreateOptions;
@@ -46,8 +47,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * The IBM  Data API Data Flow service provides APIs to manage, edit, and run data flows in supported runtimes such as
- * PX-Engine.
+ * The IBM DataStage service provides APIs to manage, edit, and run data flows in supported runtimes such as PX-Engine.
  *
  * @version v3
  */
@@ -91,6 +91,43 @@ public class Datastage extends BaseService {
   public Datastage(String serviceName, Authenticator authenticator) {
     super(serviceName, authenticator);
     setServiceUrl(DEFAULT_SERVICE_URL);
+  }
+
+  /**
+   * Delete DataStage flows.
+   *
+   * Deletes the specified data flows in a project or catalog (either project_id or catalog_id must be set).
+   *
+   * If the deletion of the data flows and their runs will take some time to finish, then a 202 response will be
+   * returned and the deletion will continue asynchronously.
+   *          All the data flow runs associated with the data flows will also be deleted. If a data flow is still
+   * running, it will not be deleted unless the force parameter is set to true. If a data flow is still running and the
+   * force parameter is set to true, the call returns immediately with a 202 response. The related data flows are
+   * deleted after the data flow runs are stopped.
+   *
+   * @param datastageFlowsDeleteOptions the {@link DatastageFlowsDeleteOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a void result
+   */
+  public ServiceCall<Void> datastageFlowsDelete(DatastageFlowsDeleteOptions datastageFlowsDeleteOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(datastageFlowsDeleteOptions,
+      "datastageFlowsDeleteOptions cannot be null");
+    RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows"));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "datastageFlowsDelete");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.query("id", RequestUtils.join(datastageFlowsDeleteOptions.id(), ","));
+    if (datastageFlowsDeleteOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(datastageFlowsDeleteOptions.catalogId()));
+    }
+    if (datastageFlowsDeleteOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(datastageFlowsDeleteOptions.projectId()));
+    }
+    if (datastageFlowsDeleteOptions.force() != null) {
+      builder.query("force", String.valueOf(datastageFlowsDeleteOptions.force()));
+    }
+    ResponseConverter<Void> responseConverter = ResponseConverterUtils.getVoid();
+    return createServiceCall(builder.build(), responseConverter);
   }
 
   /**
@@ -229,52 +266,15 @@ public class Datastage extends BaseService {
   }
 
   /**
-   * Delete DataStage flows.
-   *
-   * Deletes the specified data flows in a project or catalog (either project_id or catalog_id must be set).
-   *
-   * If the deletion of the data flows and their runs will take some time to finish, then a 202 response will be
-   * returned and the deletion will continue asynchronously.
-   *          All the data flow runs associated with the data flows will also be deleted. If a data flow is still
-   * running, it will not be deleted unless the force parameter is set to true. If a data flow is still running and the
-   * force parameter is set to true, the call returns immediately with a 202 response. The related data flows are
-   * deleted after the data flow runs are stopped.
-   *
-   * @param datastageFlowsDeleteOptions the {@link DatastageFlowsDeleteOptions} containing the options for the call
-   * @return a {@link ServiceCall} with a void result
-   */
-  public ServiceCall<Void> datastageFlowsDelete(DatastageFlowsDeleteOptions datastageFlowsDeleteOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(datastageFlowsDeleteOptions,
-      "datastageFlowsDeleteOptions cannot be null");
-    RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows"));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "datastageFlowsDelete");
-    for (Entry<String, String> header : sdkHeaders.entrySet()) {
-      builder.header(header.getKey(), header.getValue());
-    }
-    builder.query("id", RequestUtils.join(datastageFlowsDeleteOptions.id(), ","));
-    if (datastageFlowsDeleteOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(datastageFlowsDeleteOptions.catalogId()));
-    }
-    if (datastageFlowsDeleteOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(datastageFlowsDeleteOptions.projectId()));
-    }
-    if (datastageFlowsDeleteOptions.force() != null) {
-      builder.query("force", String.valueOf(datastageFlowsDeleteOptions.force()));
-    }
-    ResponseConverter<Void> responseConverter = ResponseConverterUtils.getVoid();
-    return createServiceCall(builder.build(), responseConverter);
-  }
-
-  /**
    * Get DataStage flow.
    *
    * Lists the DataStage flow that is contained in the specified project. Attachments, metadata and a limited number of
    * attributes from the entity of each DataStage flow is returned.
    *
    * @param datastageFlowsGetOptions the {@link DatastageFlowsGetOptions} containing the options for the call
-   * @return a {@link ServiceCall} with a result of type {@link DataIntgFlow}
+   * @return a {@link ServiceCall} with a result of type {@link DataIntgFlowJson}
    */
-  public ServiceCall<DataIntgFlow> datastageFlowsGet(DatastageFlowsGetOptions datastageFlowsGetOptions) {
+  public ServiceCall<DataIntgFlowJson> datastageFlowsGet(DatastageFlowsGetOptions datastageFlowsGetOptions) {
     com.ibm.cloud.sdk.core.util.Validator.notNull(datastageFlowsGetOptions,
       "datastageFlowsGetOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
@@ -291,8 +291,8 @@ public class Datastage extends BaseService {
     if (datastageFlowsGetOptions.projectId() != null) {
       builder.query("project_id", String.valueOf(datastageFlowsGetOptions.projectId()));
     }
-    ResponseConverter<DataIntgFlow> responseConverter =
-      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataIntgFlow>() { }.getType());
+    ResponseConverter<DataIntgFlowJson> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataIntgFlowJson>() { }.getType());
     return createServiceCall(builder.build(), responseConverter);
   }
 
@@ -446,6 +446,35 @@ public class Datastage extends BaseService {
   }
 
   /**
+   * Cancel a previous import request.
+   *
+   * Cancel a previous import request. Use GET /v3/migration/imports/{import_id} to obtain the current status of the
+   * import, including whether it has been cancelled.
+   *
+   * @param migrationDeleteOptions the {@link MigrationDeleteOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a void result
+   */
+  public ServiceCall<Void> migrationDelete(MigrationDeleteOptions migrationDeleteOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(migrationDeleteOptions,
+      "migrationDeleteOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("import_id", migrationDeleteOptions.importId());
+    RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/migration/isx_imports/{import_id}", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "migrationDelete");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    if (migrationDeleteOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(migrationDeleteOptions.catalogId()));
+    }
+    if (migrationDeleteOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(migrationDeleteOptions.projectId()));
+    }
+    ResponseConverter<Void> responseConverter = ResponseConverterUtils.getVoid();
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
    * Get the status of a previous import request.
    *
    * Gets the status of an import request. The status field in the response object indicates if the given import is
@@ -474,35 +503,6 @@ public class Datastage extends BaseService {
     }
     ResponseConverter<ImportResponse> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<ImportResponse>() { }.getType());
-    return createServiceCall(builder.build(), responseConverter);
-  }
-
-  /**
-   * Cancel a previous import request.
-   *
-   * Cancel a previous import request. Use GET /v3/migration/imports/{import_id} to obtain the current status of the
-   * import, including whether it has been cancelled.
-   *
-   * @param migrationDeleteOptions the {@link MigrationDeleteOptions} containing the options for the call
-   * @return a {@link ServiceCall} with a void result
-   */
-  public ServiceCall<Void> migrationDelete(MigrationDeleteOptions migrationDeleteOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(migrationDeleteOptions,
-      "migrationDeleteOptions cannot be null");
-    Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("import_id", migrationDeleteOptions.importId());
-    RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/migration/isx_imports/{import_id}", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "migrationDelete");
-    for (Entry<String, String> header : sdkHeaders.entrySet()) {
-      builder.header(header.getKey(), header.getValue());
-    }
-    if (migrationDeleteOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(migrationDeleteOptions.catalogId()));
-    }
-    if (migrationDeleteOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(migrationDeleteOptions.projectId()));
-    }
-    ResponseConverter<Void> responseConverter = ResponseConverterUtils.getVoid();
     return createServiceCall(builder.build(), responseConverter);
   }
 

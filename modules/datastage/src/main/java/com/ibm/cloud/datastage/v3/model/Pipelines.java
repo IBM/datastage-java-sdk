@@ -24,30 +24,30 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class Pipelines extends GenericModel {
 
-  protected String id;
-  protected String description;
-  @SerializedName("runtime_ref")
-  protected String runtimeRef;
-  protected List<Object> nodes;
   @SerializedName("app_data")
   protected Map<String, Object> appData;
+  protected String description;
+  protected String id;
+  protected List<Object> nodes;
+  @SerializedName("runtime_ref")
+  protected String runtimeRef;
 
   /**
    * Builder.
    */
   public static class Builder {
-    private String id;
-    private String description;
-    private String runtimeRef;
-    private List<Object> nodes;
     private Map<String, Object> appData;
+    private String description;
+    private String id;
+    private List<Object> nodes;
+    private String runtimeRef;
 
     private Builder(Pipelines pipelines) {
-      this.id = pipelines.id;
-      this.description = pipelines.description;
-      this.runtimeRef = pipelines.runtimeRef;
-      this.nodes = pipelines.nodes;
       this.appData = pipelines.appData;
+      this.description = pipelines.description;
+      this.id = pipelines.id;
+      this.nodes = pipelines.nodes;
+      this.runtimeRef = pipelines.runtimeRef;
     }
 
     /**
@@ -82,13 +82,13 @@ public class Pipelines extends GenericModel {
     }
 
     /**
-     * Set the id.
+     * Set the appData.
      *
-     * @param id the id
+     * @param appData the appData
      * @return the Pipelines builder
      */
-    public Builder id(String id) {
-      this.id = id;
+    public Builder appData(Map<String, Object> appData) {
+      this.appData = appData;
       return this;
     }
 
@@ -104,13 +104,13 @@ public class Pipelines extends GenericModel {
     }
 
     /**
-     * Set the runtimeRef.
+     * Set the id.
      *
-     * @param runtimeRef the runtimeRef
+     * @param id the id
      * @return the Pipelines builder
      */
-    public Builder runtimeRef(String runtimeRef) {
-      this.runtimeRef = runtimeRef;
+    public Builder id(String id) {
+      this.id = id;
       return this;
     }
 
@@ -127,23 +127,23 @@ public class Pipelines extends GenericModel {
     }
 
     /**
-     * Set the appData.
+     * Set the runtimeRef.
      *
-     * @param appData the appData
+     * @param runtimeRef the runtimeRef
      * @return the Pipelines builder
      */
-    public Builder appData(Map<String, Object> appData) {
-      this.appData = appData;
+    public Builder runtimeRef(String runtimeRef) {
+      this.runtimeRef = runtimeRef;
       return this;
     }
   }
 
   protected Pipelines(Builder builder) {
-    id = builder.id;
-    description = builder.description;
-    runtimeRef = builder.runtimeRef;
-    nodes = builder.nodes;
     appData = builder.appData;
+    description = builder.description;
+    id = builder.id;
+    nodes = builder.nodes;
+    runtimeRef = builder.runtimeRef;
   }
 
   /**
@@ -156,14 +156,14 @@ public class Pipelines extends GenericModel {
   }
 
   /**
-   * Gets the id.
+   * Gets the appData.
    *
-   * Unique identifier.
+   * Object containing app-specific data.
    *
-   * @return the id
+   * @return the appData
    */
-  public String id() {
-    return id;
+  public Map<String, Object> appData() {
+    return appData;
   }
 
   /**
@@ -178,14 +178,14 @@ public class Pipelines extends GenericModel {
   }
 
   /**
-   * Gets the runtimeRef.
+   * Gets the id.
    *
-   * Reference to the runtime type.
+   * Unique identifier.
    *
-   * @return the runtimeRef
+   * @return the id
    */
-  public String runtimeRef() {
-    return runtimeRef;
+  public String id() {
+    return id;
   }
 
   /**
@@ -200,14 +200,14 @@ public class Pipelines extends GenericModel {
   }
 
   /**
-   * Gets the appData.
+   * Gets the runtimeRef.
    *
-   * Object containing app-specific data.
+   * Reference to the runtime type.
    *
-   * @return the appData
+   * @return the runtimeRef
    */
-  public Map<String, Object> appData() {
-    return appData;
+  public String runtimeRef() {
+    return runtimeRef;
   }
 }
 

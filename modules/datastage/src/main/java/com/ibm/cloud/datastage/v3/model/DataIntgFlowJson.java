@@ -12,38 +12,48 @@
  */
 package com.ibm.cloud.datastage.v3.model;
 
-import java.util.Map;
-
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Describes the compile response model.
+ * A pipeline JSON containing operations to apply to source(s).
  */
-public class FlowCompileResponse extends GenericModel {
+public class DataIntgFlowJson extends GenericModel {
 
-  protected Map<String, Object> message;
-  protected String type;
+  protected PipelineJson attachments;
+  protected DataIntgFlowEntity entity;
+  protected AssetSystemMetadata metadata;
 
   /**
-   * Gets the message.
+   * Gets the attachments.
    *
-   * Compile result for DataStage flow.
+   * Pipeline flow to be stored.
    *
-   * @return the message
+   * @return the attachments
    */
-  public Map<String, Object> getMessage() {
-    return message;
+  public PipelineJson getAttachments() {
+    return attachments;
   }
 
   /**
-   * Gets the type.
+   * Gets the entity.
    *
-   * Compile response type. e.g. ok or error.
+   * The underlying DataStage flow definition.
    *
-   * @return the type
+   * @return the entity
    */
-  public String getType() {
-    return type;
+  public DataIntgFlowEntity getEntity() {
+    return entity;
+  }
+
+  /**
+   * Gets the metadata.
+   *
+   * System metadata about an asset.
+   *
+   * @return the metadata
+   */
+  public AssetSystemMetadata getMetadata() {
+    return metadata;
   }
 }
 

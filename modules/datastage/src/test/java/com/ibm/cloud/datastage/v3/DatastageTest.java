@@ -20,6 +20,7 @@ import com.ibm.cloud.datastage.v3.model.DataFlowPagedCollection;
 import com.ibm.cloud.datastage.v3.model.DataImportError;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlow;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowEntity;
+import com.ibm.cloud.datastage.v3.model.DataIntgFlowJson;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowLock;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowLockEntity;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowLockMetadata;
@@ -111,139 +112,6 @@ public class DatastageTest extends PowerMockTestCase {
   }
 
   @Test
-  public void testDatastageFlowsListWOptions() throws Throwable {
-    // Schedule some responses.
-    String mockResponseBody = "{\"data_flows\": [{\"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"size\": 4, \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"description\": \"description\", \"tags\": [\"tags\"], \"source_system\": {\"mapKey\": \"anyValue\"}, \"usage\": {\"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\", \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"access_count\": 11}}, \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"lock\": {\"metadata\": {\"alive\": false}, \"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}}, \"description\": \"description\", \"name\": \"name\", \"rov\": {\"mode\": 4, \"members\": [\"members\"]}, \"sub_type\": \"subType\"}, \"attachments\": {\"mapKey\": \"anyValue\"}}], \"first\": {\"href\": \"href\"}, \"prev\": {\"href\": \"href\"}, \"next\": {\"href\": \"href\"}, \"last\": {\"href\": \"href\"}, \"limit\": 5, \"total_count\": 10}";
-    String datastageFlowsListPath = "/v3/data_intg_flows";
-
-    server.enqueue(new MockResponse()
-    .setHeader("Content-type", "application/json;charset=utf-8")
-    .setResponseCode(200)
-    .setBody(mockResponseBody));
-
-    constructClientService();
-
-    // Construct an instance of the DatastageFlowsListOptions model
-    DatastageFlowsListOptions datastageFlowsListOptionsModel = new DatastageFlowsListOptions.Builder()
-    .catalogId("testString")
-    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
-    .sort("testString")
-    .start("testString")
-    .limit(Long.valueOf("100"))
-    .entityName("testString")
-    .entityDescription("testString")
-    .build();
-
-    // Invoke operation with valid options model (positive test)
-    Response<DataFlowPagedCollection> response = datastageService.datastageFlowsList(datastageFlowsListOptionsModel).execute();
-    assertNotNull(response);
-    DataFlowPagedCollection responseObj = response.getResult();
-    assertNotNull(responseObj);
-
-    // Verify the contents of the request
-    RecordedRequest request = server.takeRequest();
-    assertNotNull(request);
-    assertEquals(request.getMethod(), "GET");
-
-    // Check query
-    Map<String, String> query = TestUtilities.parseQueryString(request);
-    assertNotNull(query);
-    // Get query params
-    assertEquals(query.get("catalog_id"), "testString");
-    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
-    assertEquals(query.get("sort"), "testString");
-    assertEquals(query.get("start"), "testString");
-    assertEquals(Long.valueOf(query.get("limit")), Long.valueOf("100"));
-    assertEquals(query.get("entity.name"), "testString");
-    assertEquals(query.get("entity.description"), "testString");
-    // Check request path
-    String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, datastageFlowsListPath);
-  }
-
-  @Test
-  public void testDatastageFlowsCreateWOptions() throws Throwable {
-    // Schedule some responses.
-    String mockResponseBody = "{\"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"size\": 4, \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"description\": \"description\", \"tags\": [\"tags\"], \"source_system\": {\"mapKey\": \"anyValue\"}, \"usage\": {\"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\", \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"access_count\": 11}}, \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"lock\": {\"metadata\": {\"alive\": false}, \"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}}, \"description\": \"description\", \"name\": \"name\", \"rov\": {\"mode\": 4, \"members\": [\"members\"]}, \"sub_type\": \"subType\"}, \"attachments\": {\"mapKey\": \"anyValue\"}}";
-    String datastageFlowsCreatePath = "/v3/data_intg_flows";
-
-    server.enqueue(new MockResponse()
-    .setHeader("Content-type", "application/json;charset=utf-8")
-    .setResponseCode(201)
-    .setBody(mockResponseBody));
-
-    constructClientService();
-
-    // Construct an instance of the Pipelines model
-    Pipelines pipelinesModel = new Pipelines.Builder()
-    .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-    .description("A test DataStage flow")
-    .runtimeRef("pxOsh")
-    .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
-    .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-    .build();
-
-    // Construct an instance of the PipelineJson model
-    PipelineJson pipelineJsonModel = new PipelineJson.Builder()
-    .docType("pipeline")
-    .version("3.0")
-    .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
-    .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
-    .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-    .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-    .schemas(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
-    .runtimes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
-    .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-    .parameters(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-    .externalParamsets(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
-    .build();
-
-    // Construct an instance of the DatastageFlowsCreateOptions model
-    DatastageFlowsCreateOptions datastageFlowsCreateOptionsModel = new DatastageFlowsCreateOptions.Builder()
-    .dataIntgFlowName("testString")
-    .pipelineFlows(pipelineJsonModel)
-    .catalogId("testString")
-    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
-    .assetCategory("system")
-    .build();
-
-    // Invoke operation with valid options model (positive test)
-    Response<DataIntgFlow> response = datastageService.datastageFlowsCreate(datastageFlowsCreateOptionsModel).execute();
-    assertNotNull(response);
-    DataIntgFlow responseObj = response.getResult();
-    assertNotNull(responseObj);
-
-    // Verify the contents of the request
-    RecordedRequest request = server.takeRequest();
-    assertNotNull(request);
-    assertEquals(request.getMethod(), "POST");
-
-    // Check query
-    Map<String, String> query = TestUtilities.parseQueryString(request);
-    assertNotNull(query);
-    // Get query params
-    assertEquals(query.get("data_intg_flow_name"), "testString");
-    assertEquals(query.get("catalog_id"), "testString");
-    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
-    assertEquals(query.get("asset_category"), "system");
-    // Check request path
-    String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, datastageFlowsCreatePath);
-  }
-
-  // Test the datastageFlowsCreate operation with null options model parameter
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDatastageFlowsCreateNoOptions() throws Throwable {
-    // construct the service
-    constructClientService();
-
-    server.enqueue(new MockResponse());
-
-    // Invoke operation with null options model (negative test)
-    datastageService.datastageFlowsCreate(null).execute();
-  }
-
-  @Test
   public void testDatastageFlowsDeleteWOptions() throws Throwable {
     // Schedule some responses.
     String mockResponseBody = "";
@@ -301,9 +169,142 @@ public class DatastageTest extends PowerMockTestCase {
   }
 
   @Test
+  public void testDatastageFlowsListWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"data_flows\": [{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}], \"first\": {\"href\": \"href\"}, \"last\": {\"href\": \"href\"}, \"limit\": 5, \"next\": {\"href\": \"href\"}, \"prev\": {\"href\": \"href\"}, \"total_count\": 10}";
+    String datastageFlowsListPath = "/v3/data_intg_flows";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json;charset=utf-8")
+    .setResponseCode(200)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the DatastageFlowsListOptions model
+    DatastageFlowsListOptions datastageFlowsListOptionsModel = new DatastageFlowsListOptions.Builder()
+    .catalogId("testString")
+    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+    .sort("testString")
+    .start("testString")
+    .limit(Long.valueOf("100"))
+    .entityName("testString")
+    .entityDescription("testString")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<DataFlowPagedCollection> response = datastageService.datastageFlowsList(datastageFlowsListOptionsModel).execute();
+    assertNotNull(response);
+    DataFlowPagedCollection responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    // Get query params
+    assertEquals(query.get("catalog_id"), "testString");
+    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
+    assertEquals(query.get("sort"), "testString");
+    assertEquals(query.get("start"), "testString");
+    assertEquals(Long.valueOf(query.get("limit")), Long.valueOf("100"));
+    assertEquals(query.get("entity.name"), "testString");
+    assertEquals(query.get("entity.description"), "testString");
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, datastageFlowsListPath);
+  }
+
+  @Test
+  public void testDatastageFlowsCreateWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
+    String datastageFlowsCreatePath = "/v3/data_intg_flows";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json;charset=utf-8")
+    .setResponseCode(201)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the Pipelines model
+    Pipelines pipelinesModel = new Pipelines.Builder()
+    .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .description("A test DataStage flow")
+    .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+    .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .runtimeRef("pxOsh")
+    .build();
+
+    // Construct an instance of the PipelineJson model
+    PipelineJson pipelineJsonModel = new PipelineJson.Builder()
+    .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .docType("pipeline")
+    .externalParamsets(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
+    .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
+    .parameters(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
+    .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+    .runtimes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .schemas(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .version("3.0")
+    .build();
+
+    // Construct an instance of the DatastageFlowsCreateOptions model
+    DatastageFlowsCreateOptions datastageFlowsCreateOptionsModel = new DatastageFlowsCreateOptions.Builder()
+    .dataIntgFlowName("testString")
+    .pipelineFlows(pipelineJsonModel)
+    .catalogId("testString")
+    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+    .assetCategory("system")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<DataIntgFlow> response = datastageService.datastageFlowsCreate(datastageFlowsCreateOptionsModel).execute();
+    assertNotNull(response);
+    DataIntgFlow responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    // Get query params
+    assertEquals(query.get("data_intg_flow_name"), "testString");
+    assertEquals(query.get("catalog_id"), "testString");
+    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
+    assertEquals(query.get("asset_category"), "system");
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, datastageFlowsCreatePath);
+  }
+
+  // Test the datastageFlowsCreate operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDatastageFlowsCreateNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    datastageService.datastageFlowsCreate(null).execute();
+  }
+
+  @Test
   public void testDatastageFlowsGetWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"size\": 4, \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"description\": \"description\", \"tags\": [\"tags\"], \"source_system\": {\"mapKey\": \"anyValue\"}, \"usage\": {\"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\", \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"access_count\": 11}}, \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"lock\": {\"metadata\": {\"alive\": false}, \"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}}, \"description\": \"description\", \"name\": \"name\", \"rov\": {\"mode\": 4, \"members\": [\"members\"]}, \"sub_type\": \"subType\"}, \"attachments\": {\"mapKey\": \"anyValue\"}}";
+    String mockResponseBody = "{\"attachments\": {\"app_data\": {\"mapKey\": \"anyValue\"}, \"doc_type\": \"pipeline\", \"external_paramsets\": [\"anyValue\"], \"id\": \"84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff\", \"json_schema\": \"http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json\", \"parameters\": {\"mapKey\": \"anyValue\"}, \"pipelines\": [{\"app_data\": {\"mapKey\": \"anyValue\"}, \"description\": \"A test DataStage flow\", \"id\": \"fa1b859a-d592-474d-b56c-2137e4efa4bc\", \"nodes\": [\"anyValue\"], \"runtime_ref\": \"pxOsh\"}], \"primary_pipeline\": \"fa1b859a-d592-474d-b56c-2137e4efa4bc\", \"runtimes\": [\"anyValue\"], \"schemas\": [\"anyValue\"], \"version\": \"3.0\"}, \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
     String datastageFlowsGetPath = "/v3/data_intg_flows/testString";
 
     server.enqueue(new MockResponse()
@@ -321,9 +322,9 @@ public class DatastageTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<DataIntgFlow> response = datastageService.datastageFlowsGet(datastageFlowsGetOptionsModel).execute();
+    Response<DataIntgFlowJson> response = datastageService.datastageFlowsGet(datastageFlowsGetOptionsModel).execute();
     assertNotNull(response);
-    DataIntgFlow responseObj = response.getResult();
+    DataIntgFlowJson responseObj = response.getResult();
     assertNotNull(responseObj);
 
     // Verify the contents of the request
@@ -357,7 +358,7 @@ public class DatastageTest extends PowerMockTestCase {
   @Test
   public void testDatastageFlowsUpdateWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"size\": 4, \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"description\": \"description\", \"tags\": [\"tags\"], \"source_system\": {\"mapKey\": \"anyValue\"}, \"usage\": {\"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\", \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"access_count\": 11}}, \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"lock\": {\"metadata\": {\"alive\": false}, \"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}}, \"description\": \"description\", \"name\": \"name\", \"rov\": {\"mode\": 4, \"members\": [\"members\"]}, \"sub_type\": \"subType\"}, \"attachments\": {\"mapKey\": \"anyValue\"}}";
+    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
     String datastageFlowsUpdatePath = "/v3/data_intg_flows/testString";
 
     server.enqueue(new MockResponse()
@@ -369,26 +370,26 @@ public class DatastageTest extends PowerMockTestCase {
 
     // Construct an instance of the Pipelines model
     Pipelines pipelinesModel = new Pipelines.Builder()
-    .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-    .description("A test DataStage flow")
-    .runtimeRef("pxOsh")
-    .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
     .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .description("A test DataStage flow")
+    .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+    .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .runtimeRef("pxOsh")
     .build();
 
     // Construct an instance of the PipelineJson model
     PipelineJson pipelineJsonModel = new PipelineJson.Builder()
-    .docType("pipeline")
-    .version("3.0")
-    .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
-    .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
-    .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-    .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-    .schemas(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
-    .runtimes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
     .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-    .parameters(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .docType("pipeline")
     .externalParamsets(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
+    .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
+    .parameters(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
+    .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+    .runtimes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .schemas(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .version("3.0")
     .build();
 
     // Construct an instance of the DatastageFlowsUpdateOptions model
@@ -438,7 +439,7 @@ public class DatastageTest extends PowerMockTestCase {
   @Test
   public void testDatastageFlowsCloneWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"size\": 4, \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"description\": \"description\", \"tags\": [\"tags\"], \"source_system\": {\"mapKey\": \"anyValue\"}, \"usage\": {\"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\", \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"access_count\": 11}}, \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"lock\": {\"metadata\": {\"alive\": false}, \"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}}, \"description\": \"description\", \"name\": \"name\", \"rov\": {\"mode\": 4, \"members\": [\"members\"]}, \"sub_type\": \"subType\"}, \"attachments\": {\"mapKey\": \"anyValue\"}}";
+    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
     String datastageFlowsClonePath = "/v3/data_intg_flows/testString/clone";
 
     server.enqueue(new MockResponse()
@@ -492,7 +493,7 @@ public class DatastageTest extends PowerMockTestCase {
   @Test
   public void testDatastageFlowsCompileWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"type\": \"type\", \"message\": {\"mapKey\": \"anyValue\"}}";
+    String mockResponseBody = "{\"message\": {\"mapKey\": \"anyValue\"}, \"type\": \"type\"}";
     String datastageFlowsCompilePath = "/v3/ds_codegen/compile/testString";
 
     server.enqueue(new MockResponse()
@@ -548,7 +549,7 @@ public class DatastageTest extends PowerMockTestCase {
   @Test
   public void testMigrationCreateWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"metadata\": {\"id\": \"id\", \"name\": \"name\", \"url\": \"url\", \"project_id\": \"projectId\", \"project_name\": \"projectName\", \"catalog_id\": \"catalogId\", \"created_at\": \"2019-01-01T12:00:00.000Z\", \"modified_at\": \"2019-01-01T12:00:00.000Z\", \"created_by\": \"user1@company1.com\"}, \"entity\": {\"name\": \"seat-reservation-jobs\", \"status\": \"in_progress\", \"start_time\": \"2019-01-01T12:00:00.000Z\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"remaining_time\": 13, \"cancelled_by\": \"user1@company1.com\", \"on_failure\": \"onFailure\", \"conflict_resolution\": \"conflictResolution\", \"import_data_flows\": [{\"id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"ref_asset_id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"name\": \"cancel-reservation-job\", \"original_name\": \"cancel-reservation-job\", \"type\": \"px_job\", \"job_type\": \"px_job\", \"job_id\": \"ccfaaafd-810d-4f0e-b0a9-228c328a0136\", \"job_name\": \"Aggregator12_DataStage_1\", \"status\": \"completed\", \"conflict_resolution_status\": \"import_flow_renamed\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"errors\": [{\"type\": \"unsupported_stage_type\", \"name\": \"name\", \"description\": \"description\"}], \"warnings\": [{\"type\": \"unreleased_stage_type\", \"name\": \"name\", \"description\": \"description\"}]}], \"tally\": {\"total\": 5, \"imported\": 8, \"renamed\": 7, \"skipped\": 7, \"replaced\": 8, \"failed\": 6, \"deprecated\": 10, \"unsupported\": 11, \"pending\": 7, \"connections_total\": 16, \"parameter_sets_total\": 18, \"table_definitions_total\": 21}}}";
+    String mockResponseBody = "{\"entity\": {\"cancelled_by\": \"user1@company1.com\", \"conflict_resolution\": \"conflictResolution\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"import_data_flows\": [{\"conflict_resolution_status\": \"import_flow_renamed\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"errors\": [{\"description\": \"description\", \"name\": \"name\", \"type\": \"unsupported_stage_type\"}], \"id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"job_id\": \"ccfaaafd-810d-4f0e-b0a9-228c328a0136\", \"job_name\": \"Aggregator12_DataStage_1\", \"job_type\": \"px_job\", \"name\": \"cancel-reservation-job\", \"original_name\": \"cancel-reservation-job\", \"ref_asset_id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"status\": \"completed\", \"type\": \"px_job\", \"warnings\": [{\"description\": \"description\", \"name\": \"name\", \"type\": \"unreleased_stage_type\"}]}], \"name\": \"seat-reservation-jobs\", \"on_failure\": \"onFailure\", \"remaining_time\": 13, \"start_time\": \"2019-01-01T12:00:00.000Z\", \"status\": \"in_progress\", \"tally\": {\"connections_total\": 16, \"deprecated\": 10, \"failed\": 6, \"imported\": 8, \"parameter_sets_total\": 18, \"pending\": 7, \"px_containers_total\": 17, \"renamed\": 7, \"replaced\": 8, \"sequence_jobs_total\": 17, \"skipped\": 7, \"table_definitions_total\": 21, \"total\": 5, \"unsupported\": 11}}, \"metadata\": {\"catalog_id\": \"catalogId\", \"created_at\": \"2019-01-01T12:00:00.000Z\", \"created_by\": \"user1@company1.com\", \"id\": \"id\", \"modified_at\": \"2019-01-01T12:00:00.000Z\", \"name\": \"name\", \"project_id\": \"projectId\", \"project_name\": \"projectName\", \"url\": \"url\"}}";
     String migrationCreatePath = "/v3/migration/isx_imports";
 
     server.enqueue(new MockResponse()
@@ -608,60 +609,6 @@ public class DatastageTest extends PowerMockTestCase {
   }
 
   @Test
-  public void testMigrationGetWOptions() throws Throwable {
-    // Schedule some responses.
-    String mockResponseBody = "{\"metadata\": {\"id\": \"id\", \"name\": \"name\", \"url\": \"url\", \"project_id\": \"projectId\", \"project_name\": \"projectName\", \"catalog_id\": \"catalogId\", \"created_at\": \"2019-01-01T12:00:00.000Z\", \"modified_at\": \"2019-01-01T12:00:00.000Z\", \"created_by\": \"user1@company1.com\"}, \"entity\": {\"name\": \"seat-reservation-jobs\", \"status\": \"in_progress\", \"start_time\": \"2019-01-01T12:00:00.000Z\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"remaining_time\": 13, \"cancelled_by\": \"user1@company1.com\", \"on_failure\": \"onFailure\", \"conflict_resolution\": \"conflictResolution\", \"import_data_flows\": [{\"id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"ref_asset_id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"name\": \"cancel-reservation-job\", \"original_name\": \"cancel-reservation-job\", \"type\": \"px_job\", \"job_type\": \"px_job\", \"job_id\": \"ccfaaafd-810d-4f0e-b0a9-228c328a0136\", \"job_name\": \"Aggregator12_DataStage_1\", \"status\": \"completed\", \"conflict_resolution_status\": \"import_flow_renamed\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"errors\": [{\"type\": \"unsupported_stage_type\", \"name\": \"name\", \"description\": \"description\"}], \"warnings\": [{\"type\": \"unreleased_stage_type\", \"name\": \"name\", \"description\": \"description\"}]}], \"tally\": {\"total\": 5, \"imported\": 8, \"renamed\": 7, \"skipped\": 7, \"replaced\": 8, \"failed\": 6, \"deprecated\": 10, \"unsupported\": 11, \"pending\": 7, \"connections_total\": 16, \"parameter_sets_total\": 18, \"table_definitions_total\": 21}}}";
-    String migrationGetPath = "/v3/migration/isx_imports/testString";
-
-    server.enqueue(new MockResponse()
-    .setHeader("Content-type", "application/json;charset=utf-8")
-    .setResponseCode(200)
-    .setBody(mockResponseBody));
-
-    constructClientService();
-
-    // Construct an instance of the MigrationGetOptions model
-    MigrationGetOptions migrationGetOptionsModel = new MigrationGetOptions.Builder()
-    .importId("testString")
-    .catalogId("testString")
-    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
-    .build();
-
-    // Invoke operation with valid options model (positive test)
-    Response<ImportResponse> response = datastageService.migrationGet(migrationGetOptionsModel).execute();
-    assertNotNull(response);
-    ImportResponse responseObj = response.getResult();
-    assertNotNull(responseObj);
-
-    // Verify the contents of the request
-    RecordedRequest request = server.takeRequest();
-    assertNotNull(request);
-    assertEquals(request.getMethod(), "GET");
-
-    // Check query
-    Map<String, String> query = TestUtilities.parseQueryString(request);
-    assertNotNull(query);
-    // Get query params
-    assertEquals(query.get("catalog_id"), "testString");
-    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
-    // Check request path
-    String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, migrationGetPath);
-  }
-
-  // Test the migrationGet operation with null options model parameter
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testMigrationGetNoOptions() throws Throwable {
-    // construct the service
-    constructClientService();
-
-    server.enqueue(new MockResponse());
-
-    // Invoke operation with null options model (negative test)
-    datastageService.migrationGet(null).execute();
-  }
-
-  @Test
   public void testMigrationDeleteWOptions() throws Throwable {
     // Schedule some responses.
     String mockResponseBody = "";
@@ -713,6 +660,60 @@ public class DatastageTest extends PowerMockTestCase {
 
     // Invoke operation with null options model (negative test)
     datastageService.migrationDelete(null).execute();
+  }
+
+  @Test
+  public void testMigrationGetWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"entity\": {\"cancelled_by\": \"user1@company1.com\", \"conflict_resolution\": \"conflictResolution\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"import_data_flows\": [{\"conflict_resolution_status\": \"import_flow_renamed\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"errors\": [{\"description\": \"description\", \"name\": \"name\", \"type\": \"unsupported_stage_type\"}], \"id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"job_id\": \"ccfaaafd-810d-4f0e-b0a9-228c328a0136\", \"job_name\": \"Aggregator12_DataStage_1\", \"job_type\": \"px_job\", \"name\": \"cancel-reservation-job\", \"original_name\": \"cancel-reservation-job\", \"ref_asset_id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"status\": \"completed\", \"type\": \"px_job\", \"warnings\": [{\"description\": \"description\", \"name\": \"name\", \"type\": \"unreleased_stage_type\"}]}], \"name\": \"seat-reservation-jobs\", \"on_failure\": \"onFailure\", \"remaining_time\": 13, \"start_time\": \"2019-01-01T12:00:00.000Z\", \"status\": \"in_progress\", \"tally\": {\"connections_total\": 16, \"deprecated\": 10, \"failed\": 6, \"imported\": 8, \"parameter_sets_total\": 18, \"pending\": 7, \"px_containers_total\": 17, \"renamed\": 7, \"replaced\": 8, \"sequence_jobs_total\": 17, \"skipped\": 7, \"table_definitions_total\": 21, \"total\": 5, \"unsupported\": 11}}, \"metadata\": {\"catalog_id\": \"catalogId\", \"created_at\": \"2019-01-01T12:00:00.000Z\", \"created_by\": \"user1@company1.com\", \"id\": \"id\", \"modified_at\": \"2019-01-01T12:00:00.000Z\", \"name\": \"name\", \"project_id\": \"projectId\", \"project_name\": \"projectName\", \"url\": \"url\"}}";
+    String migrationGetPath = "/v3/migration/isx_imports/testString";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json;charset=utf-8")
+    .setResponseCode(200)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the MigrationGetOptions model
+    MigrationGetOptions migrationGetOptionsModel = new MigrationGetOptions.Builder()
+    .importId("testString")
+    .catalogId("testString")
+    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<ImportResponse> response = datastageService.migrationGet(migrationGetOptionsModel).execute();
+    assertNotNull(response);
+    ImportResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    // Get query params
+    assertEquals(query.get("catalog_id"), "testString");
+    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, migrationGetPath);
+  }
+
+  // Test the migrationGet operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testMigrationGetNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    datastageService.migrationGet(null).execute();
   }
 
   /** Initialize the server */

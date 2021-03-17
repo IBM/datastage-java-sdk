@@ -19,19 +19,8 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class DataIntgFlowLock extends GenericModel {
 
-  protected DataIntgFlowLockMetadata metadata;
   protected DataIntgFlowLockEntity entity;
-
-  /**
-   * Gets the metadata.
-   *
-   * Metadata information for a DataStage lock object.
-   *
-   * @return the metadata
-   */
-  public DataIntgFlowLockMetadata getMetadata() {
-    return metadata;
-  }
+  protected DataIntgFlowLockMetadata metadata;
 
   /**
    * Gets the entity.
@@ -42,6 +31,17 @@ public class DataIntgFlowLock extends GenericModel {
    */
   public DataIntgFlowLockEntity getEntity() {
     return entity;
+  }
+
+  /**
+   * Gets the metadata.
+   *
+   * Metadata information for a DataStage lock object.
+   *
+   * @return the metadata
+   */
+  public DataIntgFlowLockMetadata getMetadata() {
+    return metadata;
   }
 }
 

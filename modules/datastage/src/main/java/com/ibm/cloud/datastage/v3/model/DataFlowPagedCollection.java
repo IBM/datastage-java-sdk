@@ -25,10 +25,10 @@ public class DataFlowPagedCollection extends GenericModel {
   @SerializedName("data_flows")
   protected List<DataIntgFlow> dataFlows;
   protected HrefModel first;
-  protected HrefModel prev;
-  protected HrefModel next;
   protected HrefModel last;
   protected Long limit;
+  protected HrefModel next;
+  protected HrefModel prev;
   @SerializedName("total_count")
   protected Long totalCount;
 
@@ -55,28 +55,6 @@ public class DataFlowPagedCollection extends GenericModel {
   }
 
   /**
-   * Gets the prev.
-   *
-   * URI of a resource.
-   *
-   * @return the prev
-   */
-  public HrefModel getPrev() {
-    return prev;
-  }
-
-  /**
-   * Gets the next.
-   *
-   * URI of a resource.
-   *
-   * @return the next
-   */
-  public HrefModel getNext() {
-    return next;
-  }
-
-  /**
    * Gets the last.
    *
    * URI of a resource.
@@ -96,6 +74,28 @@ public class DataFlowPagedCollection extends GenericModel {
    */
   public Long getLimit() {
     return limit;
+  }
+
+  /**
+   * Gets the next.
+   *
+   * URI of a resource.
+   *
+   * @return the next
+   */
+  public HrefModel getNext() {
+    return next;
+  }
+
+  /**
+   * Gets the prev.
+   *
+   * URI of a resource.
+   *
+   * @return the prev
+   */
+  public HrefModel getPrev() {
+    return prev;
   }
 
   /**

@@ -42,8 +42,8 @@ public class DataIntgFlowTest {
   @Test
   public void testDataIntgFlow() throws Throwable {
     DataIntgFlow dataIntgFlowModel = new DataIntgFlow();
-    assertNull(dataIntgFlowModel.getMetadata());
-    assertNull(dataIntgFlowModel.getEntity());
     assertNull(dataIntgFlowModel.getAttachments());
+    assertNull(dataIntgFlowModel.getEntity());
+    assertNull(dataIntgFlowModel.getMetadata());
   }
 }

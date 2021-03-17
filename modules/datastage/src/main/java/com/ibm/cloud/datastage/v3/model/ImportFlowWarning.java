@@ -31,19 +31,19 @@ public class ImportFlowWarning extends GenericModel {
     String UNSUPPORTED_CREDENTIALS_FILE = "unsupported_credentials_file";
   }
 
-  protected String type;
-  protected String name;
   protected String description;
+  protected String name;
+  protected String type;
 
   /**
-   * Gets the type.
+   * Gets the description.
    *
-   * warning type.
+   * additional warning text.
    *
-   * @return the type
+   * @return the description
    */
-  public String getType() {
-    return type;
+  public String getDescription() {
+    return description;
   }
 
   /**
@@ -58,14 +58,14 @@ public class ImportFlowWarning extends GenericModel {
   }
 
   /**
-   * Gets the description.
+   * Gets the type.
    *
-   * additional warning text.
+   * warning type.
    *
-   * @return the description
+   * @return the type
    */
-  public String getDescription() {
-    return description;
+  public String getType() {
+    return type;
   }
 }
 

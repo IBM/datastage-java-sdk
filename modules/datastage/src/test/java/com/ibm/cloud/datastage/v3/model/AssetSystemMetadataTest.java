@@ -39,15 +39,15 @@ public class AssetSystemMetadataTest {
     assertNull(assetSystemMetadataModel.getCatalogId());
     assertNull(assetSystemMetadataModel.getCreateTime());
     assertNull(assetSystemMetadataModel.getCreatorId());
+    assertNull(assetSystemMetadataModel.getDescription());
     assertNull(assetSystemMetadataModel.getHref());
     assertNull(assetSystemMetadataModel.getName());
     assertNull(assetSystemMetadataModel.getOriginCountry());
-    assertNull(assetSystemMetadataModel.getSize());
     assertNull(assetSystemMetadataModel.getProjectId());
     assertNull(assetSystemMetadataModel.getResourceKey());
-    assertNull(assetSystemMetadataModel.getDescription());
-    assertNull(assetSystemMetadataModel.getTags());
+    assertNull(assetSystemMetadataModel.getSize());
     assertNull(assetSystemMetadataModel.getSourceSystem());
+    assertNull(assetSystemMetadataModel.getTags());
     assertNull(assetSystemMetadataModel.getUsage());
   }
 }

@@ -46,10 +46,10 @@ public class DataFlowPagedCollectionTest {
     DataFlowPagedCollection dataFlowPagedCollectionModel = new DataFlowPagedCollection();
     assertNull(dataFlowPagedCollectionModel.getDataFlows());
     assertNull(dataFlowPagedCollectionModel.getFirst());
-    assertNull(dataFlowPagedCollectionModel.getPrev());
-    assertNull(dataFlowPagedCollectionModel.getNext());
     assertNull(dataFlowPagedCollectionModel.getLast());
     assertNull(dataFlowPagedCollectionModel.getLimit());
+    assertNull(dataFlowPagedCollectionModel.getNext());
+    assertNull(dataFlowPagedCollectionModel.getPrev());
     assertNull(dataFlowPagedCollectionModel.getTotalCount());
   }
 }

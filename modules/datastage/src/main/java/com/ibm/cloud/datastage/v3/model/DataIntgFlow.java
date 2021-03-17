@@ -12,7 +12,7 @@
  */
 package com.ibm.cloud.datastage.v3.model;
 
-import java.util.Map;
+import java.util.List;
 
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
@@ -22,19 +22,19 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class DataIntgFlow extends GenericModel {
 
-  protected AssetSystemMetadata metadata;
+  protected List<Object> attachments;
   protected DataIntgFlowEntity entity;
-  protected Map<String, Object> attachments;
+  protected AssetSystemMetadata metadata;
 
   /**
-   * Gets the metadata.
+   * Gets the attachments.
    *
-   * System metadata about an asset.
+   * Metadata information for datastage flow.
    *
-   * @return the metadata
+   * @return the attachments
    */
-  public AssetSystemMetadata getMetadata() {
-    return metadata;
+  public List<Object> getAttachments() {
+    return attachments;
   }
 
   /**
@@ -49,14 +49,14 @@ public class DataIntgFlow extends GenericModel {
   }
 
   /**
-   * Gets the attachments.
+   * Gets the metadata.
    *
-   * Pipeline flow from BFF as an attachment.
+   * System metadata about an asset.
    *
-   * @return the attachments
+   * @return the metadata
    */
-  public Map<String, Object> getAttachments() {
-    return attachments;
+  public AssetSystemMetadata getMetadata() {
+    return metadata;
   }
 }
 

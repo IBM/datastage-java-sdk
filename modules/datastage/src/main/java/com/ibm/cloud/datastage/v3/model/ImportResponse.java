@@ -19,19 +19,8 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class ImportResponse extends GenericModel {
 
-  protected ImportResponseMetadata metadata;
   protected ImportResponseEntity entity;
-
-  /**
-   * Gets the metadata.
-   *
-   * import response metadata.
-   *
-   * @return the metadata
-   */
-  public ImportResponseMetadata getMetadata() {
-    return metadata;
-  }
+  protected ImportResponseMetadata metadata;
 
   /**
    * Gets the entity.
@@ -42,6 +31,17 @@ public class ImportResponse extends GenericModel {
    */
   public ImportResponseEntity getEntity() {
     return entity;
+  }
+
+  /**
+   * Gets the metadata.
+   *
+   * import response metadata.
+   *
+   * @return the metadata
+   */
+  public ImportResponseMetadata getMetadata() {
+    return metadata;
   }
 }
 

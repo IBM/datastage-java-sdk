@@ -32,8 +32,8 @@ public class ImportFlowWarningTest {
   @Test
   public void testImportFlowWarning() throws Throwable {
     ImportFlowWarning importFlowWarningModel = new ImportFlowWarning();
-    assertNull(importFlowWarningModel.getType());
-    assertNull(importFlowWarningModel.getName());
     assertNull(importFlowWarningModel.getDescription());
+    assertNull(importFlowWarningModel.getName());
+    assertNull(importFlowWarningModel.getType());
   }
 }

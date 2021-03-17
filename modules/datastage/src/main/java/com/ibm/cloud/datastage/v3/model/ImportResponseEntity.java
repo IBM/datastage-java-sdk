@@ -39,56 +39,45 @@ public class ImportResponseEntity extends GenericModel {
     String COMPLETED = "completed";
   }
 
-  protected String name;
-  protected String status;
-  @SerializedName("start_time")
-  protected Date startTime;
-  @SerializedName("end_time")
-  protected Date endTime;
-  @SerializedName("remaining_time")
-  protected Long remainingTime;
   @SerializedName("cancelled_by")
   protected String cancelledBy;
-  @SerializedName("on_failure")
-  protected String onFailure;
   @SerializedName("conflict_resolution")
   protected String conflictResolution;
+  @SerializedName("end_time")
+  protected Date endTime;
   @SerializedName("import_data_flows")
   protected List<ImportFlow> importDataFlows;
+  protected String name;
+  @SerializedName("on_failure")
+  protected String onFailure;
+  @SerializedName("remaining_time")
+  protected Long remainingTime;
+  @SerializedName("start_time")
+  protected Date startTime;
+  protected String status;
   protected ImportCount tally;
 
   /**
-   * Gets the name.
+   * Gets the cancelledBy.
    *
-   * Name of the import request.
+   * Account ID of the user who cancelled the import request. This field is required only when the status  field is
+   * "cancelled".
    *
-   * @return the name
+   * @return the cancelledBy
    */
-  public String getName() {
-    return name;
+  public String getCancelledBy() {
+    return cancelledBy;
   }
 
   /**
-   * Gets the status.
+   * Gets the conflictResolution.
    *
-   * import status.
+   * The conflict_resolution option used for the import.
    *
-   * @return the status
+   * @return the conflictResolution
    */
-  public String getStatus() {
-    return status;
-  }
-
-  /**
-   * Gets the startTime.
-   *
-   * The timestamp when the import opearton started. In format YYYY-MM-DDTHH:mm:ssZ or YYYY-MM-DDTHH:mm:ss.sssZ,
-   * matching the date-time format as specified by RFC 3339.
-   *
-   * @return the startTime
-   */
-  public Date getStartTime() {
-    return startTime;
+  public String getConflictResolution() {
+    return conflictResolution;
   }
 
   /**
@@ -104,26 +93,26 @@ public class ImportResponseEntity extends GenericModel {
   }
 
   /**
-   * Gets the remainingTime.
+   * Gets the importDataFlows.
    *
-   * Estimate of remaining time in seconds.
+   * All data flows imported or to be imported. Each ImportFlow object contains status for the individual data flow
+   * import operation.
    *
-   * @return the remainingTime
+   * @return the importDataFlows
    */
-  public Long getRemainingTime() {
-    return remainingTime;
+  public List<ImportFlow> getImportDataFlows() {
+    return importDataFlows;
   }
 
   /**
-   * Gets the cancelledBy.
+   * Gets the name.
    *
-   * Account ID of the user who cancelled the import request. This field is required only when the status  field is
-   * "cancelled".
+   * Name of the import request.
    *
-   * @return the cancelledBy
+   * @return the name
    */
-  public String getCancelledBy() {
-    return cancelledBy;
+  public String getName() {
+    return name;
   }
 
   /**
@@ -138,26 +127,37 @@ public class ImportResponseEntity extends GenericModel {
   }
 
   /**
-   * Gets the conflictResolution.
+   * Gets the remainingTime.
    *
-   * The conflict_resolution option used for the import.
+   * Estimate of remaining time in seconds.
    *
-   * @return the conflictResolution
+   * @return the remainingTime
    */
-  public String getConflictResolution() {
-    return conflictResolution;
+  public Long getRemainingTime() {
+    return remainingTime;
   }
 
   /**
-   * Gets the importDataFlows.
+   * Gets the startTime.
    *
-   * All data flows imported or to be imported. Each ImportFlow object contains status for the individual data flow
-   * import operation.
+   * The timestamp when the import opearton started. In format YYYY-MM-DDTHH:mm:ssZ or YYYY-MM-DDTHH:mm:ss.sssZ,
+   * matching the date-time format as specified by RFC 3339.
    *
-   * @return the importDataFlows
+   * @return the startTime
    */
-  public List<ImportFlow> getImportDataFlows() {
-    return importDataFlows;
+  public Date getStartTime() {
+    return startTime;
+  }
+
+  /**
+   * Gets the status.
+   *
+   * import status.
+   *
+   * @return the status
+   */
+  public String getStatus() {
+    return status;
   }
 
   /**

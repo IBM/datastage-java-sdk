@@ -81,21 +81,27 @@ public class DataImportError extends GenericModel {
     String FLOW_RENAME_ERROR = "flow_rename_error";
     /** duplicate_job_error. */
     String DUPLICATE_JOB_ERROR = "duplicate_job_error";
+    /** parameter_set_creation_error. */
+    String PARAMETER_SET_CREATION_ERROR = "parameter_set_creation_error";
+    /** distributed_lock_error. */
+    String DISTRIBUTED_LOCK_ERROR = "distributed_lock_error";
+    /** duplicate_object_error. */
+    String DUPLICATE_OBJECT_ERROR = "duplicate_object_error";
   }
 
-  protected String type;
-  protected String name;
   protected String description;
+  protected String name;
+  protected String type;
 
   /**
-   * Gets the type.
+   * Gets the description.
    *
-   * error type.
+   * additional error text.
    *
-   * @return the type
+   * @return the description
    */
-  public String getType() {
-    return type;
+  public String getDescription() {
+    return description;
   }
 
   /**
@@ -110,14 +116,14 @@ public class DataImportError extends GenericModel {
   }
 
   /**
-   * Gets the description.
+   * Gets the type.
    *
-   * additional error text.
+   * error type.
    *
-   * @return the description
+   * @return the type
    */
-  public String getDescription() {
-    return description;
+  public String getType() {
+    return type;
   }
 }
 

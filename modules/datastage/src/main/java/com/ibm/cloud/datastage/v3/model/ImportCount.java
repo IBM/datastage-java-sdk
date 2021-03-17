@@ -21,31 +21,57 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class ImportCount extends GenericModel {
 
-  protected Long total;
-  protected Long imported;
-  protected Long renamed;
-  protected Long skipped;
-  protected Long replaced;
-  protected Long failed;
-  protected Long deprecated;
-  protected Long unsupported;
-  protected Long pending;
   @SerializedName("connections_total")
   protected Long connectionsTotal;
+  protected Long deprecated;
+  protected Long failed;
+  protected Long imported;
   @SerializedName("parameter_sets_total")
   protected Long parameterSetsTotal;
+  protected Long pending;
+  @SerializedName("px_containers_total")
+  protected Long pxContainersTotal;
+  protected Long renamed;
+  protected Long replaced;
+  @SerializedName("sequence_jobs_total")
+  protected Long sequenceJobsTotal;
+  protected Long skipped;
   @SerializedName("table_definitions_total")
   protected Long tableDefinitionsTotal;
+  protected Long total;
+  protected Long unsupported;
 
   /**
-   * Gets the total.
+   * Gets the connectionsTotal.
    *
-   * Total number of data flows to be imported.
+   * Total number of data connections.
    *
-   * @return the total
+   * @return the connectionsTotal
    */
-  public Long getTotal() {
-    return total;
+  public Long getConnectionsTotal() {
+    return connectionsTotal;
+  }
+
+  /**
+   * Gets the deprecated.
+   *
+   * Total number of deprecated resources in the import file.
+   *
+   * @return the deprecated
+   */
+  public Long getDeprecated() {
+    return deprecated;
+  }
+
+  /**
+   * Gets the failed.
+   *
+   * Total number of data flows that cannot be imported due to import errors.
+   *
+   * @return the failed
+   */
+  public Long getFailed() {
+    return failed;
   }
 
   /**
@@ -57,6 +83,39 @@ public class ImportCount extends GenericModel {
    */
   public Long getImported() {
     return imported;
+  }
+
+  /**
+   * Gets the parameterSetsTotal.
+   *
+   * Total number of parameter sets.
+   *
+   * @return the parameterSetsTotal
+   */
+  public Long getParameterSetsTotal() {
+    return parameterSetsTotal;
+  }
+
+  /**
+   * Gets the pending.
+   *
+   * Total number of data flows that have not been processed.
+   *
+   * @return the pending
+   */
+  public Long getPending() {
+    return pending;
+  }
+
+  /**
+   * Gets the pxContainersTotal.
+   *
+   * Total number of parallel job containers.
+   *
+   * @return the pxContainersTotal
+   */
+  public Long getPxContainersTotal() {
+    return pxContainersTotal;
   }
 
   /**
@@ -72,18 +131,6 @@ public class ImportCount extends GenericModel {
   }
 
   /**
-   * Gets the skipped.
-   *
-   * Total number of data flows skipped due to name conflicts. The skipped count is not included in the failed count or
-   * imported count.
-   *
-   * @return the skipped
-   */
-  public Long getSkipped() {
-    return skipped;
-  }
-
-  /**
    * Gets the replaced.
    *
    * Total number of existing data flows replaced by imported flows. The replaced count is included in the imported
@@ -96,69 +143,26 @@ public class ImportCount extends GenericModel {
   }
 
   /**
-   * Gets the failed.
+   * Gets the sequenceJobsTotal.
    *
-   * Total number of data flows that cannot be imported due to import errors.
+   * Total number of sequence jobs.
    *
-   * @return the failed
+   * @return the sequenceJobsTotal
    */
-  public Long getFailed() {
-    return failed;
+  public Long getSequenceJobsTotal() {
+    return sequenceJobsTotal;
   }
 
   /**
-   * Gets the deprecated.
+   * Gets the skipped.
    *
-   * Total number of deprecated resources in the import file.
+   * Total number of data flows skipped due to name conflicts. The skipped count is not included in the failed count or
+   * imported count.
    *
-   * @return the deprecated
+   * @return the skipped
    */
-  public Long getDeprecated() {
-    return deprecated;
-  }
-
-  /**
-   * Gets the unsupported.
-   *
-   * Total number of unsupported resources in the import file.
-   *
-   * @return the unsupported
-   */
-  public Long getUnsupported() {
-    return unsupported;
-  }
-
-  /**
-   * Gets the pending.
-   *
-   * Total number of data flows that have not been processed.
-   *
-   * @return the pending
-   */
-  public Long getPending() {
-    return pending;
-  }
-
-  /**
-   * Gets the connectionsTotal.
-   *
-   * Total number of data connections.
-   *
-   * @return the connectionsTotal
-   */
-  public Long getConnectionsTotal() {
-    return connectionsTotal;
-  }
-
-  /**
-   * Gets the parameterSetsTotal.
-   *
-   * Total number of parameter sets.
-   *
-   * @return the parameterSetsTotal
-   */
-  public Long getParameterSetsTotal() {
-    return parameterSetsTotal;
+  public Long getSkipped() {
+    return skipped;
   }
 
   /**
@@ -170,6 +174,28 @@ public class ImportCount extends GenericModel {
    */
   public Long getTableDefinitionsTotal() {
     return tableDefinitionsTotal;
+  }
+
+  /**
+   * Gets the total.
+   *
+   * Total number of data flows to be imported.
+   *
+   * @return the total
+   */
+  public Long getTotal() {
+    return total;
+  }
+
+  /**
+   * Gets the unsupported.
+   *
+   * Total number of unsupported resources in the import file.
+   *
+   * @return the unsupported
+   */
+  public Long getUnsupported() {
+    return unsupported;
   }
 }
 

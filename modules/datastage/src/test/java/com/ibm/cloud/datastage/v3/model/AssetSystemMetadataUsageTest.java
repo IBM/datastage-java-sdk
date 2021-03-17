@@ -32,10 +32,10 @@ public class AssetSystemMetadataUsageTest {
   @Test
   public void testAssetSystemMetadataUsage() throws Throwable {
     AssetSystemMetadataUsage assetSystemMetadataUsageModel = new AssetSystemMetadataUsage();
-    assertNull(assetSystemMetadataUsageModel.getLastModificationTime());
-    assertNull(assetSystemMetadataUsageModel.getLastModifierId());
+    assertNull(assetSystemMetadataUsageModel.getAccessCount());
     assertNull(assetSystemMetadataUsageModel.getLastAccessTime());
     assertNull(assetSystemMetadataUsageModel.getLastAccessorId());
-    assertNull(assetSystemMetadataUsageModel.getAccessCount());
+    assertNull(assetSystemMetadataUsageModel.getLastModificationTime());
+    assertNull(assetSystemMetadataUsageModel.getLastModifierId());
   }
 }

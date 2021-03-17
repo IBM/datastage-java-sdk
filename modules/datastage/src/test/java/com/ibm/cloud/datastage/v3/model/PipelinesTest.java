@@ -34,25 +34,25 @@ public class PipelinesTest {
   @Test
   public void testPipelines() throws Throwable {
     Pipelines pipelinesModel = new Pipelines.Builder()
-      .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-      .description("A test DataStage flow")
-      .runtimeRef("pxOsh")
-      .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
       .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .description("A test DataStage flow")
+      .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+      .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+      .runtimeRef("pxOsh")
       .build();
-    assertEquals(pipelinesModel.id(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
-    assertEquals(pipelinesModel.description(), "A test DataStage flow");
-    assertEquals(pipelinesModel.runtimeRef(), "pxOsh");
-    assertEquals(pipelinesModel.nodes(), new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")));
     assertEquals(pipelinesModel.appData(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
+    assertEquals(pipelinesModel.description(), "A test DataStage flow");
+    assertEquals(pipelinesModel.id(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
+    assertEquals(pipelinesModel.nodes(), new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")));
+    assertEquals(pipelinesModel.runtimeRef(), "pxOsh");
 
     String json = TestUtilities.serialize(pipelinesModel);
 
     Pipelines pipelinesModelNew = TestUtilities.deserialize(json, Pipelines.class);
     assertTrue(pipelinesModelNew instanceof Pipelines);
-    assertEquals(pipelinesModelNew.id(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
-    assertEquals(pipelinesModelNew.description(), "A test DataStage flow");
-    assertEquals(pipelinesModelNew.runtimeRef(), "pxOsh");
     assertEquals(pipelinesModelNew.appData().toString(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } }.toString());
+    assertEquals(pipelinesModelNew.description(), "A test DataStage flow");
+    assertEquals(pipelinesModelNew.id(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
+    assertEquals(pipelinesModelNew.runtimeRef(), "pxOsh");
   }
 }

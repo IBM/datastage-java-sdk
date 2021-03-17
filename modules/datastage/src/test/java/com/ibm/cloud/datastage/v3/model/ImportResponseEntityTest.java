@@ -39,15 +39,15 @@ public class ImportResponseEntityTest {
   @Test
   public void testImportResponseEntity() throws Throwable {
     ImportResponseEntity importResponseEntityModel = new ImportResponseEntity();
-    assertNull(importResponseEntityModel.getName());
-    assertNull(importResponseEntityModel.getStatus());
-    assertNull(importResponseEntityModel.getStartTime());
-    assertNull(importResponseEntityModel.getEndTime());
-    assertNull(importResponseEntityModel.getRemainingTime());
     assertNull(importResponseEntityModel.getCancelledBy());
-    assertNull(importResponseEntityModel.getOnFailure());
     assertNull(importResponseEntityModel.getConflictResolution());
+    assertNull(importResponseEntityModel.getEndTime());
     assertNull(importResponseEntityModel.getImportDataFlows());
+    assertNull(importResponseEntityModel.getName());
+    assertNull(importResponseEntityModel.getOnFailure());
+    assertNull(importResponseEntityModel.getRemainingTime());
+    assertNull(importResponseEntityModel.getStartTime());
+    assertNull(importResponseEntityModel.getStatus());
     assertNull(importResponseEntityModel.getTally());
   }
 }

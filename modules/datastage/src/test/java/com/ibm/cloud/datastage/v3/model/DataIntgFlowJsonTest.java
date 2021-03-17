@@ -14,12 +14,18 @@
 package com.ibm.cloud.datastage.v3.model;
 
 import com.ibm.cloud.datastage.v3.model.AssetEntityROV;
+import com.ibm.cloud.datastage.v3.model.AssetSystemMetadata;
+import com.ibm.cloud.datastage.v3.model.AssetSystemMetadataUsage;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowEntity;
+import com.ibm.cloud.datastage.v3.model.DataIntgFlowJson;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowLock;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowLockEntity;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowLockMetadata;
+import com.ibm.cloud.datastage.v3.model.PipelineJson;
+import com.ibm.cloud.datastage.v3.model.Pipelines;
 import com.ibm.cloud.datastage.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
+import com.ibm.cloud.sdk.core.util.DateUtils;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,20 +35,17 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the DataIntgFlowEntity model.
+ * Unit test class for the DataIntgFlowJson model.
  */
-public class DataIntgFlowEntityTest {
+public class DataIntgFlowJsonTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testDataIntgFlowEntity() throws Throwable {
-    DataIntgFlowEntity dataIntgFlowEntityModel = new DataIntgFlowEntity();
-    assertNull(dataIntgFlowEntityModel.getDataIntgFlow());
-    assertNull(dataIntgFlowEntityModel.getDescription());
-    assertNull(dataIntgFlowEntityModel.getLock());
-    assertNull(dataIntgFlowEntityModel.getName());
-    assertNull(dataIntgFlowEntityModel.getRov());
-    assertNull(dataIntgFlowEntityModel.getSubType());
+  public void testDataIntgFlowJson() throws Throwable {
+    DataIntgFlowJson dataIntgFlowJsonModel = new DataIntgFlowJson();
+    assertNull(dataIntgFlowJsonModel.getAttachments());
+    assertNull(dataIntgFlowJsonModel.getEntity());
+    assertNull(dataIntgFlowJsonModel.getMetadata());
   }
 }

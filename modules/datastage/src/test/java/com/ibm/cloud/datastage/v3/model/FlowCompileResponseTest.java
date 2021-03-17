@@ -32,7 +32,7 @@ public class FlowCompileResponseTest {
   @Test
   public void testFlowCompileResponse() throws Throwable {
     FlowCompileResponse flowCompileResponseModel = new FlowCompileResponse();
-    assertNull(flowCompileResponseModel.getType());
     assertNull(flowCompileResponseModel.getMessage());
+    assertNull(flowCompileResponseModel.getType());
   }
 }

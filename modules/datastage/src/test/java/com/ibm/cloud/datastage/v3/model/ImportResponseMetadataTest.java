@@ -32,14 +32,14 @@ public class ImportResponseMetadataTest {
   @Test
   public void testImportResponseMetadata() throws Throwable {
     ImportResponseMetadata importResponseMetadataModel = new ImportResponseMetadata();
-    assertNull(importResponseMetadataModel.getId());
-    assertNull(importResponseMetadataModel.getName());
-    assertNull(importResponseMetadataModel.getUrl());
-    assertNull(importResponseMetadataModel.getProjectId());
-    assertNull(importResponseMetadataModel.getProjectName());
     assertNull(importResponseMetadataModel.getCatalogId());
     assertNull(importResponseMetadataModel.getCreatedAt());
-    assertNull(importResponseMetadataModel.getModifiedAt());
     assertNull(importResponseMetadataModel.getCreatedBy());
+    assertNull(importResponseMetadataModel.getId());
+    assertNull(importResponseMetadataModel.getModifiedAt());
+    assertNull(importResponseMetadataModel.getName());
+    assertNull(importResponseMetadataModel.getProjectId());
+    assertNull(importResponseMetadataModel.getProjectName());
+    assertNull(importResponseMetadataModel.getUrl());
   }
 }

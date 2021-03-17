@@ -34,7 +34,7 @@ public class DataIntgFlowLockTest {
   @Test
   public void testDataIntgFlowLock() throws Throwable {
     DataIntgFlowLock dataIntgFlowLockModel = new DataIntgFlowLock();
-    assertNull(dataIntgFlowLockModel.getMetadata());
     assertNull(dataIntgFlowLockModel.getEntity());
+    assertNull(dataIntgFlowLockModel.getMetadata());
   }
 }

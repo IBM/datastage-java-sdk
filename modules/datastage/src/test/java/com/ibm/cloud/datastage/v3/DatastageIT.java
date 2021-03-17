@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 import com.ibm.cloud.datastage.test.SdkIntegrationTestBase;
 import com.ibm.cloud.datastage.v3.model.DataFlowPagedCollection;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlow;
+import com.ibm.cloud.datastage.v3.model.DataIntgFlowJson;
 import com.ibm.cloud.datastage.v3.model.DatastageFlowsCloneOptions;
 import com.ibm.cloud.datastage.v3.model.DatastageFlowsCompileOptions;
 import com.ibm.cloud.datastage.v3.model.DatastageFlowsCreateOptions;
@@ -58,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static java.lang.Thread.sleep;
 import static org.testng.Assert.*;
 
 /**
@@ -67,13 +69,17 @@ import static org.testng.Assert.*;
 public class DatastageIT extends SdkIntegrationTestBase {
   public Datastage service = null;
   public static Map<String, String> config = null;
+  private static final String IN_PROGRESS = "in_progress";
   private static String PROJECT_ID = null;
   private static String DATASTAGE_FLOW_ID = null;
   private static String DATASTAGE_FLOW_ID_CLONE = null;
+  private static String DATASTAGE_FLOW_ID_MIGRATION = null;
   private static List<Object> nodes = null;
   private static Object appData = null;
   private static List<Object> schemas = null;
   private static List<Object> schemasUpdated = null;
+  private InputStream rowGenIsx = null;
+  private static String importId = null;
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
   /**
@@ -107,6 +113,7 @@ public class DatastageIT extends SdkIntegrationTestBase {
     InputStream appDataStream = this.getClass().getClassLoader().getResourceAsStream("appdata.json");
     InputStream schemaStream = this.getClass().getClassLoader().getResourceAsStream("schemas.json");
     InputStream schemaStreamForUpdate = this.getClass().getClassLoader().getResourceAsStream("schemas_updated.json");
+    rowGenIsx = this.getClass().getClassLoader().getResourceAsStream("rowgen_peek.isx");
     String nodesStr = IOUtils.toString(nodeStream, StandardCharsets.UTF_8);
     String appDataStr = IOUtils.toString(appDataStream, StandardCharsets.UTF_8);
     String schemaStr = IOUtils.toString(schemaStream, StandardCharsets.UTF_8);
@@ -194,10 +201,52 @@ public class DatastageIT extends SdkIntegrationTestBase {
       .build();
 
       // Invoke operation
-      Response<DataIntgFlow> response = service.datastageFlowsGet(datastageFlowsGetOptions).execute();
+      Response<DataIntgFlowJson> response = service.datastageFlowsGet(datastageFlowsGetOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
+
+      DataIntgFlowJson dataIntgFlowResult = response.getResult();
+
+      assertNotNull(dataIntgFlowResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void test04DatastageFlowsUpdate() throws Exception {
+    try {
+      Pipelines pipelinesModel = new Pipelines.Builder()
+      .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+      .description("A test DataStage flow updated")
+      .runtimeRef("pxOsh")
+      .nodes(nodes)
+      .appData((Map<String, Object>) appData)
+      .build();
+
+      PipelineJson pipelineJsonModel = new PipelineJson.Builder()
+      .docType("pipeline")
+      .version("3.0")
+      .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
+      .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
+      .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+      .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
+      .schemas(schemasUpdated)
+      .build();
+
+      DatastageFlowsUpdateOptions datastageFlowsUpdateOptions = new DatastageFlowsUpdateOptions.Builder()
+      .dataIntgFlowId(DATASTAGE_FLOW_ID)
+      .dataIntgFlowName("testString" + UUID.randomUUID().toString())
+      .pipelineFlows(pipelineJsonModel)
+      .projectId(PROJECT_ID)
+      .build();
+      // Invoke operation
+      Response<DataIntgFlow> response = service.datastageFlowsUpdate(datastageFlowsUpdateOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
 
       DataIntgFlow dataIntgFlowResult = response.getResult();
 
@@ -207,48 +256,6 @@ public class DatastageIT extends SdkIntegrationTestBase {
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
-
-//  @Test
-//  public void test04DatastageFlowsUpdate() throws Exception {
-//    try {
-//      Pipelines pipelinesModel = new Pipelines.Builder()
-//      .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-//      .description("A test DataStage flow updated")
-//      .runtimeRef("pxOsh")
-//      .nodes(nodes)
-//      .appData((Map<String, Object>) appData)
-//      .build();
-//
-//      PipelineJson pipelineJsonModel = new PipelineJson.Builder()
-//      .docType("pipeline")
-//      .version("3.0")
-//      .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
-//      .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
-//      .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-//      .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-//      .schemas(schemasUpdated)
-//      .build();
-//
-//      DatastageFlowsUpdateOptions datastageFlowsUpdateOptions = new DatastageFlowsUpdateOptions.Builder()
-//      .dataIntgFlowId(DATASTAGE_FLOW_ID)
-//      .dataIntgFlowName("testString" + UUID.randomUUID().toString())
-//      .pipelineFlows(pipelineJsonModel)
-//      .projectId(PROJECT_ID)
-//      .build();
-//      // Invoke operation
-//      Response<DataIntgFlow> response = service.datastageFlowsUpdate(datastageFlowsUpdateOptions).execute();
-//      // Validate response
-//      assertNotNull(response);
-//      assertEquals(response.getStatusCode(), 201);
-//
-//      DataIntgFlow dataIntgFlowResult = response.getResult();
-//
-//      assertNotNull(dataIntgFlowResult);
-//    } catch (ServiceResponseException e) {
-//        fail(String.format("Service returned status code %d: %s\nError details: %s",
-//          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
-//    }
-//  }
 
   @Test
   public void test05DatastageFlowsClone() throws Exception {
@@ -282,7 +289,6 @@ public class DatastageIT extends SdkIntegrationTestBase {
       DatastageFlowsCompileOptions datastageFlowsCompileOptions = new DatastageFlowsCompileOptions.Builder()
       .dataIntgFlowId(DATASTAGE_FLOW_ID)
       .projectId(PROJECT_ID)
-      //.runtimeType("testString")
       .build();
 
       // Invoke operation
@@ -300,95 +306,107 @@ public class DatastageIT extends SdkIntegrationTestBase {
     }
   }
 
-//  @Test
-//  public void testMigrationCreate() throws Exception {
-//    try {
-//      MigrationCreateOptions migrationCreateOptions = new MigrationCreateOptions.Builder()
-//      .body(TestUtilities.createMockStream("This is a mock file."))
-//      .projectId(PROJECT_ID)
-//      .onFailure("continue")
-//      .conflictResolution("rename")
-//      .attachmentType("isx")
-//      .fileName("myFlows.isx")
-//      .build();
-//
-//      // Invoke operation
-//      Response<ImportResponse> response = service.migrationCreate(migrationCreateOptions).execute();
-//      // Validate response
-//      assertNotNull(response);
-//      assertEquals(response.getStatusCode(), 202);
-//
-//      ImportResponse importResponseResult = response.getResult();
-//
-//      assertNotNull(importResponseResult);
-//    } catch (ServiceResponseException e) {
-//        fail(String.format("Service returned status code %d: %s\nError details: %s",
-//          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
-//    }
-//  }
-//
-//  @Test
-//  public void testMigrationGet() throws Exception {
-//    try {
-//      MigrationGetOptions migrationGetOptions = new MigrationGetOptions.Builder()
-//      .importId("testString")
-//      .catalogId("testString")
-//      .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
-//      .build();
-//
-//      // Invoke operation
-//      Response<ImportResponse> response = service.migrationGet(migrationGetOptions).execute();
-//      // Validate response
-//      assertNotNull(response);
-//      assertEquals(response.getStatusCode(), 200);
-//
-//      ImportResponse importResponseResult = response.getResult();
-//
-//      assertNotNull(importResponseResult);
-//    } catch (ServiceResponseException e) {
-//        fail(String.format("Service returned status code %d: %s\nError details: %s",
-//          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
-//    }
-//  }
-//
-//  @Test
-//  public void testMigrationDelete() throws Exception {
-//    try {
-//      MigrationDeleteOptions migrationDeleteOptions = new MigrationDeleteOptions.Builder()
-//      .importId("cc6dbbfd-810d-4f0e-b0a9-228c328aff29")
-//      .catalogId("testString")
-//      .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
-//      .build();
-//
-//      // Invoke operation
-//      Response<Void> response = service.migrationDelete(migrationDeleteOptions).execute();
-//      // Validate response
-//      assertNotNull(response);
-//      assertEquals(response.getStatusCode(), 204);
-//    } catch (ServiceResponseException e) {
-//        fail(String.format("Service returned status code %d: %s\nError details: %s",
-//          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
-//    }
-//  }
-
   @Test
-  public void test10DatastageFlowsDelete() throws Exception {
-    String ids[] = new String[] {DATASTAGE_FLOW_ID};
+  public void test07MigrationCreate() throws Exception {
     try {
-      DatastageFlowsDeleteOptions datastageFlowsDeleteOptions = new DatastageFlowsDeleteOptions.Builder()
-      .id(Arrays.asList(ids))
+      MigrationCreateOptions migrationCreateOptions = new MigrationCreateOptions.Builder()
+      .body(rowGenIsx)
       .projectId(PROJECT_ID)
-      .force(true)
+      .onFailure("continue")
+      .conflictResolution("rename")
+      .attachmentType("isx")
+      .fileName("rowgen_peek.isx")
       .build();
 
       // Invoke operation
+      Response<ImportResponse> response = service.migrationCreate(migrationCreateOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 202);
+
+      ImportResponse importResponseResult = response.getResult();
+
+      assertNotNull(importResponseResult);
+      assertNotNull(importResponseResult.getMetadata());
+      importId = importResponseResult.getMetadata().getId();
+      assertNotNull(importId);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void test08MigrationGet() throws Exception {
+    String importStatus = IN_PROGRESS;
+    while (importStatus.equalsIgnoreCase(IN_PROGRESS)) {
+      Thread.sleep(5000);
+      try {
+        MigrationGetOptions migrationGetOptions = new MigrationGetOptions.Builder()
+                .importId(importId)
+                .projectId(PROJECT_ID)
+                .build();
+
+        // Invoke operation
+        Response<ImportResponse> response = service.migrationGet(migrationGetOptions).execute();
+        // Validate response
+        assertNotNull(response);
+        assertEquals(response.getStatusCode(), 200);
+
+        ImportResponse importResponseResult = response.getResult();
+
+        assertNotNull(importResponseResult);
+        assertNotNull(importResponseResult.getEntity());
+        assertNotNull(importResponseResult.getEntity().getImportDataFlows());
+        DATASTAGE_FLOW_ID_MIGRATION = importResponseResult.getEntity().getImportDataFlows().get(0).getId();
+        importStatus = importResponseResult.getEntity().getImportDataFlows().get(0).getStatus();
+        System.out.println("Import status : " + importStatus);
+
+      } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
+                e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+      }
+    }
+  }
+
+  @Test
+  public void test09MigrationDelete() throws Exception {
+    try {
+      MigrationDeleteOptions migrationDeleteOptions = new MigrationDeleteOptions.Builder()
+      .importId(importId)
+      .projectId(PROJECT_ID)
+      .build();
+
+      // Invoke operation
+      Response<Void> response = service.migrationDelete(migrationDeleteOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 202);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void test10DatastageFlowsDelete() throws Exception  {
+    String ids[] = new String[] {DATASTAGE_FLOW_ID, DATASTAGE_FLOW_ID_CLONE, DATASTAGE_FLOW_ID_MIGRATION};
+    try {
+      DatastageFlowsDeleteOptions datastageFlowsDeleteOptions = new DatastageFlowsDeleteOptions.Builder()
+              .id(Arrays.asList(ids))
+              .projectId(PROJECT_ID)
+              .force(true)
+              .build();
+
+      // Invoke operation
       Response<Void> response = service.datastageFlowsDelete(datastageFlowsDeleteOptions).execute();
+
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 204);
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
-          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+      fail(String.format("Service returned status code %d: %s\nError details: %s",
+              e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
 

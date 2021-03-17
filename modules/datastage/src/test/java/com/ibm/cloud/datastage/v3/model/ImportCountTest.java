@@ -32,17 +32,19 @@ public class ImportCountTest {
   @Test
   public void testImportCount() throws Throwable {
     ImportCount importCountModel = new ImportCount();
-    assertNull(importCountModel.getTotal());
-    assertNull(importCountModel.getImported());
-    assertNull(importCountModel.getRenamed());
-    assertNull(importCountModel.getSkipped());
-    assertNull(importCountModel.getReplaced());
-    assertNull(importCountModel.getFailed());
-    assertNull(importCountModel.getDeprecated());
-    assertNull(importCountModel.getUnsupported());
-    assertNull(importCountModel.getPending());
     assertNull(importCountModel.getConnectionsTotal());
+    assertNull(importCountModel.getDeprecated());
+    assertNull(importCountModel.getFailed());
+    assertNull(importCountModel.getImported());
     assertNull(importCountModel.getParameterSetsTotal());
+    assertNull(importCountModel.getPending());
+    assertNull(importCountModel.getPxContainersTotal());
+    assertNull(importCountModel.getRenamed());
+    assertNull(importCountModel.getReplaced());
+    assertNull(importCountModel.getSequenceJobsTotal());
+    assertNull(importCountModel.getSkipped());
     assertNull(importCountModel.getTableDefinitionsTotal());
+    assertNull(importCountModel.getTotal());
+    assertNull(importCountModel.getUnsupported());
   }
 }

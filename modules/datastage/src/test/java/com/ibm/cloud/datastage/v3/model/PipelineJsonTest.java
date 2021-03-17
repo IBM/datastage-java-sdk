@@ -35,53 +35,53 @@ public class PipelineJsonTest {
   @Test
   public void testPipelineJson() throws Throwable {
     Pipelines pipelinesModel = new Pipelines.Builder()
-      .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-      .description("A test DataStage flow")
-      .runtimeRef("pxOsh")
-      .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
       .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .description("A test DataStage flow")
+      .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+      .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+      .runtimeRef("pxOsh")
       .build();
-    assertEquals(pipelinesModel.id(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
-    assertEquals(pipelinesModel.description(), "A test DataStage flow");
-    assertEquals(pipelinesModel.runtimeRef(), "pxOsh");
-    assertEquals(pipelinesModel.nodes(), new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")));
     assertEquals(pipelinesModel.appData(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
+    assertEquals(pipelinesModel.description(), "A test DataStage flow");
+    assertEquals(pipelinesModel.id(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
+    assertEquals(pipelinesModel.nodes(), new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")));
+    assertEquals(pipelinesModel.runtimeRef(), "pxOsh");
 
     PipelineJson pipelineJsonModel = new PipelineJson.Builder()
-      .docType("pipeline")
-      .version("3.0")
-      .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
-      .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
-      .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-      .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-      .schemas(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
-      .runtimes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
       .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-      .parameters(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .docType("pipeline")
       .externalParamsets(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+      .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
+      .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
+      .parameters(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
+      .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+      .runtimes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+      .schemas(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+      .version("3.0")
       .build();
-    assertEquals(pipelineJsonModel.docType(), "pipeline");
-    assertEquals(pipelineJsonModel.version(), "3.0");
-    assertEquals(pipelineJsonModel.jsonSchema(), "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json");
-    assertEquals(pipelineJsonModel.id(), "84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff");
-    assertEquals(pipelineJsonModel.primaryPipeline(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
-    assertEquals(pipelineJsonModel.pipelines(), new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)));
-    assertEquals(pipelineJsonModel.schemas(), new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")));
-    assertEquals(pipelineJsonModel.runtimes(), new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")));
     assertEquals(pipelineJsonModel.appData(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
-    assertEquals(pipelineJsonModel.parameters(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
+    assertEquals(pipelineJsonModel.docType(), "pipeline");
     assertEquals(pipelineJsonModel.externalParamsets(), new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")));
+    assertEquals(pipelineJsonModel.id(), "84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff");
+    assertEquals(pipelineJsonModel.jsonSchema(), "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json");
+    assertEquals(pipelineJsonModel.parameters(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
+    assertEquals(pipelineJsonModel.pipelines(), new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)));
+    assertEquals(pipelineJsonModel.primaryPipeline(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
+    assertEquals(pipelineJsonModel.runtimes(), new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")));
+    assertEquals(pipelineJsonModel.schemas(), new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")));
+    assertEquals(pipelineJsonModel.version(), "3.0");
 
     String json = TestUtilities.serialize(pipelineJsonModel);
 
     PipelineJson pipelineJsonModelNew = TestUtilities.deserialize(json, PipelineJson.class);
     assertTrue(pipelineJsonModelNew instanceof PipelineJson);
-    assertEquals(pipelineJsonModelNew.docType(), "pipeline");
-    assertEquals(pipelineJsonModelNew.version(), "3.0");
-    assertEquals(pipelineJsonModelNew.jsonSchema(), "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json");
-    assertEquals(pipelineJsonModelNew.id(), "84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff");
-    assertEquals(pipelineJsonModelNew.primaryPipeline(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
     assertEquals(pipelineJsonModelNew.appData().toString(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } }.toString());
+    assertEquals(pipelineJsonModelNew.docType(), "pipeline");
+    assertEquals(pipelineJsonModelNew.id(), "84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff");
+    assertEquals(pipelineJsonModelNew.jsonSchema(), "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json");
     assertEquals(pipelineJsonModelNew.parameters().toString(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } }.toString());
+    assertEquals(pipelineJsonModelNew.primaryPipeline(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
+    assertEquals(pipelineJsonModelNew.version(), "3.0");
   }
 }

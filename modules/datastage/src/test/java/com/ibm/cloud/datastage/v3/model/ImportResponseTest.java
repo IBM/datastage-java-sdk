@@ -41,7 +41,7 @@ public class ImportResponseTest {
   @Test
   public void testImportResponse() throws Throwable {
     ImportResponse importResponseModel = new ImportResponse();
-    assertNull(importResponseModel.getMetadata());
     assertNull(importResponseModel.getEntity());
+    assertNull(importResponseModel.getMetadata());
   }
 }

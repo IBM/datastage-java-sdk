@@ -34,18 +34,18 @@ public class ImportFlowTest {
   @Test
   public void testImportFlow() throws Throwable {
     ImportFlow importFlowModel = new ImportFlow();
-    assertNull(importFlowModel.getId());
-    assertNull(importFlowModel.getRefAssetId());
-    assertNull(importFlowModel.getName());
-    assertNull(importFlowModel.getOriginalName());
-    assertNull(importFlowModel.getType());
-    assertNull(importFlowModel.getJobType());
-    assertNull(importFlowModel.getJobId());
-    assertNull(importFlowModel.getJobName());
-    assertNull(importFlowModel.getStatus());
     assertNull(importFlowModel.getConflictResolutionStatus());
     assertNull(importFlowModel.getEndTime());
     assertNull(importFlowModel.getErrors());
+    assertNull(importFlowModel.getId());
+    assertNull(importFlowModel.getJobId());
+    assertNull(importFlowModel.getJobName());
+    assertNull(importFlowModel.getJobType());
+    assertNull(importFlowModel.getName());
+    assertNull(importFlowModel.getOriginalName());
+    assertNull(importFlowModel.getRefAssetId());
+    assertNull(importFlowModel.getStatus());
+    assertNull(importFlowModel.getType());
     assertNull(importFlowModel.getWarnings());
   }
 }

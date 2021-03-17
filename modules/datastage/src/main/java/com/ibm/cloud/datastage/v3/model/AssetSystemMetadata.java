@@ -34,19 +34,19 @@ public class AssetSystemMetadata extends GenericModel {
   protected Date createTime;
   @SerializedName("creator_id")
   protected String creatorId;
+  protected String description;
   protected String href;
   protected String name;
   @SerializedName("origin_country")
   protected String originCountry;
-  protected Long size;
   @SerializedName("project_id")
   protected String projectId;
   @SerializedName("resource_key")
   protected String resourceKey;
-  protected String description;
-  protected List<String> tags;
+  protected Long size;
   @SerializedName("source_system")
   protected Map<String, Object> sourceSystem;
+  protected List<String> tags;
   protected AssetSystemMetadataUsage usage;
 
   /**
@@ -106,6 +106,17 @@ public class AssetSystemMetadata extends GenericModel {
   }
 
   /**
+   * Gets the description.
+   *
+   * The description of the asset.
+   *
+   * @return the description
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
    * Gets the href.
    *
    * URL that can be used to get the asset.
@@ -139,17 +150,6 @@ public class AssetSystemMetadata extends GenericModel {
   }
 
   /**
-   * Gets the size.
-   *
-   * size of the asset.
-   *
-   * @return the size
-   */
-  public Long getSize() {
-    return size;
-  }
-
-  /**
    * Gets the projectId.
    *
    * The ID of the project which contains the asset. catalog_id or project_id is required.
@@ -172,25 +172,14 @@ public class AssetSystemMetadata extends GenericModel {
   }
 
   /**
-   * Gets the description.
+   * Gets the size.
    *
-   * The description of the asset.
+   * size of the asset.
    *
-   * @return the description
+   * @return the size
    */
-  public String getDescription() {
-    return description;
-  }
-
-  /**
-   * Gets the tags.
-   *
-   * A list of tags that can be used to identify different types of data flow.
-   *
-   * @return the tags
-   */
-  public List<String> getTags() {
-    return tags;
+  public Long getSize() {
+    return size;
   }
 
   /**
@@ -202,6 +191,17 @@ public class AssetSystemMetadata extends GenericModel {
    */
   public Map<String, Object> getSourceSystem() {
     return sourceSystem;
+  }
+
+  /**
+   * Gets the tags.
+   *
+   * A list of tags that can be used to identify different types of data flow.
+   *
+   * @return the tags
+   */
+  public List<String> getTags() {
+    return tags;
   }
 
   /**

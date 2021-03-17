@@ -32,7 +32,7 @@ public class AssetEntityROVTest {
   @Test
   public void testAssetEntityROV() throws Throwable {
     AssetEntityROV assetEntityRovModel = new AssetEntityROV();
-    assertNull(assetEntityRovModel.getMode());
     assertNull(assetEntityRovModel.getMembers());
+    assertNull(assetEntityRovModel.getMode());
   }
 }

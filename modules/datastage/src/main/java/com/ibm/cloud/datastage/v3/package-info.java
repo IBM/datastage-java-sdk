@@ -11,6 +11,6 @@
  * specific language governing permissions and limitations under the License.
  */
 /**
- * IBM API For Data Flow Service v3.
+ * IBM APIs for DataStage v3.
  */
 package com.ibm.cloud.datastage.v3;

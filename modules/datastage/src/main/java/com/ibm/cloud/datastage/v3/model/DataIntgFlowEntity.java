@@ -24,8 +24,8 @@ public class DataIntgFlowEntity extends GenericModel {
 
   @SerializedName("data_intg_flow")
   protected Map<String, Object> dataIntgFlow;
-  protected DataIntgFlowLock lock;
   protected String description;
+  protected DataIntgFlowLock lock;
   protected String name;
   protected AssetEntityROV rov;
   @SerializedName("sub_type")
@@ -43,17 +43,6 @@ public class DataIntgFlowEntity extends GenericModel {
   }
 
   /**
-   * Gets the lock.
-   *
-   * Lock information for a DataStage flow asset.
-   *
-   * @return the lock
-   */
-  public DataIntgFlowLock getLock() {
-    return lock;
-  }
-
-  /**
    * Gets the description.
    *
    * The description of the DataStage flow.
@@ -62,6 +51,17 @@ public class DataIntgFlowEntity extends GenericModel {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Gets the lock.
+   *
+   * Lock information for a DataStage flow asset.
+   *
+   * @return the lock
+   */
+  public DataIntgFlowLock getLock() {
+    return lock;
   }
 
   /**
