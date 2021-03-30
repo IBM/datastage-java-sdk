@@ -39,7 +39,7 @@ The IBM Cloud DataStage Java SDK allows developers to programmatically interact 
 
 Service Name | Artifact Coordinates
 --- | ---
-<!-- [Example Service](https://cloud.ibm.com/apidocs/example-service) | com.ibm.cloud:example-service:0.0.1 -->
+[DataStage](https://cloud.ibm.com/apidocs/datastage) | com.ibm.cloud:datastage:0.0.1
 
 ## Prerequisites
 
@@ -67,14 +67,14 @@ artifact coordinates (group id, artifact id and version) for the service, like t
 ```xml
 <dependency>
     <groupId>com.ibm.cloud</groupId>
-    <artifactId>example-service</artifactId>
+    <artifactId>datastage</artifactId>
     <version>0.0.1</version>
 </dependency>
 ```
 
 ##### Gradle
 ```gradle
-'com.ibm.cloud:example-service:0.0.1'
+'com.ibm.cloud:datastage:0.0.1'
 ```
 
 ## Using the SDK

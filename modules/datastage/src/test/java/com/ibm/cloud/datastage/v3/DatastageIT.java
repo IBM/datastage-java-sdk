@@ -169,7 +169,7 @@ public class DatastageIT extends SdkIntegrationTestBase {
       .build();
 
       DatastageFlowsCreateOptions datastageFlowsCreateOptions = new DatastageFlowsCreateOptions.Builder()
-      .dataIntgFlowName("testString" + UUID.randomUUID().toString())
+      .dataIntgFlowName("testIntegrationFlow" + UUID.randomUUID().toString())
       .pipelineFlows(pipelineJsonModel)
       .projectId(PROJECT_ID)
       .assetCategory("system")
