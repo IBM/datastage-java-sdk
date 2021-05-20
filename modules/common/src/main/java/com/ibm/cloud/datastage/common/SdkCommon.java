@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import com.ibm.cloud.sdk.core.http.HttpHeaders;
 import com.ibm.cloud.sdk.core.util.RequestUtils;
 
 /**
@@ -31,12 +30,13 @@ public class SdkCommon {
     /**
      * SDK-specific "user agent" header value.
      */
-    private static String userAgent;
+    private static String userAgent = "datastage-java-sdk";
+
+    private static final String USER_AGENT = "agentname";
 
     private static String projectName;
     private static String version;
 
-    // >>> Replace "datastage" with the parent project's artifactId (e.g. platform-services)
     private static String parentArtifactId = "datastage";
 
     static {
@@ -116,7 +116,7 @@ public class SdkCommon {
      */
     public static Map<String, String> getSdkHeaders(String serviceName, String serviceVersion, String operationId) {
         Map<String, String> headers = new HashMap<>();
-        headers.put(HttpHeaders.USER_AGENT, getUserAgent());
+        headers.put(USER_AGENT, userAgent);
         return headers;
     }
 }

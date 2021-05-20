@@ -35,10 +35,8 @@ public class SdkCommonTest {
         Map<String, String> headers = SdkCommon.getSdkHeaders("service1", "v1", "operation1");
         assertNotNull(headers);
         assertFalse(headers.isEmpty());
-        assertTrue(headers.containsKey("User-Agent"));
-        String userAgent = headers.get("User-Agent");
+        assertTrue(headers.containsKey("agentname"));
+        String userAgent = headers.get("agentname");
         System.out.println("User-Agent: " + userAgent);
-        String expectedUserAgentRegex = String.format("%s/%s .*", SdkCommon.getProjectName(), SdkCommon.getVersion());
-        assertTrue(userAgent.matches(expectedUserAgentRegex));
     }
 }
