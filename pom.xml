@@ -60,12 +60,12 @@
         <!-- >>> List each service's module here -->
         <!-- i.e. <module>modules/example-service</module> -->
 
-        <!-- This module should be listed after all the service-related modules above -->
-        <module>modules/coverage-reports</module>
-
         <!-- This module should always be listed last -->
         <!-- >>> Uncomment the following line if you want to build the examples -->
         <module>modules/datastage</module>
+
+	<!-- This module should be listed after all the service-related modules above -->
+        <module>modules/coverage-reports</module>
     </modules>
 
     <licenses>
