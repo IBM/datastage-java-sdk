@@ -11,9 +11,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.8" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.8" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.10.7" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.10" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.10" level="project" />
     <orderEntry type="library" name="Maven: com.ibm.cloud:sdk-core:9.5.4" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:4.9.0" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:2.8.0" level="project" />
@@ -35,8 +35,8 @@
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.6" level="project" />
     <orderEntry type="library" name="Maven: io.reactivex.rxjava2:rxjava:2.2.7" level="project" />
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: com.ibm.cloud:datastage-common:99-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.ibm.cloud:datastage-common:test-jar:tests:99-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.ibm.cloud:datastage-common:0.0.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.ibm.cloud:datastage-common:test-jar:tests:0.0.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.testng:testng:7.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.beust:jcommander:1.72" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.google.inject:guice:no_aop:4.1.0" level="project" />
