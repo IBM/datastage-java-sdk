@@ -38,7 +38,7 @@ public class FlowCompileResponse extends GenericModel {
   /**
    * Gets the type.
    *
-   * Compile response type. e.g. ok or error.
+   * Compile response type. For example ok or error.
    *
    * @return the type
    */

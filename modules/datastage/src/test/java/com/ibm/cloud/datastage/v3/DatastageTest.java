@@ -16,6 +16,12 @@ import com.ibm.cloud.datastage.v3.Datastage;
 import com.ibm.cloud.datastage.v3.model.AssetEntityROV;
 import com.ibm.cloud.datastage.v3.model.AssetSystemMetadata;
 import com.ibm.cloud.datastage.v3.model.AssetSystemMetadataUsage;
+import com.ibm.cloud.datastage.v3.model.CloneDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.CloneDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.CompileDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.CreateDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.CreateDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.CreateMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.DataFlowPagedCollection;
 import com.ibm.cloud.datastage.v3.model.DataImportError;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlow;
@@ -24,26 +30,27 @@ import com.ibm.cloud.datastage.v3.model.DataIntgFlowJson;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowLock;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowLockEntity;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowLockMetadata;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsCloneOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsCompileOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsCreateOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsDeleteOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsGetOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsListOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsUpdateOptions;
+import com.ibm.cloud.datastage.v3.model.DeleteDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.DeleteDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.DeleteMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.FlowCompileResponse;
+import com.ibm.cloud.datastage.v3.model.GetDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.GetDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.GetMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.HrefModel;
 import com.ibm.cloud.datastage.v3.model.ImportCount;
 import com.ibm.cloud.datastage.v3.model.ImportFlow;
 import com.ibm.cloud.datastage.v3.model.ImportFlowWarning;
+import com.ibm.cloud.datastage.v3.model.ImportNotification;
 import com.ibm.cloud.datastage.v3.model.ImportResponse;
 import com.ibm.cloud.datastage.v3.model.ImportResponseEntity;
 import com.ibm.cloud.datastage.v3.model.ImportResponseMetadata;
-import com.ibm.cloud.datastage.v3.model.MigrationCreateOptions;
-import com.ibm.cloud.datastage.v3.model.MigrationDeleteOptions;
-import com.ibm.cloud.datastage.v3.model.MigrationGetOptions;
+import com.ibm.cloud.datastage.v3.model.ListDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.ListDatastageSubflowsOptions;
 import com.ibm.cloud.datastage.v3.model.PipelineJson;
 import com.ibm.cloud.datastage.v3.model.Pipelines;
+import com.ibm.cloud.datastage.v3.model.UpdateDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.UpdateDatastageSubflowsOptions;
 import com.ibm.cloud.datastage.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.security.Authenticator;
@@ -112,10 +119,10 @@ public class DatastageTest extends PowerMockTestCase {
   }
 
   @Test
-  public void testDatastageFlowsDeleteWOptions() throws Throwable {
+  public void testDeleteDatastageFlowsWOptions() throws Throwable {
     // Schedule some responses.
     String mockResponseBody = "";
-    String datastageFlowsDeletePath = "/v3/data_intg_flows";
+    String deleteDatastageFlowsPath = "/v3/data_intg_flows";
 
     server.enqueue(new MockResponse()
     .setResponseCode(202)
@@ -123,8 +130,8 @@ public class DatastageTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the DatastageFlowsDeleteOptions model
-    DatastageFlowsDeleteOptions datastageFlowsDeleteOptionsModel = new DatastageFlowsDeleteOptions.Builder()
+    // Construct an instance of the DeleteDatastageFlowsOptions model
+    DeleteDatastageFlowsOptions deleteDatastageFlowsOptionsModel = new DeleteDatastageFlowsOptions.Builder()
     .id(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
     .catalogId("testString")
     .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
@@ -132,7 +139,7 @@ public class DatastageTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<Void> response = datastageService.datastageFlowsDelete(datastageFlowsDeleteOptionsModel).execute();
+    Response<Void> response = datastageService.deleteDatastageFlows(deleteDatastageFlowsOptionsModel).execute();
     assertNotNull(response);
     Void responseObj = response.getResult();
     // Response does not have a return type. Check that the result is null.
@@ -153,26 +160,26 @@ public class DatastageTest extends PowerMockTestCase {
     assertEquals(Boolean.valueOf(query.get("force")), Boolean.valueOf(true));
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, datastageFlowsDeletePath);
+    assertEquals(parsedPath, deleteDatastageFlowsPath);
   }
 
-  // Test the datastageFlowsDelete operation with null options model parameter
+  // Test the deleteDatastageFlows operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDatastageFlowsDeleteNoOptions() throws Throwable {
+  public void testDeleteDatastageFlowsNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    datastageService.datastageFlowsDelete(null).execute();
+    datastageService.deleteDatastageFlows(null).execute();
   }
 
   @Test
-  public void testDatastageFlowsListWOptions() throws Throwable {
+  public void testListDatastageFlowsWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"data_flows\": [{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}], \"first\": {\"href\": \"href\"}, \"last\": {\"href\": \"href\"}, \"limit\": 5, \"next\": {\"href\": \"href\"}, \"prev\": {\"href\": \"href\"}, \"total_count\": 10}";
-    String datastageFlowsListPath = "/v3/data_intg_flows";
+    String mockResponseBody = "{\"data_flows\": [{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"data_intg_subflow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}], \"first\": {\"href\": \"href\"}, \"last\": {\"href\": \"href\"}, \"limit\": 5, \"next\": {\"href\": \"href\"}, \"prev\": {\"href\": \"href\"}, \"total_count\": 10}";
+    String listDatastageFlowsPath = "/v3/data_intg_flows";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json;charset=utf-8")
@@ -181,8 +188,8 @@ public class DatastageTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the DatastageFlowsListOptions model
-    DatastageFlowsListOptions datastageFlowsListOptionsModel = new DatastageFlowsListOptions.Builder()
+    // Construct an instance of the ListDatastageFlowsOptions model
+    ListDatastageFlowsOptions listDatastageFlowsOptionsModel = new ListDatastageFlowsOptions.Builder()
     .catalogId("testString")
     .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
     .sort("testString")
@@ -193,7 +200,7 @@ public class DatastageTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<DataFlowPagedCollection> response = datastageService.datastageFlowsList(datastageFlowsListOptionsModel).execute();
+    Response<DataFlowPagedCollection> response = datastageService.listDatastageFlows(listDatastageFlowsOptionsModel).execute();
     assertNotNull(response);
     DataFlowPagedCollection responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -216,14 +223,14 @@ public class DatastageTest extends PowerMockTestCase {
     assertEquals(query.get("entity.description"), "testString");
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, datastageFlowsListPath);
+    assertEquals(parsedPath, listDatastageFlowsPath);
   }
 
   @Test
-  public void testDatastageFlowsCreateWOptions() throws Throwable {
+  public void testCreateDatastageFlowsWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
-    String datastageFlowsCreatePath = "/v3/data_intg_flows";
+    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"data_intg_subflow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
+    String createDatastageFlowsPath = "/v3/data_intg_flows";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json;charset=utf-8")
@@ -235,8 +242,9 @@ public class DatastageTest extends PowerMockTestCase {
     // Construct an instance of the Pipelines model
     Pipelines pipelinesModel = new Pipelines.Builder()
     .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-    .description("A test DataStage flow")
+    .description("A test DataStage flow.")
     .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+    .name("ContainerC1")
     .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
     .runtimeRef("pxOsh")
     .build();
@@ -256,8 +264,8 @@ public class DatastageTest extends PowerMockTestCase {
     .version("3.0")
     .build();
 
-    // Construct an instance of the DatastageFlowsCreateOptions model
-    DatastageFlowsCreateOptions datastageFlowsCreateOptionsModel = new DatastageFlowsCreateOptions.Builder()
+    // Construct an instance of the CreateDatastageFlowsOptions model
+    CreateDatastageFlowsOptions createDatastageFlowsOptionsModel = new CreateDatastageFlowsOptions.Builder()
     .dataIntgFlowName("testString")
     .pipelineFlows(pipelineJsonModel)
     .catalogId("testString")
@@ -266,7 +274,7 @@ public class DatastageTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<DataIntgFlow> response = datastageService.datastageFlowsCreate(datastageFlowsCreateOptionsModel).execute();
+    Response<DataIntgFlow> response = datastageService.createDatastageFlows(createDatastageFlowsOptionsModel).execute();
     assertNotNull(response);
     DataIntgFlow responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -286,26 +294,26 @@ public class DatastageTest extends PowerMockTestCase {
     assertEquals(query.get("asset_category"), "system");
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, datastageFlowsCreatePath);
+    assertEquals(parsedPath, createDatastageFlowsPath);
   }
 
-  // Test the datastageFlowsCreate operation with null options model parameter
+  // Test the createDatastageFlows operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDatastageFlowsCreateNoOptions() throws Throwable {
+  public void testCreateDatastageFlowsNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    datastageService.datastageFlowsCreate(null).execute();
+    datastageService.createDatastageFlows(null).execute();
   }
 
   @Test
-  public void testDatastageFlowsGetWOptions() throws Throwable {
+  public void testGetDatastageFlowsWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"attachments\": {\"app_data\": {\"mapKey\": \"anyValue\"}, \"doc_type\": \"pipeline\", \"external_paramsets\": [\"anyValue\"], \"id\": \"84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff\", \"json_schema\": \"http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json\", \"parameters\": {\"mapKey\": \"anyValue\"}, \"pipelines\": [{\"app_data\": {\"mapKey\": \"anyValue\"}, \"description\": \"A test DataStage flow\", \"id\": \"fa1b859a-d592-474d-b56c-2137e4efa4bc\", \"nodes\": [\"anyValue\"], \"runtime_ref\": \"pxOsh\"}], \"primary_pipeline\": \"fa1b859a-d592-474d-b56c-2137e4efa4bc\", \"runtimes\": [\"anyValue\"], \"schemas\": [\"anyValue\"], \"version\": \"3.0\"}, \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
-    String datastageFlowsGetPath = "/v3/data_intg_flows/testString";
+    String mockResponseBody = "{\"attachments\": {\"app_data\": {\"mapKey\": \"anyValue\"}, \"doc_type\": \"pipeline\", \"external_paramsets\": [\"anyValue\"], \"id\": \"84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff\", \"json_schema\": \"http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json\", \"parameters\": {\"mapKey\": \"anyValue\"}, \"pipelines\": [{\"app_data\": {\"mapKey\": \"anyValue\"}, \"description\": \"A test DataStage flow.\", \"id\": \"fa1b859a-d592-474d-b56c-2137e4efa4bc\", \"name\": \"ContainerC1\", \"nodes\": [\"anyValue\"], \"runtime_ref\": \"pxOsh\"}], \"primary_pipeline\": \"fa1b859a-d592-474d-b56c-2137e4efa4bc\", \"runtimes\": [\"anyValue\"], \"schemas\": [\"anyValue\"], \"version\": \"3.0\"}, \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"data_intg_subflow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
+    String getDatastageFlowsPath = "/v3/data_intg_flows/testString";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json;charset=utf-8")
@@ -314,15 +322,15 @@ public class DatastageTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the DatastageFlowsGetOptions model
-    DatastageFlowsGetOptions datastageFlowsGetOptionsModel = new DatastageFlowsGetOptions.Builder()
+    // Construct an instance of the GetDatastageFlowsOptions model
+    GetDatastageFlowsOptions getDatastageFlowsOptionsModel = new GetDatastageFlowsOptions.Builder()
     .dataIntgFlowId("testString")
     .catalogId("testString")
     .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<DataIntgFlowJson> response = datastageService.datastageFlowsGet(datastageFlowsGetOptionsModel).execute();
+    Response<DataIntgFlowJson> response = datastageService.getDatastageFlows(getDatastageFlowsOptionsModel).execute();
     assertNotNull(response);
     DataIntgFlowJson responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -340,26 +348,26 @@ public class DatastageTest extends PowerMockTestCase {
     assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, datastageFlowsGetPath);
+    assertEquals(parsedPath, getDatastageFlowsPath);
   }
 
-  // Test the datastageFlowsGet operation with null options model parameter
+  // Test the getDatastageFlows operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDatastageFlowsGetNoOptions() throws Throwable {
+  public void testGetDatastageFlowsNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    datastageService.datastageFlowsGet(null).execute();
+    datastageService.getDatastageFlows(null).execute();
   }
 
   @Test
-  public void testDatastageFlowsUpdateWOptions() throws Throwable {
+  public void testUpdateDatastageFlowsWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
-    String datastageFlowsUpdatePath = "/v3/data_intg_flows/testString";
+    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"data_intg_subflow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
+    String updateDatastageFlowsPath = "/v3/data_intg_flows/testString";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json;charset=utf-8")
@@ -371,8 +379,9 @@ public class DatastageTest extends PowerMockTestCase {
     // Construct an instance of the Pipelines model
     Pipelines pipelinesModel = new Pipelines.Builder()
     .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-    .description("A test DataStage flow")
+    .description("A test DataStage flow.")
     .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+    .name("ContainerC1")
     .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
     .runtimeRef("pxOsh")
     .build();
@@ -392,8 +401,8 @@ public class DatastageTest extends PowerMockTestCase {
     .version("3.0")
     .build();
 
-    // Construct an instance of the DatastageFlowsUpdateOptions model
-    DatastageFlowsUpdateOptions datastageFlowsUpdateOptionsModel = new DatastageFlowsUpdateOptions.Builder()
+    // Construct an instance of the UpdateDatastageFlowsOptions model
+    UpdateDatastageFlowsOptions updateDatastageFlowsOptionsModel = new UpdateDatastageFlowsOptions.Builder()
     .dataIntgFlowId("testString")
     .dataIntgFlowName("testString")
     .pipelineFlows(pipelineJsonModel)
@@ -402,7 +411,7 @@ public class DatastageTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<DataIntgFlow> response = datastageService.datastageFlowsUpdate(datastageFlowsUpdateOptionsModel).execute();
+    Response<DataIntgFlow> response = datastageService.updateDatastageFlows(updateDatastageFlowsOptionsModel).execute();
     assertNotNull(response);
     DataIntgFlow responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -421,26 +430,26 @@ public class DatastageTest extends PowerMockTestCase {
     assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, datastageFlowsUpdatePath);
+    assertEquals(parsedPath, updateDatastageFlowsPath);
   }
 
-  // Test the datastageFlowsUpdate operation with null options model parameter
+  // Test the updateDatastageFlows operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDatastageFlowsUpdateNoOptions() throws Throwable {
+  public void testUpdateDatastageFlowsNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    datastageService.datastageFlowsUpdate(null).execute();
+    datastageService.updateDatastageFlows(null).execute();
   }
 
   @Test
-  public void testDatastageFlowsCloneWOptions() throws Throwable {
+  public void testCloneDatastageFlowsWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
-    String datastageFlowsClonePath = "/v3/data_intg_flows/testString/clone";
+    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"data_intg_subflow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
+    String cloneDatastageFlowsPath = "/v3/data_intg_flows/testString/clone";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json;charset=utf-8")
@@ -449,15 +458,15 @@ public class DatastageTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the DatastageFlowsCloneOptions model
-    DatastageFlowsCloneOptions datastageFlowsCloneOptionsModel = new DatastageFlowsCloneOptions.Builder()
+    // Construct an instance of the CloneDatastageFlowsOptions model
+    CloneDatastageFlowsOptions cloneDatastageFlowsOptionsModel = new CloneDatastageFlowsOptions.Builder()
     .dataIntgFlowId("testString")
     .catalogId("testString")
     .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<DataIntgFlow> response = datastageService.datastageFlowsClone(datastageFlowsCloneOptionsModel).execute();
+    Response<DataIntgFlow> response = datastageService.cloneDatastageFlows(cloneDatastageFlowsOptionsModel).execute();
     assertNotNull(response);
     DataIntgFlow responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -475,26 +484,26 @@ public class DatastageTest extends PowerMockTestCase {
     assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, datastageFlowsClonePath);
+    assertEquals(parsedPath, cloneDatastageFlowsPath);
   }
 
-  // Test the datastageFlowsClone operation with null options model parameter
+  // Test the cloneDatastageFlows operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDatastageFlowsCloneNoOptions() throws Throwable {
+  public void testCloneDatastageFlowsNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    datastageService.datastageFlowsClone(null).execute();
+    datastageService.cloneDatastageFlows(null).execute();
   }
 
   @Test
-  public void testDatastageFlowsCompileWOptions() throws Throwable {
+  public void testCompileDatastageFlowsWOptions() throws Throwable {
     // Schedule some responses.
     String mockResponseBody = "{\"message\": {\"mapKey\": \"anyValue\"}, \"type\": \"type\"}";
-    String datastageFlowsCompilePath = "/v3/ds_codegen/compile/testString";
+    String compileDatastageFlowsPath = "/v3/ds_codegen/compile/testString";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json;charset=utf-8")
@@ -503,8 +512,8 @@ public class DatastageTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the DatastageFlowsCompileOptions model
-    DatastageFlowsCompileOptions datastageFlowsCompileOptionsModel = new DatastageFlowsCompileOptions.Builder()
+    // Construct an instance of the CompileDatastageFlowsOptions model
+    CompileDatastageFlowsOptions compileDatastageFlowsOptionsModel = new CompileDatastageFlowsOptions.Builder()
     .dataIntgFlowId("testString")
     .catalogId("testString")
     .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
@@ -512,7 +521,7 @@ public class DatastageTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<FlowCompileResponse> response = datastageService.datastageFlowsCompile(datastageFlowsCompileOptionsModel).execute();
+    Response<FlowCompileResponse> response = datastageService.compileDatastageFlows(compileDatastageFlowsOptionsModel).execute();
     assertNotNull(response);
     FlowCompileResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -531,26 +540,405 @@ public class DatastageTest extends PowerMockTestCase {
     assertEquals(query.get("runtime_type"), "testString");
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, datastageFlowsCompilePath);
+    assertEquals(parsedPath, compileDatastageFlowsPath);
   }
 
-  // Test the datastageFlowsCompile operation with null options model parameter
+  // Test the compileDatastageFlows operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDatastageFlowsCompileNoOptions() throws Throwable {
+  public void testCompileDatastageFlowsNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    datastageService.datastageFlowsCompile(null).execute();
+    datastageService.compileDatastageFlows(null).execute();
   }
 
   @Test
-  public void testMigrationCreateWOptions() throws Throwable {
+  public void testDeleteDatastageSubflowsWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"entity\": {\"cancelled_by\": \"user1@company1.com\", \"conflict_resolution\": \"conflictResolution\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"import_data_flows\": [{\"conflict_resolution_status\": \"import_flow_renamed\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"errors\": [{\"description\": \"description\", \"name\": \"name\", \"type\": \"unsupported_stage_type\"}], \"id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"job_id\": \"ccfaaafd-810d-4f0e-b0a9-228c328a0136\", \"job_name\": \"Aggregator12_DataStage_1\", \"job_type\": \"px_job\", \"name\": \"cancel-reservation-job\", \"original_name\": \"cancel-reservation-job\", \"ref_asset_id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"status\": \"completed\", \"type\": \"px_job\", \"warnings\": [{\"description\": \"description\", \"name\": \"name\", \"type\": \"unreleased_stage_type\"}]}], \"name\": \"seat-reservation-jobs\", \"on_failure\": \"onFailure\", \"remaining_time\": 13, \"start_time\": \"2019-01-01T12:00:00.000Z\", \"status\": \"in_progress\", \"tally\": {\"connections_total\": 16, \"deprecated\": 10, \"failed\": 6, \"imported\": 8, \"parameter_sets_total\": 18, \"pending\": 7, \"px_containers_total\": 17, \"renamed\": 7, \"replaced\": 8, \"sequence_jobs_total\": 17, \"skipped\": 7, \"table_definitions_total\": 21, \"total\": 5, \"unsupported\": 11}}, \"metadata\": {\"catalog_id\": \"catalogId\", \"created_at\": \"2019-01-01T12:00:00.000Z\", \"created_by\": \"user1@company1.com\", \"id\": \"id\", \"modified_at\": \"2019-01-01T12:00:00.000Z\", \"name\": \"name\", \"project_id\": \"projectId\", \"project_name\": \"projectName\", \"url\": \"url\"}}";
-    String migrationCreatePath = "/v3/migration/isx_imports";
+    String mockResponseBody = "";
+    String deleteDatastageSubflowsPath = "/v3/data_intg_flows/subflows";
+
+    server.enqueue(new MockResponse()
+    .setResponseCode(202)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the DeleteDatastageSubflowsOptions model
+    DeleteDatastageSubflowsOptions deleteDatastageSubflowsOptionsModel = new DeleteDatastageSubflowsOptions.Builder()
+    .id(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
+    .catalogId("testString")
+    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<Void> response = datastageService.deleteDatastageSubflows(deleteDatastageSubflowsOptionsModel).execute();
+    assertNotNull(response);
+    Void responseObj = response.getResult();
+    // Response does not have a return type. Check that the result is null.
+    assertNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "DELETE");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    // Get query params
+    assertEquals(query.get("id"), RequestUtils.join(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")), ","));
+    assertEquals(query.get("catalog_id"), "testString");
+    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, deleteDatastageSubflowsPath);
+  }
+
+  // Test the deleteDatastageSubflows operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDeleteDatastageSubflowsNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    datastageService.deleteDatastageSubflows(null).execute();
+  }
+
+  @Test
+  public void testListDatastageSubflowsWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"data_flows\": [{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"data_intg_subflow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}], \"first\": {\"href\": \"href\"}, \"last\": {\"href\": \"href\"}, \"limit\": 5, \"next\": {\"href\": \"href\"}, \"prev\": {\"href\": \"href\"}, \"total_count\": 10}";
+    String listDatastageSubflowsPath = "/v3/data_intg_flows/subflows";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json;charset=utf-8")
+    .setResponseCode(200)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the ListDatastageSubflowsOptions model
+    ListDatastageSubflowsOptions listDatastageSubflowsOptionsModel = new ListDatastageSubflowsOptions.Builder()
+    .catalogId("testString")
+    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+    .sort("testString")
+    .start("testString")
+    .limit(Long.valueOf("100"))
+    .entityName("testString")
+    .entityDescription("testString")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<DataFlowPagedCollection> response = datastageService.listDatastageSubflows(listDatastageSubflowsOptionsModel).execute();
+    assertNotNull(response);
+    DataFlowPagedCollection responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    // Get query params
+    assertEquals(query.get("catalog_id"), "testString");
+    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
+    assertEquals(query.get("sort"), "testString");
+    assertEquals(query.get("start"), "testString");
+    assertEquals(Long.valueOf(query.get("limit")), Long.valueOf("100"));
+    assertEquals(query.get("entity.name"), "testString");
+    assertEquals(query.get("entity.description"), "testString");
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, listDatastageSubflowsPath);
+  }
+
+  @Test
+  public void testCreateDatastageSubflowsWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"data_intg_subflow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
+    String createDatastageSubflowsPath = "/v3/data_intg_flows/subflows";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json;charset=utf-8")
+    .setResponseCode(201)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the Pipelines model
+    Pipelines pipelinesModel = new Pipelines.Builder()
+    .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .description("A test DataStage flow.")
+    .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+    .name("ContainerC1")
+    .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .runtimeRef("pxOsh")
+    .build();
+
+    // Construct an instance of the PipelineJson model
+    PipelineJson pipelineJsonModel = new PipelineJson.Builder()
+    .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .docType("pipeline")
+    .externalParamsets(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
+    .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
+    .parameters(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
+    .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+    .runtimes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .schemas(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .version("3.0")
+    .build();
+
+    // Construct an instance of the CreateDatastageSubflowsOptions model
+    CreateDatastageSubflowsOptions createDatastageSubflowsOptionsModel = new CreateDatastageSubflowsOptions.Builder()
+    .dataIntgSubflowName("testString")
+    .pipelineFlows(pipelineJsonModel)
+    .catalogId("testString")
+    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+    .assetCategory("system")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<DataIntgFlow> response = datastageService.createDatastageSubflows(createDatastageSubflowsOptionsModel).execute();
+    assertNotNull(response);
+    DataIntgFlow responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    // Get query params
+    assertEquals(query.get("data_intg_subflow_name"), "testString");
+    assertEquals(query.get("catalog_id"), "testString");
+    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
+    assertEquals(query.get("asset_category"), "system");
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createDatastageSubflowsPath);
+  }
+
+  // Test the createDatastageSubflows operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateDatastageSubflowsNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    datastageService.createDatastageSubflows(null).execute();
+  }
+
+  @Test
+  public void testGetDatastageSubflowsWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"attachments\": {\"app_data\": {\"mapKey\": \"anyValue\"}, \"doc_type\": \"pipeline\", \"external_paramsets\": [\"anyValue\"], \"id\": \"84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff\", \"json_schema\": \"http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json\", \"parameters\": {\"mapKey\": \"anyValue\"}, \"pipelines\": [{\"app_data\": {\"mapKey\": \"anyValue\"}, \"description\": \"A test DataStage flow.\", \"id\": \"fa1b859a-d592-474d-b56c-2137e4efa4bc\", \"name\": \"ContainerC1\", \"nodes\": [\"anyValue\"], \"runtime_ref\": \"pxOsh\"}], \"primary_pipeline\": \"fa1b859a-d592-474d-b56c-2137e4efa4bc\", \"runtimes\": [\"anyValue\"], \"schemas\": [\"anyValue\"], \"version\": \"3.0\"}, \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"data_intg_subflow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
+    String getDatastageSubflowsPath = "/v3/data_intg_flows/subflows/testString";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json;charset=utf-8")
+    .setResponseCode(200)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the GetDatastageSubflowsOptions model
+    GetDatastageSubflowsOptions getDatastageSubflowsOptionsModel = new GetDatastageSubflowsOptions.Builder()
+    .dataIntgSubflowId("testString")
+    .catalogId("testString")
+    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<DataIntgFlowJson> response = datastageService.getDatastageSubflows(getDatastageSubflowsOptionsModel).execute();
+    assertNotNull(response);
+    DataIntgFlowJson responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    // Get query params
+    assertEquals(query.get("catalog_id"), "testString");
+    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getDatastageSubflowsPath);
+  }
+
+  // Test the getDatastageSubflows operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetDatastageSubflowsNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    datastageService.getDatastageSubflows(null).execute();
+  }
+
+  @Test
+  public void testUpdateDatastageSubflowsWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"data_intg_subflow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
+    String updateDatastageSubflowsPath = "/v3/data_intg_flows/subflows/testString";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json;charset=utf-8")
+    .setResponseCode(201)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the Pipelines model
+    Pipelines pipelinesModel = new Pipelines.Builder()
+    .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .description("A test DataStage flow.")
+    .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+    .name("ContainerC1")
+    .nodes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .runtimeRef("pxOsh")
+    .build();
+
+    // Construct an instance of the PipelineJson model
+    PipelineJson pipelineJsonModel = new PipelineJson.Builder()
+    .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .docType("pipeline")
+    .externalParamsets(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
+    .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
+    .parameters(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+    .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
+    .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+    .runtimes(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .schemas(new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")))
+    .version("3.0")
+    .build();
+
+    // Construct an instance of the UpdateDatastageSubflowsOptions model
+    UpdateDatastageSubflowsOptions updateDatastageSubflowsOptionsModel = new UpdateDatastageSubflowsOptions.Builder()
+    .dataIntgSubflowId("testString")
+    .dataIntgSubflowName("testString")
+    .pipelineFlows(pipelineJsonModel)
+    .catalogId("testString")
+    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<DataIntgFlow> response = datastageService.updateDatastageSubflows(updateDatastageSubflowsOptionsModel).execute();
+    assertNotNull(response);
+    DataIntgFlow responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PUT");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    // Get query params
+    assertEquals(query.get("data_intg_subflow_name"), "testString");
+    assertEquals(query.get("catalog_id"), "testString");
+    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, updateDatastageSubflowsPath);
+  }
+
+  // Test the updateDatastageSubflows operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUpdateDatastageSubflowsNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    datastageService.updateDatastageSubflows(null).execute();
+  }
+
+  @Test
+  public void testCloneDatastageSubflowsWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"attachments\": [\"anyValue\"], \"entity\": {\"data_intg_flow\": {\"mapKey\": \"anyValue\"}, \"data_intg_subflow\": {\"mapKey\": \"anyValue\"}, \"description\": \"description\", \"lock\": {\"entity\": {\"data_intg_flow_id\": \"dataIntgFlowId\", \"requester\": \"requester\"}, \"metadata\": {\"alive\": false}}, \"name\": \"name\", \"rov\": {\"members\": [\"members\"], \"mode\": 4}, \"sub_type\": \"subType\"}, \"metadata\": {\"asset_id\": \"assetId\", \"asset_type\": \"assetType\", \"catalog_id\": \"catalogId\", \"create_time\": \"2019-01-01T12:00:00.000Z\", \"creator_id\": \"creatorId\", \"description\": \"description\", \"href\": \"href\", \"name\": \"name\", \"origin_country\": \"originCountry\", \"project_id\": \"projectId\", \"resource_key\": \"resourceKey\", \"size\": 4, \"source_system\": {\"mapKey\": \"anyValue\"}, \"tags\": [\"tags\"], \"usage\": {\"access_count\": 11, \"last_access_time\": \"2019-01-01T12:00:00.000Z\", \"last_accessor_id\": \"lastAccessorId\", \"last_modification_time\": \"2019-01-01T12:00:00.000Z\", \"last_modifier_id\": \"lastModifierId\"}}}";
+    String cloneDatastageSubflowsPath = "/v3/data_intg_flows/subflows/testString/clone";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json;charset=utf-8")
+    .setResponseCode(201)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the CloneDatastageSubflowsOptions model
+    CloneDatastageSubflowsOptions cloneDatastageSubflowsOptionsModel = new CloneDatastageSubflowsOptions.Builder()
+    .dataIntgSubflowId("testString")
+    .catalogId("testString")
+    .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<DataIntgFlow> response = datastageService.cloneDatastageSubflows(cloneDatastageSubflowsOptionsModel).execute();
+    assertNotNull(response);
+    DataIntgFlow responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNotNull(query);
+    // Get query params
+    assertEquals(query.get("catalog_id"), "testString");
+    assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, cloneDatastageSubflowsPath);
+  }
+
+  // Test the cloneDatastageSubflows operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCloneDatastageSubflowsNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    datastageService.cloneDatastageSubflows(null).execute();
+  }
+
+  @Test
+  public void testCreateMigrationWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"entity\": {\"cancelled_by\": \"user1@company1.com\", \"conflict_resolution\": \"conflictResolution\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"import_data_flows\": [{\"conflict_resolution_status\": \"import_flow_renamed\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"errors\": [{\"description\": \"description\", \"name\": \"name\", \"stage_type\": \"stageType\", \"type\": \"unsupported_stage_type\"}], \"id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"job_id\": \"ccfaaafd-810d-4f0e-b0a9-228c328a0136\", \"job_name\": \"Aggregator12_DataStage_1\", \"job_type\": \"px_job\", \"name\": \"cancel-reservation-job\", \"original_name\": \"cancel-reservation-job\", \"ref_asset_id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"status\": \"completed\", \"type\": \"px_job\", \"warnings\": [{\"description\": \"description\", \"name\": \"name\", \"type\": \"unreleased_stage_type\"}]}], \"name\": \"seat-reservation-jobs\", \"notifications\": [{\"created_at\": \"2019-01-01T12:00:00.000Z\", \"id\": \"id\", \"status\": \"status\"}], \"on_failure\": \"onFailure\", \"remaining_time\": 13, \"start_time\": \"2019-01-01T12:00:00.000Z\", \"status\": \"in_progress\", \"tally\": {\"connections_total\": 16, \"deprecated\": 10, \"failed\": 6, \"imported\": 8, \"parameter_sets_total\": 18, \"pending\": 7, \"renamed\": 7, \"replaced\": 8, \"sequence_jobs_total\": 17, \"skipped\": 7, \"subflows_total\": 13, \"table_definitions_total\": 21, \"total\": 5, \"unsupported\": 11}}, \"metadata\": {\"catalog_id\": \"catalogId\", \"created_at\": \"2019-01-01T12:00:00.000Z\", \"created_by\": \"user1@company1.com\", \"id\": \"id\", \"modified_at\": \"2019-01-01T12:00:00.000Z\", \"name\": \"name\", \"project_id\": \"projectId\", \"project_name\": \"projectName\", \"url\": \"url\"}}";
+    String createMigrationPath = "/v3/migration/isx_imports";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json;charset=utf-8")
@@ -559,8 +947,8 @@ public class DatastageTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the MigrationCreateOptions model
-    MigrationCreateOptions migrationCreateOptionsModel = new MigrationCreateOptions.Builder()
+    // Construct an instance of the CreateMigrationOptions model
+    CreateMigrationOptions createMigrationOptionsModel = new CreateMigrationOptions.Builder()
     .body(TestUtilities.createMockStream("This is a mock file."))
     .catalogId("testString")
     .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
@@ -571,7 +959,7 @@ public class DatastageTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<ImportResponse> response = datastageService.migrationCreate(migrationCreateOptionsModel).execute();
+    Response<ImportResponse> response = datastageService.createMigration(createMigrationOptionsModel).execute();
     assertNotNull(response);
     ImportResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -593,26 +981,26 @@ public class DatastageTest extends PowerMockTestCase {
     assertEquals(query.get("file_name"), "myFlows.isx");
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, migrationCreatePath);
+    assertEquals(parsedPath, createMigrationPath);
   }
 
-  // Test the migrationCreate operation with null options model parameter
+  // Test the createMigration operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testMigrationCreateNoOptions() throws Throwable {
+  public void testCreateMigrationNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    datastageService.migrationCreate(null).execute();
+    datastageService.createMigration(null).execute();
   }
 
   @Test
-  public void testMigrationDeleteWOptions() throws Throwable {
+  public void testDeleteMigrationWOptions() throws Throwable {
     // Schedule some responses.
     String mockResponseBody = "";
-    String migrationDeletePath = "/v3/migration/isx_imports/cc6dbbfd-810d-4f0e-b0a9-228c328aff29";
+    String deleteMigrationPath = "/v3/migration/isx_imports/cc6dbbfd-810d-4f0e-b0a9-228c328aff29";
 
     server.enqueue(new MockResponse()
     .setResponseCode(204)
@@ -620,15 +1008,15 @@ public class DatastageTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the MigrationDeleteOptions model
-    MigrationDeleteOptions migrationDeleteOptionsModel = new MigrationDeleteOptions.Builder()
+    // Construct an instance of the DeleteMigrationOptions model
+    DeleteMigrationOptions deleteMigrationOptionsModel = new DeleteMigrationOptions.Builder()
     .importId("cc6dbbfd-810d-4f0e-b0a9-228c328aff29")
     .catalogId("testString")
     .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<Void> response = datastageService.migrationDelete(migrationDeleteOptionsModel).execute();
+    Response<Void> response = datastageService.deleteMigration(deleteMigrationOptionsModel).execute();
     assertNotNull(response);
     Void responseObj = response.getResult();
     // Response does not have a return type. Check that the result is null.
@@ -647,26 +1035,26 @@ public class DatastageTest extends PowerMockTestCase {
     assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, migrationDeletePath);
+    assertEquals(parsedPath, deleteMigrationPath);
   }
 
-  // Test the migrationDelete operation with null options model parameter
+  // Test the deleteMigration operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testMigrationDeleteNoOptions() throws Throwable {
+  public void testDeleteMigrationNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    datastageService.migrationDelete(null).execute();
+    datastageService.deleteMigration(null).execute();
   }
 
   @Test
-  public void testMigrationGetWOptions() throws Throwable {
+  public void testGetMigrationWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"entity\": {\"cancelled_by\": \"user1@company1.com\", \"conflict_resolution\": \"conflictResolution\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"import_data_flows\": [{\"conflict_resolution_status\": \"import_flow_renamed\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"errors\": [{\"description\": \"description\", \"name\": \"name\", \"type\": \"unsupported_stage_type\"}], \"id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"job_id\": \"ccfaaafd-810d-4f0e-b0a9-228c328a0136\", \"job_name\": \"Aggregator12_DataStage_1\", \"job_type\": \"px_job\", \"name\": \"cancel-reservation-job\", \"original_name\": \"cancel-reservation-job\", \"ref_asset_id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"status\": \"completed\", \"type\": \"px_job\", \"warnings\": [{\"description\": \"description\", \"name\": \"name\", \"type\": \"unreleased_stage_type\"}]}], \"name\": \"seat-reservation-jobs\", \"on_failure\": \"onFailure\", \"remaining_time\": 13, \"start_time\": \"2019-01-01T12:00:00.000Z\", \"status\": \"in_progress\", \"tally\": {\"connections_total\": 16, \"deprecated\": 10, \"failed\": 6, \"imported\": 8, \"parameter_sets_total\": 18, \"pending\": 7, \"px_containers_total\": 17, \"renamed\": 7, \"replaced\": 8, \"sequence_jobs_total\": 17, \"skipped\": 7, \"table_definitions_total\": 21, \"total\": 5, \"unsupported\": 11}}, \"metadata\": {\"catalog_id\": \"catalogId\", \"created_at\": \"2019-01-01T12:00:00.000Z\", \"created_by\": \"user1@company1.com\", \"id\": \"id\", \"modified_at\": \"2019-01-01T12:00:00.000Z\", \"name\": \"name\", \"project_id\": \"projectId\", \"project_name\": \"projectName\", \"url\": \"url\"}}";
-    String migrationGetPath = "/v3/migration/isx_imports/testString";
+    String mockResponseBody = "{\"entity\": {\"cancelled_by\": \"user1@company1.com\", \"conflict_resolution\": \"conflictResolution\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"import_data_flows\": [{\"conflict_resolution_status\": \"import_flow_renamed\", \"end_time\": \"2019-01-01T12:00:00.000Z\", \"errors\": [{\"description\": \"description\", \"name\": \"name\", \"stage_type\": \"stageType\", \"type\": \"unsupported_stage_type\"}], \"id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"job_id\": \"ccfaaafd-810d-4f0e-b0a9-228c328a0136\", \"job_name\": \"Aggregator12_DataStage_1\", \"job_type\": \"px_job\", \"name\": \"cancel-reservation-job\", \"original_name\": \"cancel-reservation-job\", \"ref_asset_id\": \"ccfdbbfd-810d-4f0e-b0a9-228c328a0136\", \"status\": \"completed\", \"type\": \"px_job\", \"warnings\": [{\"description\": \"description\", \"name\": \"name\", \"type\": \"unreleased_stage_type\"}]}], \"name\": \"seat-reservation-jobs\", \"notifications\": [{\"created_at\": \"2019-01-01T12:00:00.000Z\", \"id\": \"id\", \"status\": \"status\"}], \"on_failure\": \"onFailure\", \"remaining_time\": 13, \"start_time\": \"2019-01-01T12:00:00.000Z\", \"status\": \"in_progress\", \"tally\": {\"connections_total\": 16, \"deprecated\": 10, \"failed\": 6, \"imported\": 8, \"parameter_sets_total\": 18, \"pending\": 7, \"renamed\": 7, \"replaced\": 8, \"sequence_jobs_total\": 17, \"skipped\": 7, \"subflows_total\": 13, \"table_definitions_total\": 21, \"total\": 5, \"unsupported\": 11}}, \"metadata\": {\"catalog_id\": \"catalogId\", \"created_at\": \"2019-01-01T12:00:00.000Z\", \"created_by\": \"user1@company1.com\", \"id\": \"id\", \"modified_at\": \"2019-01-01T12:00:00.000Z\", \"name\": \"name\", \"project_id\": \"projectId\", \"project_name\": \"projectName\", \"url\": \"url\"}}";
+    String getMigrationPath = "/v3/migration/isx_imports/testString";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json;charset=utf-8")
@@ -675,15 +1063,15 @@ public class DatastageTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the MigrationGetOptions model
-    MigrationGetOptions migrationGetOptionsModel = new MigrationGetOptions.Builder()
+    // Construct an instance of the GetMigrationOptions model
+    GetMigrationOptions getMigrationOptionsModel = new GetMigrationOptions.Builder()
     .importId("testString")
     .catalogId("testString")
     .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<ImportResponse> response = datastageService.migrationGet(migrationGetOptionsModel).execute();
+    Response<ImportResponse> response = datastageService.getMigration(getMigrationOptionsModel).execute();
     assertNotNull(response);
     ImportResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -701,19 +1089,19 @@ public class DatastageTest extends PowerMockTestCase {
     assertEquals(query.get("project_id"), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, migrationGetPath);
+    assertEquals(parsedPath, getMigrationPath);
   }
 
-  // Test the migrationGet operation with null options model parameter
+  // Test the getMigration operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testMigrationGetNoOptions() throws Throwable {
+  public void testGetMigrationNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    datastageService.migrationGet(null).execute();
+    datastageService.getMigration(null).execute();
   }
 
   /** Initialize the server */

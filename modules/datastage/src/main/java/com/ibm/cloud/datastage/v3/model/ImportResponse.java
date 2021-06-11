@@ -25,7 +25,7 @@ public class ImportResponse extends GenericModel {
   /**
    * Gets the entity.
    *
-   * import response entity.
+   * Import the response entity.
    *
    * @return the entity
    */
@@ -36,7 +36,7 @@ public class ImportResponse extends GenericModel {
   /**
    * Gets the metadata.
    *
-   * import response metadata.
+   * Import the response metadata.
    *
    * @return the metadata
    */

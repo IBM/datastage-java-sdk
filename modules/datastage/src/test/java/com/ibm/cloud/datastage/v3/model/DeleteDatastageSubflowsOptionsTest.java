@@ -13,11 +13,7 @@
 
 package com.ibm.cloud.datastage.v3.model;
 
-import com.ibm.cloud.datastage.v3.model.AssetEntityROV;
-import com.ibm.cloud.datastage.v3.model.DataIntgFlowEntity;
-import com.ibm.cloud.datastage.v3.model.DataIntgFlowLock;
-import com.ibm.cloud.datastage.v3.model.DataIntgFlowLockEntity;
-import com.ibm.cloud.datastage.v3.model.DataIntgFlowLockMetadata;
+import com.ibm.cloud.datastage.v3.model.DeleteDatastageSubflowsOptions;
 import com.ibm.cloud.datastage.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -29,21 +25,27 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the DataIntgFlowEntity model.
+ * Unit test class for the DeleteDatastageSubflowsOptions model.
  */
-public class DataIntgFlowEntityTest {
+public class DeleteDatastageSubflowsOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testDataIntgFlowEntity() throws Throwable {
-    DataIntgFlowEntity dataIntgFlowEntityModel = new DataIntgFlowEntity();
-    assertNull(dataIntgFlowEntityModel.getDataIntgFlow());
-    assertNull(dataIntgFlowEntityModel.getDataIntgSubflow());
-    assertNull(dataIntgFlowEntityModel.getDescription());
-    assertNull(dataIntgFlowEntityModel.getLock());
-    assertNull(dataIntgFlowEntityModel.getName());
-    assertNull(dataIntgFlowEntityModel.getRov());
-    assertNull(dataIntgFlowEntityModel.getSubType());
+  public void testDeleteDatastageSubflowsOptions() throws Throwable {
+    DeleteDatastageSubflowsOptions deleteDatastageSubflowsOptionsModel = new DeleteDatastageSubflowsOptions.Builder()
+      .id(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
+      .catalogId("testString")
+      .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+      .build();
+    assertEquals(deleteDatastageSubflowsOptionsModel.id(), new java.util.ArrayList<String>(java.util.Arrays.asList("testString")));
+    assertEquals(deleteDatastageSubflowsOptionsModel.catalogId(), "testString");
+    assertEquals(deleteDatastageSubflowsOptionsModel.projectId(), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
   }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDeleteDatastageSubflowsOptionsError() throws Throwable {
+    new DeleteDatastageSubflowsOptions.Builder().build();
+  }
+
 }

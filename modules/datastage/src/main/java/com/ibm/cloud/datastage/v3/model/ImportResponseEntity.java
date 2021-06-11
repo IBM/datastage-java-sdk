@@ -19,7 +19,7 @@ import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * import response entity.
+ * Import the response entity.
  */
 public class ImportResponseEntity extends GenericModel {
 
@@ -48,6 +48,7 @@ public class ImportResponseEntity extends GenericModel {
   @SerializedName("import_data_flows")
   protected List<ImportFlow> importDataFlows;
   protected String name;
+  protected List<ImportNotification> notifications;
   @SerializedName("on_failure")
   protected String onFailure;
   @SerializedName("remaining_time")
@@ -60,7 +61,7 @@ public class ImportResponseEntity extends GenericModel {
   /**
    * Gets the cancelledBy.
    *
-   * Account ID of the user who cancelled the import request. This field is required only when the status  field is
+   * Account ID of the user who cancelled the import request. This field is required only when the status field is
    * "cancelled".
    *
    * @return the cancelledBy
@@ -113,6 +114,17 @@ public class ImportResponseEntity extends GenericModel {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Gets the notifications.
+   *
+   * Import event notifications.
+   *
+   * @return the notifications
+   */
+  public List<ImportNotification> getNotifications() {
+    return notifications;
   }
 
   /**

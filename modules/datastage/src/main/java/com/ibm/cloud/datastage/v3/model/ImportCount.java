@@ -29,13 +29,13 @@ public class ImportCount extends GenericModel {
   @SerializedName("parameter_sets_total")
   protected Long parameterSetsTotal;
   protected Long pending;
-  @SerializedName("px_containers_total")
-  protected Long pxContainersTotal;
   protected Long renamed;
   protected Long replaced;
   @SerializedName("sequence_jobs_total")
   protected Long sequenceJobsTotal;
   protected Long skipped;
+  @SerializedName("subflows_total")
+  protected Long subflowsTotal;
   @SerializedName("table_definitions_total")
   protected Long tableDefinitionsTotal;
   protected Long total;
@@ -108,17 +108,6 @@ public class ImportCount extends GenericModel {
   }
 
   /**
-   * Gets the pxContainersTotal.
-   *
-   * Total number of parallel job containers.
-   *
-   * @return the pxContainersTotal
-   */
-  public Long getPxContainersTotal() {
-    return pxContainersTotal;
-  }
-
-  /**
    * Gets the renamed.
    *
    * Total number of data flows successfully imported and renamed due to a name conflict. The renamed count is included
@@ -163,6 +152,17 @@ public class ImportCount extends GenericModel {
    */
   public Long getSkipped() {
     return skipped;
+  }
+
+  /**
+   * Gets the subflowsTotal.
+   *
+   * Total number of parallel job subflows.
+   *
+   * @return the subflowsTotal
+   */
+  public Long getSubflowsTotal() {
+    return subflowsTotal;
   }
 
   /**

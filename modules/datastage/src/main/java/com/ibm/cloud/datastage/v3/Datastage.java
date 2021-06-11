@@ -19,21 +19,27 @@ package com.ibm.cloud.datastage.v3;
 
 import com.google.gson.JsonObject;
 import com.ibm.cloud.datastage.common.SdkCommon;
+import com.ibm.cloud.datastage.v3.model.CloneDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.CloneDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.CompileDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.CreateDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.CreateDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.CreateMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.DataFlowPagedCollection;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlow;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowJson;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsCloneOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsCompileOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsCreateOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsDeleteOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsGetOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsListOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsUpdateOptions;
+import com.ibm.cloud.datastage.v3.model.DeleteDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.DeleteDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.DeleteMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.FlowCompileResponse;
+import com.ibm.cloud.datastage.v3.model.GetDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.GetDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.GetMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.ImportResponse;
-import com.ibm.cloud.datastage.v3.model.MigrationCreateOptions;
-import com.ibm.cloud.datastage.v3.model.MigrationDeleteOptions;
-import com.ibm.cloud.datastage.v3.model.MigrationGetOptions;
+import com.ibm.cloud.datastage.v3.model.ListDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.ListDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.UpdateDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.UpdateDatastageSubflowsOptions;
 import com.ibm.cloud.sdk.core.http.RequestBuilder;
 import com.ibm.cloud.sdk.core.http.ResponseConverter;
 import com.ibm.cloud.sdk.core.http.ServiceCall;
@@ -96,7 +102,7 @@ public class Datastage extends BaseService {
   /**
    * Delete DataStage flows.
    *
-   * Deletes the specified data flows in a project or catalog (either project_id or catalog_id must be set).
+   * Deletes the specified data flows in a project or catalog (either `project_id` or `catalog_id` must be set).
    *
    * If the deletion of the data flows and their runs will take some time to finish, then a 202 response will be
    * returned and the deletion will continue asynchronously.
@@ -105,26 +111,26 @@ public class Datastage extends BaseService {
    * force parameter is set to true, the call returns immediately with a 202 response. The related data flows are
    * deleted after the data flow runs are stopped.
    *
-   * @param datastageFlowsDeleteOptions the {@link DatastageFlowsDeleteOptions} containing the options for the call
+   * @param deleteDatastageFlowsOptions the {@link DeleteDatastageFlowsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a void result
    */
-  public ServiceCall<Void> datastageFlowsDelete(DatastageFlowsDeleteOptions datastageFlowsDeleteOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(datastageFlowsDeleteOptions,
-      "datastageFlowsDeleteOptions cannot be null");
+  public ServiceCall<Void> deleteDatastageFlows(DeleteDatastageFlowsOptions deleteDatastageFlowsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(deleteDatastageFlowsOptions,
+      "deleteDatastageFlowsOptions cannot be null");
     RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows"));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "datastageFlowsDelete");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "deleteDatastageFlows");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
-    builder.query("id", RequestUtils.join(datastageFlowsDeleteOptions.id(), ","));
-    if (datastageFlowsDeleteOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(datastageFlowsDeleteOptions.catalogId()));
+    builder.query("id", RequestUtils.join(deleteDatastageFlowsOptions.id(), ","));
+    if (deleteDatastageFlowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(deleteDatastageFlowsOptions.catalogId()));
     }
-    if (datastageFlowsDeleteOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(datastageFlowsDeleteOptions.projectId()));
+    if (deleteDatastageFlowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(deleteDatastageFlowsOptions.projectId()));
     }
-    if (datastageFlowsDeleteOptions.force() != null) {
-      builder.query("force", String.valueOf(datastageFlowsDeleteOptions.force()));
+    if (deleteDatastageFlowsOptions.force() != null) {
+      builder.query("force", String.valueOf(deleteDatastageFlowsOptions.force()));
     }
     ResponseConverter<Void> responseConverter = ResponseConverterUtils.getVoid();
     return createServiceCall(builder.build(), responseConverter);
@@ -139,56 +145,56 @@ public class Datastage extends BaseService {
    *
    * | Field                    | Match type   | Example                                 |
    * | ------------------------ | ------------ | --------------------------------------- |
-   * | entity.name              | Equals           | entity.name=MyDataStageFlow  |
-   * | entity.name              | Starts with      | entity.name=starts:MyData  |
-   * | entity.description       | Equals           | entity.description=movement  |
-   * | entity.description       | Starts with      | entity.description=starts:data  |
+   * | `entity.name`              | Equals           | `entity.name=MyDataStageFlow`  |
+   * | `entity.name`              | Starts with      | `entity.name=starts:MyData`  |
+   * | `entity.description`       | Equals           | `entity.description=movement`  |
+   * | `entity.description`       | Starts with      | `entity.description=starts:data`  |
    *
    * To sort the results, use one or more of the parameters  described in the following section. If no sort key is
-   * specified, the results are sorted in descending order on metadata.create_time (i.e. returning the most  recently
+   * specified, the results are sorted in descending order on `metadata.create_time` (i.e. returning the most  recently
    * created data flows first).
    *
    * | Field                          | Example |
    * | ------------------------- | ----------------------------------- |
-   * | sort     | sort=+entity.name (sort by ascending name)  |
-   * | sort     | sort=-metadata.create_time (sort by descending creation time) |
+   * | sort     | `sort=+entity.name` (sort by ascending name)  |
+   * | sort     | `sort=-metadata.create_time` (sort by descending creation time) |
    *
    * Multiple sort keys can be specified by delimiting them with a comma. For example, to sort in descending order on
-   * create_time and then in ascending order on name use: sort=-metadata.create_time,+entity.name.
+   * `create_time` and then in ascending order on name use: `sort=-metadata.create_time`,`+entity.name`.
    *
-   * @param datastageFlowsListOptions the {@link DatastageFlowsListOptions} containing the options for the call
+   * @param listDatastageFlowsOptions the {@link ListDatastageFlowsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link DataFlowPagedCollection}
    */
-  public ServiceCall<DataFlowPagedCollection> datastageFlowsList(DatastageFlowsListOptions datastageFlowsListOptions) {
-    if (datastageFlowsListOptions == null) {
-      datastageFlowsListOptions = new DatastageFlowsListOptions.Builder().build();
+  public ServiceCall<DataFlowPagedCollection> listDatastageFlows(ListDatastageFlowsOptions listDatastageFlowsOptions) {
+    if (listDatastageFlowsOptions == null) {
+      listDatastageFlowsOptions = new ListDatastageFlowsOptions.Builder().build();
     }
     RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows"));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "datastageFlowsList");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "listDatastageFlows");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
     builder.header("Accept", "application/json;charset=utf-8");
-    if (datastageFlowsListOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(datastageFlowsListOptions.catalogId()));
+    if (listDatastageFlowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(listDatastageFlowsOptions.catalogId()));
     }
-    if (datastageFlowsListOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(datastageFlowsListOptions.projectId()));
+    if (listDatastageFlowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(listDatastageFlowsOptions.projectId()));
     }
-    if (datastageFlowsListOptions.sort() != null) {
-      builder.query("sort", String.valueOf(datastageFlowsListOptions.sort()));
+    if (listDatastageFlowsOptions.sort() != null) {
+      builder.query("sort", String.valueOf(listDatastageFlowsOptions.sort()));
     }
-    if (datastageFlowsListOptions.start() != null) {
-      builder.query("start", String.valueOf(datastageFlowsListOptions.start()));
+    if (listDatastageFlowsOptions.start() != null) {
+      builder.query("start", String.valueOf(listDatastageFlowsOptions.start()));
     }
-    if (datastageFlowsListOptions.limit() != null) {
-      builder.query("limit", String.valueOf(datastageFlowsListOptions.limit()));
+    if (listDatastageFlowsOptions.limit() != null) {
+      builder.query("limit", String.valueOf(listDatastageFlowsOptions.limit()));
     }
-    if (datastageFlowsListOptions.entityName() != null) {
-      builder.query("entity.name", String.valueOf(datastageFlowsListOptions.entityName()));
+    if (listDatastageFlowsOptions.entityName() != null) {
+      builder.query("entity.name", String.valueOf(listDatastageFlowsOptions.entityName()));
     }
-    if (datastageFlowsListOptions.entityDescription() != null) {
-      builder.query("entity.description", String.valueOf(datastageFlowsListOptions.entityDescription()));
+    if (listDatastageFlowsOptions.entityDescription() != null) {
+      builder.query("entity.description", String.valueOf(listDatastageFlowsOptions.entityDescription()));
     }
     ResponseConverter<DataFlowPagedCollection> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataFlowPagedCollection>() { }.getType());
@@ -204,60 +210,60 @@ public class Datastage extends BaseService {
    *
    * | Field                    | Match type   | Example                                 |
    * | ------------------------ | ------------ | --------------------------------------- |
-   * | entity.name              | Equals           | entity.name=MyDataStageFlow  |
-   * | entity.name              | Starts with      | entity.name=starts:MyData  |
-   * | entity.description       | Equals           | entity.description=movement  |
-   * | entity.description       | Starts with      | entity.description=starts:data  |
+   * | `entity.name`              | Equals           | `entity.name=MyDataStageFlow`  |
+   * | `entity.name`              | Starts with      | `entity.name=starts:MyData`  |
+   * | `entity.description`       | Equals           | `entity.description=movement`  |
+   * | `entity.description`       | Starts with      | `entity.description=starts:data`  |
    *
    * To sort the results, use one or more of the parameters  described in the following section. If no sort key is
-   * specified, the results are sorted in descending order on metadata.create_time (i.e. returning the most  recently
+   * specified, the results are sorted in descending order on `metadata.create_time` (i.e. returning the most  recently
    * created data flows first).
    *
    * | Field                          | Example |
    * | ------------------------- | ----------------------------------- |
-   * | sort     | sort=+entity.name (sort by ascending name)  |
-   * | sort     | sort=-metadata.create_time (sort by descending creation time) |
+   * | sort     | `sort=+entity.name` (sort by ascending name)  |
+   * | sort     | `sort=-metadata.create_time` (sort by descending creation time) |
    *
    * Multiple sort keys can be specified by delimiting them with a comma. For example, to sort in descending order on
-   * create_time and then in ascending order on name use: sort=-metadata.create_time,+entity.name.
+   * `create_time` and then in ascending order on name use: `sort=-metadata.create_time`,`+entity.name`.
    *
    * @return a {@link ServiceCall} with a result of type {@link DataFlowPagedCollection}
    */
-  public ServiceCall<DataFlowPagedCollection> datastageFlowsList() {
-    return datastageFlowsList(null);
+  public ServiceCall<DataFlowPagedCollection> listDatastageFlows() {
+    return listDatastageFlows(null);
   }
 
   /**
    * Create DataStage flow.
    *
-   * Creates a DataStage flow in the specified project or catalog (either project_id or catalog_id must be set). All
+   * Creates a DataStage flow in the specified project or catalog (either `project_id` or `catalog_id` must be set). All
    * subsequent calls to use the data flow must specify the project or catalog ID the data flow was created in.
    *
-   * @param datastageFlowsCreateOptions the {@link DatastageFlowsCreateOptions} containing the options for the call
+   * @param createDatastageFlowsOptions the {@link CreateDatastageFlowsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link DataIntgFlow}
    */
-  public ServiceCall<DataIntgFlow> datastageFlowsCreate(DatastageFlowsCreateOptions datastageFlowsCreateOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(datastageFlowsCreateOptions,
-      "datastageFlowsCreateOptions cannot be null");
+  public ServiceCall<DataIntgFlow> createDatastageFlows(CreateDatastageFlowsOptions createDatastageFlowsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(createDatastageFlowsOptions,
+      "createDatastageFlowsOptions cannot be null");
     RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows"));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "datastageFlowsCreate");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "createDatastageFlows");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
     builder.header("Accept", "application/json;charset=utf-8");
-    builder.query("data_intg_flow_name", String.valueOf(datastageFlowsCreateOptions.dataIntgFlowName()));
-    if (datastageFlowsCreateOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(datastageFlowsCreateOptions.catalogId()));
+    builder.query("data_intg_flow_name", String.valueOf(createDatastageFlowsOptions.dataIntgFlowName()));
+    if (createDatastageFlowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(createDatastageFlowsOptions.catalogId()));
     }
-    if (datastageFlowsCreateOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(datastageFlowsCreateOptions.projectId()));
+    if (createDatastageFlowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(createDatastageFlowsOptions.projectId()));
     }
-    if (datastageFlowsCreateOptions.assetCategory() != null) {
-      builder.query("asset_category", String.valueOf(datastageFlowsCreateOptions.assetCategory()));
+    if (createDatastageFlowsOptions.assetCategory() != null) {
+      builder.query("asset_category", String.valueOf(createDatastageFlowsOptions.assetCategory()));
     }
     final JsonObject contentJson = new JsonObject();
-    if (datastageFlowsCreateOptions.pipelineFlows() != null) {
-      contentJson.add("pipeline_flows", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(datastageFlowsCreateOptions.pipelineFlows()));
+    if (createDatastageFlowsOptions.pipelineFlows() != null) {
+      contentJson.add("pipeline_flows", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(createDatastageFlowsOptions.pipelineFlows()));
     }
     builder.bodyJson(contentJson);
     ResponseConverter<DataIntgFlow> responseConverter =
@@ -271,25 +277,25 @@ public class Datastage extends BaseService {
    * Lists the DataStage flow that is contained in the specified project. Attachments, metadata and a limited number of
    * attributes from the entity of each DataStage flow is returned.
    *
-   * @param datastageFlowsGetOptions the {@link DatastageFlowsGetOptions} containing the options for the call
+   * @param getDatastageFlowsOptions the {@link GetDatastageFlowsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link DataIntgFlowJson}
    */
-  public ServiceCall<DataIntgFlowJson> datastageFlowsGet(DatastageFlowsGetOptions datastageFlowsGetOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(datastageFlowsGetOptions,
-      "datastageFlowsGetOptions cannot be null");
+  public ServiceCall<DataIntgFlowJson> getDatastageFlows(GetDatastageFlowsOptions getDatastageFlowsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getDatastageFlowsOptions,
+      "getDatastageFlowsOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("data_intg_flow_id", datastageFlowsGetOptions.dataIntgFlowId());
+    pathParamsMap.put("data_intg_flow_id", getDatastageFlowsOptions.dataIntgFlowId());
     RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows/{data_intg_flow_id}", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "datastageFlowsGet");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "getDatastageFlows");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
     builder.header("Accept", "application/json;charset=utf-8");
-    if (datastageFlowsGetOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(datastageFlowsGetOptions.catalogId()));
+    if (getDatastageFlowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(getDatastageFlowsOptions.catalogId()));
     }
-    if (datastageFlowsGetOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(datastageFlowsGetOptions.projectId()));
+    if (getDatastageFlowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(getDatastageFlowsOptions.projectId()));
     }
     ResponseConverter<DataIntgFlowJson> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataIntgFlowJson>() { }.getType());
@@ -299,33 +305,33 @@ public class Datastage extends BaseService {
   /**
    * Update DataStage flow.
    *
-   * Modifies a data flow in the specified project or catalog (either project_id or catalog_id must be set). All
+   * Modifies a data flow in the specified project or catalog (either `project_id` or `catalog_id` must be set). All
    * subsequent calls to use the data flow must specify the project or catalog ID the data flow was created in.
    *
-   * @param datastageFlowsUpdateOptions the {@link DatastageFlowsUpdateOptions} containing the options for the call
+   * @param updateDatastageFlowsOptions the {@link UpdateDatastageFlowsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link DataIntgFlow}
    */
-  public ServiceCall<DataIntgFlow> datastageFlowsUpdate(DatastageFlowsUpdateOptions datastageFlowsUpdateOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(datastageFlowsUpdateOptions,
-      "datastageFlowsUpdateOptions cannot be null");
+  public ServiceCall<DataIntgFlow> updateDatastageFlows(UpdateDatastageFlowsOptions updateDatastageFlowsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(updateDatastageFlowsOptions,
+      "updateDatastageFlowsOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("data_intg_flow_id", datastageFlowsUpdateOptions.dataIntgFlowId());
+    pathParamsMap.put("data_intg_flow_id", updateDatastageFlowsOptions.dataIntgFlowId());
     RequestBuilder builder = RequestBuilder.put(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows/{data_intg_flow_id}", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "datastageFlowsUpdate");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "updateDatastageFlows");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
     builder.header("Accept", "application/json;charset=utf-8");
-    builder.query("data_intg_flow_name", String.valueOf(datastageFlowsUpdateOptions.dataIntgFlowName()));
-    if (datastageFlowsUpdateOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(datastageFlowsUpdateOptions.catalogId()));
+    builder.query("data_intg_flow_name", String.valueOf(updateDatastageFlowsOptions.dataIntgFlowName()));
+    if (updateDatastageFlowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(updateDatastageFlowsOptions.catalogId()));
     }
-    if (datastageFlowsUpdateOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(datastageFlowsUpdateOptions.projectId()));
+    if (updateDatastageFlowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(updateDatastageFlowsOptions.projectId()));
     }
     final JsonObject contentJson = new JsonObject();
-    if (datastageFlowsUpdateOptions.pipelineFlows() != null) {
-      contentJson.add("pipeline_flows", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(datastageFlowsUpdateOptions.pipelineFlows()));
+    if (updateDatastageFlowsOptions.pipelineFlows() != null) {
+      contentJson.add("pipeline_flows", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(updateDatastageFlowsOptions.pipelineFlows()));
     }
     builder.bodyJson(contentJson);
     ResponseConverter<DataIntgFlow> responseConverter =
@@ -339,25 +345,25 @@ public class Datastage extends BaseService {
    * Create a DataStage flow in the specified project or catalog based on an existing DataStage flow in the same project
    * or catalog.
    *
-   * @param datastageFlowsCloneOptions the {@link DatastageFlowsCloneOptions} containing the options for the call
+   * @param cloneDatastageFlowsOptions the {@link CloneDatastageFlowsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link DataIntgFlow}
    */
-  public ServiceCall<DataIntgFlow> datastageFlowsClone(DatastageFlowsCloneOptions datastageFlowsCloneOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(datastageFlowsCloneOptions,
-      "datastageFlowsCloneOptions cannot be null");
+  public ServiceCall<DataIntgFlow> cloneDatastageFlows(CloneDatastageFlowsOptions cloneDatastageFlowsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(cloneDatastageFlowsOptions,
+      "cloneDatastageFlowsOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("data_intg_flow_id", datastageFlowsCloneOptions.dataIntgFlowId());
+    pathParamsMap.put("data_intg_flow_id", cloneDatastageFlowsOptions.dataIntgFlowId());
     RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows/{data_intg_flow_id}/clone", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "datastageFlowsClone");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "cloneDatastageFlows");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
     builder.header("Accept", "application/json;charset=utf-8");
-    if (datastageFlowsCloneOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(datastageFlowsCloneOptions.catalogId()));
+    if (cloneDatastageFlowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(cloneDatastageFlowsOptions.catalogId()));
     }
-    if (datastageFlowsCloneOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(datastageFlowsCloneOptions.projectId()));
+    if (cloneDatastageFlowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(cloneDatastageFlowsOptions.projectId()));
     }
     ResponseConverter<DataIntgFlow> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataIntgFlow>() { }.getType());
@@ -367,34 +373,300 @@ public class Datastage extends BaseService {
   /**
    * Compile DataStage flow to generate runtime assets.
    *
-   * Generate the runtime assets for a DataStage flow in the specified project or catalog (either project_id or
-   * catalog_id must be set) for specified runtime type.
+   * Generate the runtime assets for a DataStage flow in the specified project or catalog for a specified runtime type.
+   * Either project_id or catalog_id must be specified.
    *
-   * @param datastageFlowsCompileOptions the {@link DatastageFlowsCompileOptions} containing the options for the call
+   * @param compileDatastageFlowsOptions the {@link CompileDatastageFlowsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link FlowCompileResponse}
    */
-  public ServiceCall<FlowCompileResponse> datastageFlowsCompile(DatastageFlowsCompileOptions datastageFlowsCompileOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(datastageFlowsCompileOptions,
-      "datastageFlowsCompileOptions cannot be null");
+  public ServiceCall<FlowCompileResponse> compileDatastageFlows(CompileDatastageFlowsOptions compileDatastageFlowsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(compileDatastageFlowsOptions,
+      "compileDatastageFlowsOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("data_intg_flow_id", datastageFlowsCompileOptions.dataIntgFlowId());
+    pathParamsMap.put("data_intg_flow_id", compileDatastageFlowsOptions.dataIntgFlowId());
     RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/ds_codegen/compile/{data_intg_flow_id}", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "datastageFlowsCompile");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "compileDatastageFlows");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
     builder.header("Accept", "application/json;charset=utf-8");
-    if (datastageFlowsCompileOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(datastageFlowsCompileOptions.catalogId()));
+    if (compileDatastageFlowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(compileDatastageFlowsOptions.catalogId()));
     }
-    if (datastageFlowsCompileOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(datastageFlowsCompileOptions.projectId()));
+    if (compileDatastageFlowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(compileDatastageFlowsOptions.projectId()));
     }
-    if (datastageFlowsCompileOptions.runtimeType() != null) {
-      builder.query("runtime_type", String.valueOf(datastageFlowsCompileOptions.runtimeType()));
+    if (compileDatastageFlowsOptions.runtimeType() != null) {
+      builder.query("runtime_type", String.valueOf(compileDatastageFlowsOptions.runtimeType()));
     }
     ResponseConverter<FlowCompileResponse> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<FlowCompileResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Delete DataStage subflows.
+   *
+   * Deletes the specified data subflows in a project or catalog (either `project_id` or `catalog_id` must be set).
+   *
+   * If the deletion of the data subflows will take some time to finish, then a 202 response will be returned and the
+   * deletion will continue asynchronously.
+   *
+   * @param deleteDatastageSubflowsOptions the {@link DeleteDatastageSubflowsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a void result
+   */
+  public ServiceCall<Void> deleteDatastageSubflows(DeleteDatastageSubflowsOptions deleteDatastageSubflowsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(deleteDatastageSubflowsOptions,
+      "deleteDatastageSubflowsOptions cannot be null");
+    RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows/subflows"));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "deleteDatastageSubflows");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.query("id", RequestUtils.join(deleteDatastageSubflowsOptions.id(), ","));
+    if (deleteDatastageSubflowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(deleteDatastageSubflowsOptions.catalogId()));
+    }
+    if (deleteDatastageSubflowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(deleteDatastageSubflowsOptions.projectId()));
+    }
+    ResponseConverter<Void> responseConverter = ResponseConverterUtils.getVoid();
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Get metadata and lock information for DataStage subflows.
+   *
+   * Lists the metadata, entity and lock information for DataStage subflows that are contained in the specified project.
+   *
+   *
+   * Use the following parameters to filter the results:
+   *
+   * | Field                    | Match type   | Example                                 |
+   * | ------------------------ | ------------ | --------------------------------------- |
+   * | `entity.name`              | Equals           | `entity.name=MyDataStageSubFlow`  |
+   * | `entity.name`              | Starts with      | `entity.name=starts:MyData`  |
+   * | `entity.description`       | Equals           | `entity.description=movement`  |
+   * | `entity.description`       | Starts with      | `entity.description=starts:data`  |
+   *
+   * To sort the results, use one or more of the parameters  described in the following section. If no sort key is
+   * specified, the results are sorted in descending order on `metadata.create_time` (i.e. returning the most  recently
+   * created data flows first).
+   *
+   * | Field                          | Example |
+   * | ------------------------- | ----------------------------------- |
+   * | sort     | `sort=+entity.name` (sort by ascending name)  |
+   * | sort     | `sort=-metadata.create_time` (sort by descending creation time) |
+   *
+   * Multiple sort keys can be specified by delimiting them with a comma. For example, to sort in descending order on
+   * `create_time` and then in ascending order on name use: `sort=-metadata.create_time`,`+entity.name`.
+   *
+   * @param listDatastageSubflowsOptions the {@link ListDatastageSubflowsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link DataFlowPagedCollection}
+   */
+  public ServiceCall<DataFlowPagedCollection> listDatastageSubflows(ListDatastageSubflowsOptions listDatastageSubflowsOptions) {
+    if (listDatastageSubflowsOptions == null) {
+      listDatastageSubflowsOptions = new ListDatastageSubflowsOptions.Builder().build();
+    }
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows/subflows"));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "listDatastageSubflows");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json;charset=utf-8");
+    if (listDatastageSubflowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(listDatastageSubflowsOptions.catalogId()));
+    }
+    if (listDatastageSubflowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(listDatastageSubflowsOptions.projectId()));
+    }
+    if (listDatastageSubflowsOptions.sort() != null) {
+      builder.query("sort", String.valueOf(listDatastageSubflowsOptions.sort()));
+    }
+    if (listDatastageSubflowsOptions.start() != null) {
+      builder.query("start", String.valueOf(listDatastageSubflowsOptions.start()));
+    }
+    if (listDatastageSubflowsOptions.limit() != null) {
+      builder.query("limit", String.valueOf(listDatastageSubflowsOptions.limit()));
+    }
+    if (listDatastageSubflowsOptions.entityName() != null) {
+      builder.query("entity.name", String.valueOf(listDatastageSubflowsOptions.entityName()));
+    }
+    if (listDatastageSubflowsOptions.entityDescription() != null) {
+      builder.query("entity.description", String.valueOf(listDatastageSubflowsOptions.entityDescription()));
+    }
+    ResponseConverter<DataFlowPagedCollection> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataFlowPagedCollection>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Get metadata and lock information for DataStage subflows.
+   *
+   * Lists the metadata, entity and lock information for DataStage subflows that are contained in the specified project.
+   *
+   *
+   * Use the following parameters to filter the results:
+   *
+   * | Field                    | Match type   | Example                                 |
+   * | ------------------------ | ------------ | --------------------------------------- |
+   * | `entity.name`              | Equals           | `entity.name=MyDataStageSubFlow`  |
+   * | `entity.name`              | Starts with      | `entity.name=starts:MyData`  |
+   * | `entity.description`       | Equals           | `entity.description=movement`  |
+   * | `entity.description`       | Starts with      | `entity.description=starts:data`  |
+   *
+   * To sort the results, use one or more of the parameters  described in the following section. If no sort key is
+   * specified, the results are sorted in descending order on `metadata.create_time` (i.e. returning the most  recently
+   * created data flows first).
+   *
+   * | Field                          | Example |
+   * | ------------------------- | ----------------------------------- |
+   * | sort     | `sort=+entity.name` (sort by ascending name)  |
+   * | sort     | `sort=-metadata.create_time` (sort by descending creation time) |
+   *
+   * Multiple sort keys can be specified by delimiting them with a comma. For example, to sort in descending order on
+   * `create_time` and then in ascending order on name use: `sort=-metadata.create_time`,`+entity.name`.
+   *
+   * @return a {@link ServiceCall} with a result of type {@link DataFlowPagedCollection}
+   */
+  public ServiceCall<DataFlowPagedCollection> listDatastageSubflows() {
+    return listDatastageSubflows(null);
+  }
+
+  /**
+   * Create DataStage subflow.
+   *
+   * Creates a DataStage subflow in the specified project or catalog (either `project_id` or `catalog_id` must be set).
+   * All subsequent calls to use the data flow must specify the project or catalog ID the data flow was created in.
+   *
+   * @param createDatastageSubflowsOptions the {@link CreateDatastageSubflowsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link DataIntgFlow}
+   */
+  public ServiceCall<DataIntgFlow> createDatastageSubflows(CreateDatastageSubflowsOptions createDatastageSubflowsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(createDatastageSubflowsOptions,
+      "createDatastageSubflowsOptions cannot be null");
+    RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows/subflows"));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "createDatastageSubflows");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json;charset=utf-8");
+    builder.query("data_intg_subflow_name", String.valueOf(createDatastageSubflowsOptions.dataIntgSubflowName()));
+    if (createDatastageSubflowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(createDatastageSubflowsOptions.catalogId()));
+    }
+    if (createDatastageSubflowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(createDatastageSubflowsOptions.projectId()));
+    }
+    if (createDatastageSubflowsOptions.assetCategory() != null) {
+      builder.query("asset_category", String.valueOf(createDatastageSubflowsOptions.assetCategory()));
+    }
+    final JsonObject contentJson = new JsonObject();
+    if (createDatastageSubflowsOptions.pipelineFlows() != null) {
+      contentJson.add("pipeline_flows", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(createDatastageSubflowsOptions.pipelineFlows()));
+    }
+    builder.bodyJson(contentJson);
+    ResponseConverter<DataIntgFlow> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataIntgFlow>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Get DataStage subflow.
+   *
+   * Lists the DataStage subflow that is contained in the specified project. Attachments, metadata and a limited number
+   * of attributes from the entity of each DataStage flow is returned.
+   *
+   * @param getDatastageSubflowsOptions the {@link GetDatastageSubflowsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link DataIntgFlowJson}
+   */
+  public ServiceCall<DataIntgFlowJson> getDatastageSubflows(GetDatastageSubflowsOptions getDatastageSubflowsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getDatastageSubflowsOptions,
+      "getDatastageSubflowsOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("data_intg_subflow_id", getDatastageSubflowsOptions.dataIntgSubflowId());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows/subflows/{data_intg_subflow_id}", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "getDatastageSubflows");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json;charset=utf-8");
+    if (getDatastageSubflowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(getDatastageSubflowsOptions.catalogId()));
+    }
+    if (getDatastageSubflowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(getDatastageSubflowsOptions.projectId()));
+    }
+    ResponseConverter<DataIntgFlowJson> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataIntgFlowJson>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Update DataStage subflow.
+   *
+   * Modifies a data subflow in the specified project or catalog (either `project_id` or `catalog_id` must be set). All
+   * subsequent calls to use the data flow must specify the project or catalog ID the data flow was created in.
+   *
+   * @param updateDatastageSubflowsOptions the {@link UpdateDatastageSubflowsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link DataIntgFlow}
+   */
+  public ServiceCall<DataIntgFlow> updateDatastageSubflows(UpdateDatastageSubflowsOptions updateDatastageSubflowsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(updateDatastageSubflowsOptions,
+      "updateDatastageSubflowsOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("data_intg_subflow_id", updateDatastageSubflowsOptions.dataIntgSubflowId());
+    RequestBuilder builder = RequestBuilder.put(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows/subflows/{data_intg_subflow_id}", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "updateDatastageSubflows");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json;charset=utf-8");
+    builder.query("data_intg_subflow_name", String.valueOf(updateDatastageSubflowsOptions.dataIntgSubflowName()));
+    if (updateDatastageSubflowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(updateDatastageSubflowsOptions.catalogId()));
+    }
+    if (updateDatastageSubflowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(updateDatastageSubflowsOptions.projectId()));
+    }
+    final JsonObject contentJson = new JsonObject();
+    if (updateDatastageSubflowsOptions.pipelineFlows() != null) {
+      contentJson.add("pipeline_flows", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(updateDatastageSubflowsOptions.pipelineFlows()));
+    }
+    builder.bodyJson(contentJson);
+    ResponseConverter<DataIntgFlow> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataIntgFlow>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Clone DataStage subflow.
+   *
+   * Create a DataStage subflow in the specified project or catalog based on an existing DataStage subflow in the same
+   * project or catalog.
+   *
+   * @param cloneDatastageSubflowsOptions the {@link CloneDatastageSubflowsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link DataIntgFlow}
+   */
+  public ServiceCall<DataIntgFlow> cloneDatastageSubflows(CloneDatastageSubflowsOptions cloneDatastageSubflowsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(cloneDatastageSubflowsOptions,
+      "cloneDatastageSubflowsOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("data_intg_subflow_id", cloneDatastageSubflowsOptions.dataIntgSubflowId());
+    RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/data_intg_flows/subflows/{data_intg_subflow_id}/clone", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "cloneDatastageSubflows");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json;charset=utf-8");
+    if (cloneDatastageSubflowsOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(cloneDatastageSubflowsOptions.catalogId()));
+    }
+    if (cloneDatastageSubflowsOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(cloneDatastageSubflowsOptions.projectId()));
+    }
+    ResponseConverter<DataIntgFlow> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<DataIntgFlow>() { }.getType());
     return createServiceCall(builder.build(), responseConverter);
   }
 
@@ -409,37 +681,37 @@ public class Datastage extends BaseService {
    * option is set to "stop", a completed import request may contain not only successfully imported data flows but also
    * data flows that cannot be imported.
    *
-   * @param migrationCreateOptions the {@link MigrationCreateOptions} containing the options for the call
+   * @param createMigrationOptions the {@link CreateMigrationOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link ImportResponse}
    */
-  public ServiceCall<ImportResponse> migrationCreate(MigrationCreateOptions migrationCreateOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(migrationCreateOptions,
-      "migrationCreateOptions cannot be null");
+  public ServiceCall<ImportResponse> createMigration(CreateMigrationOptions createMigrationOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(createMigrationOptions,
+      "createMigrationOptions cannot be null");
     RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/migration/isx_imports"));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "migrationCreate");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "createMigration");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
     builder.header("Accept", "application/json;charset=utf-8");
-    if (migrationCreateOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(migrationCreateOptions.catalogId()));
+    if (createMigrationOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(createMigrationOptions.catalogId()));
     }
-    if (migrationCreateOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(migrationCreateOptions.projectId()));
+    if (createMigrationOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(createMigrationOptions.projectId()));
     }
-    if (migrationCreateOptions.onFailure() != null) {
-      builder.query("on_failure", String.valueOf(migrationCreateOptions.onFailure()));
+    if (createMigrationOptions.onFailure() != null) {
+      builder.query("on_failure", String.valueOf(createMigrationOptions.onFailure()));
     }
-    if (migrationCreateOptions.conflictResolution() != null) {
-      builder.query("conflict_resolution", String.valueOf(migrationCreateOptions.conflictResolution()));
+    if (createMigrationOptions.conflictResolution() != null) {
+      builder.query("conflict_resolution", String.valueOf(createMigrationOptions.conflictResolution()));
     }
-    if (migrationCreateOptions.attachmentType() != null) {
-      builder.query("attachment_type", String.valueOf(migrationCreateOptions.attachmentType()));
+    if (createMigrationOptions.attachmentType() != null) {
+      builder.query("attachment_type", String.valueOf(createMigrationOptions.attachmentType()));
     }
-    if (migrationCreateOptions.fileName() != null) {
-      builder.query("file_name", String.valueOf(migrationCreateOptions.fileName()));
+    if (createMigrationOptions.fileName() != null) {
+      builder.query("file_name", String.valueOf(createMigrationOptions.fileName()));
     }
-    builder.bodyContent(migrationCreateOptions.body(), "application/octet-stream");
+    builder.bodyContent(createMigrationOptions.body(), "application/octet-stream");
     ResponseConverter<ImportResponse> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<ImportResponse>() { }.getType());
     return createServiceCall(builder.build(), responseConverter);
@@ -451,24 +723,24 @@ public class Datastage extends BaseService {
    * Cancel a previous import request. Use GET /v3/migration/imports/{import_id} to obtain the current status of the
    * import, including whether it has been cancelled.
    *
-   * @param migrationDeleteOptions the {@link MigrationDeleteOptions} containing the options for the call
+   * @param deleteMigrationOptions the {@link DeleteMigrationOptions} containing the options for the call
    * @return a {@link ServiceCall} with a void result
    */
-  public ServiceCall<Void> migrationDelete(MigrationDeleteOptions migrationDeleteOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(migrationDeleteOptions,
-      "migrationDeleteOptions cannot be null");
+  public ServiceCall<Void> deleteMigration(DeleteMigrationOptions deleteMigrationOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(deleteMigrationOptions,
+      "deleteMigrationOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("import_id", migrationDeleteOptions.importId());
+    pathParamsMap.put("import_id", deleteMigrationOptions.importId());
     RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/migration/isx_imports/{import_id}", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "migrationDelete");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "deleteMigration");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
-    if (migrationDeleteOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(migrationDeleteOptions.catalogId()));
+    if (deleteMigrationOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(deleteMigrationOptions.catalogId()));
     }
-    if (migrationDeleteOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(migrationDeleteOptions.projectId()));
+    if (deleteMigrationOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(deleteMigrationOptions.projectId()));
     }
     ResponseConverter<Void> responseConverter = ResponseConverterUtils.getVoid();
     return createServiceCall(builder.build(), responseConverter);
@@ -481,25 +753,25 @@ public class Datastage extends BaseService {
    * completed, in progress, or failed. Detailed status information about each imported data flow is also contained in
    * the response object.
    *
-   * @param migrationGetOptions the {@link MigrationGetOptions} containing the options for the call
+   * @param getMigrationOptions the {@link GetMigrationOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link ImportResponse}
    */
-  public ServiceCall<ImportResponse> migrationGet(MigrationGetOptions migrationGetOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(migrationGetOptions,
-      "migrationGetOptions cannot be null");
+  public ServiceCall<ImportResponse> getMigration(GetMigrationOptions getMigrationOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getMigrationOptions,
+      "getMigrationOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("import_id", migrationGetOptions.importId());
+    pathParamsMap.put("import_id", getMigrationOptions.importId());
     RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/migration/isx_imports/{import_id}", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "migrationGet");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("datastage", "v3", "getMigration");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
     builder.header("Accept", "application/json;charset=utf-8");
-    if (migrationGetOptions.catalogId() != null) {
-      builder.query("catalog_id", String.valueOf(migrationGetOptions.catalogId()));
+    if (getMigrationOptions.catalogId() != null) {
+      builder.query("catalog_id", String.valueOf(getMigrationOptions.catalogId()));
     }
-    if (migrationGetOptions.projectId() != null) {
-      builder.query("project_id", String.valueOf(migrationGetOptions.projectId()));
+    if (getMigrationOptions.projectId() != null) {
+      builder.query("project_id", String.valueOf(getMigrationOptions.projectId()));
     }
     ResponseConverter<ImportResponse> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<ImportResponse>() { }.getType());

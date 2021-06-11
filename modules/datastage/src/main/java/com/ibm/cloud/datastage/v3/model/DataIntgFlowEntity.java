@@ -24,6 +24,8 @@ public class DataIntgFlowEntity extends GenericModel {
 
   @SerializedName("data_intg_flow")
   protected Map<String, Object> dataIntgFlow;
+  @SerializedName("data_intg_subflow")
+  protected Map<String, Object> dataIntgSubflow;
   protected String description;
   protected DataIntgFlowLock lock;
   protected String name;
@@ -40,6 +42,17 @@ public class DataIntgFlowEntity extends GenericModel {
    */
   public Map<String, Object> getDataIntgFlow() {
     return dataIntgFlow;
+  }
+
+  /**
+   * Gets the dataIntgSubflow.
+   *
+   * Asset type object.
+   *
+   * @return the dataIntgSubflow
+   */
+  public Map<String, Object> getDataIntgSubflow() {
+    return dataIntgSubflow;
   }
 
   /**

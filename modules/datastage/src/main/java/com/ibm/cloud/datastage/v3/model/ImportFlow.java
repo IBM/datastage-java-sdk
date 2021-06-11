@@ -59,6 +59,22 @@ public class ImportFlow extends GenericModel {
     String TABLE_DEFINITION_RENAMED = "table_definition_renamed";
     /** table_definition_skipped. */
     String TABLE_DEFINITION_SKIPPED = "table_definition_skipped";
+    /** sequence_job_replacement_succeeded. */
+    String SEQUENCE_JOB_REPLACEMENT_SUCCEEDED = "sequence_job_replacement_succeeded";
+    /** sequence_job_replacement_failed. */
+    String SEQUENCE_JOB_REPLACEMENT_FAILED = "sequence_job_replacement_failed";
+    /** sequence_job_renamed. */
+    String SEQUENCE_JOB_RENAMED = "sequence_job_renamed";
+    /** sequence_job_skipped. */
+    String SEQUENCE_JOB_SKIPPED = "sequence_job_skipped";
+    /** subflow_replacement_succeeded. */
+    String SUBFLOW_REPLACEMENT_SUCCEEDED = "subflow_replacement_succeeded";
+    /** subflow_replacement_failed. */
+    String SUBFLOW_REPLACEMENT_FAILED = "subflow_replacement_failed";
+    /** subflow_renamed. */
+    String SUBFLOW_RENAMED = "subflow_renamed";
+    /** subflow_skipped. */
+    String SUBFLOW_SKIPPED = "subflow_skipped";
   }
 
   /**
@@ -129,8 +145,8 @@ public class ImportFlow extends GenericModel {
     String TABLE_DEF = "table_def";
     /** parameter_set. */
     String PARAMETER_SET = "parameter_set";
-    /** px_container. */
-    String PX_CONTAINER = "px_container";
+    /** subflow. */
+    String SUBFLOW = "subflow";
     /** sequence_job. */
     String SEQUENCE_JOB = "sequence_job";
   }
