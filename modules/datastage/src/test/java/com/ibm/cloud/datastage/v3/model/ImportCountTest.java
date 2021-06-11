@@ -38,11 +38,11 @@ public class ImportCountTest {
     assertNull(importCountModel.getImported());
     assertNull(importCountModel.getParameterSetsTotal());
     assertNull(importCountModel.getPending());
-    assertNull(importCountModel.getPxContainersTotal());
     assertNull(importCountModel.getRenamed());
     assertNull(importCountModel.getReplaced());
     assertNull(importCountModel.getSequenceJobsTotal());
     assertNull(importCountModel.getSkipped());
+    assertNull(importCountModel.getSubflowsTotal());
     assertNull(importCountModel.getTableDefinitionsTotal());
     assertNull(importCountModel.getTotal());
     assertNull(importCountModel.getUnsupported());

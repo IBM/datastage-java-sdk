@@ -18,7 +18,7 @@ import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * import response metadata.
+ * Import the response metadata.
  */
 public class ImportResponseMetadata extends GenericModel {
 

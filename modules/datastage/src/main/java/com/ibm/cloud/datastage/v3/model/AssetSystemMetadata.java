@@ -74,7 +74,7 @@ public class AssetSystemMetadata extends GenericModel {
   /**
    * Gets the catalogId.
    *
-   * The ID of the catalog which contains the asset. catalog_id or project_id is required.
+   * The ID of the catalog which contains the asset. `catalog_id` or `project_id` is required.
    *
    * @return the catalogId
    */
@@ -152,7 +152,7 @@ public class AssetSystemMetadata extends GenericModel {
   /**
    * Gets the projectId.
    *
-   * The ID of the project which contains the asset. catalog_id or project_id is required.
+   * The ID of the project which contains the asset. `catalog_id` or `project_id` is required.
    *
    * @return the projectId
    */

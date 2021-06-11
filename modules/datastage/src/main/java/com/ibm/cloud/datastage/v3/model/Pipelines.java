@@ -28,6 +28,7 @@ public class Pipelines extends GenericModel {
   protected Map<String, Object> appData;
   protected String description;
   protected String id;
+  protected String name;
   protected List<Object> nodes;
   @SerializedName("runtime_ref")
   protected String runtimeRef;
@@ -39,6 +40,7 @@ public class Pipelines extends GenericModel {
     private Map<String, Object> appData;
     private String description;
     private String id;
+    private String name;
     private List<Object> nodes;
     private String runtimeRef;
 
@@ -46,6 +48,7 @@ public class Pipelines extends GenericModel {
       this.appData = pipelines.appData;
       this.description = pipelines.description;
       this.id = pipelines.id;
+      this.name = pipelines.name;
       this.nodes = pipelines.nodes;
       this.runtimeRef = pipelines.runtimeRef;
     }
@@ -115,6 +118,17 @@ public class Pipelines extends GenericModel {
     }
 
     /**
+     * Set the name.
+     *
+     * @param name the name
+     * @return the Pipelines builder
+     */
+    public Builder name(String name) {
+      this.name = name;
+      return this;
+    }
+
+    /**
      * Set the nodes.
      * Existing nodes will be replaced.
      *
@@ -142,6 +156,7 @@ public class Pipelines extends GenericModel {
     appData = builder.appData;
     description = builder.description;
     id = builder.id;
+    name = builder.name;
     nodes = builder.nodes;
     runtimeRef = builder.runtimeRef;
   }
@@ -186,6 +201,17 @@ public class Pipelines extends GenericModel {
    */
   public String id() {
     return id;
+  }
+
+  /**
+   * Gets the name.
+   *
+   * Name of the pipeline.
+   *
+   * @return the name
+   */
+  public String name() {
+    return name;
   }
 
   /**

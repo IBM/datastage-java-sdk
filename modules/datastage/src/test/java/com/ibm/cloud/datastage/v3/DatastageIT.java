@@ -17,6 +17,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.ibm.cloud.datastage.test.SdkIntegrationTestBase;
+import com.ibm.cloud.datastage.v3.model.CloneDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.CloneDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.CompileDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.CreateDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.CreateDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.CreateMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.DataFlowPagedCollection;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlow;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowJson;
@@ -27,13 +33,22 @@ import com.ibm.cloud.datastage.v3.model.DatastageFlowsDeleteOptions;
 import com.ibm.cloud.datastage.v3.model.DatastageFlowsGetOptions;
 import com.ibm.cloud.datastage.v3.model.DatastageFlowsListOptions;
 import com.ibm.cloud.datastage.v3.model.DatastageFlowsUpdateOptions;
+import com.ibm.cloud.datastage.v3.model.DeleteDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.DeleteDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.DeleteMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.FlowCompileResponse;
+import com.ibm.cloud.datastage.v3.model.GetDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.GetMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.ImportResponse;
+import com.ibm.cloud.datastage.v3.model.ListDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.ListDatastageSubflowsOptions;
 import com.ibm.cloud.datastage.v3.model.MigrationCreateOptions;
 import com.ibm.cloud.datastage.v3.model.MigrationDeleteOptions;
 import com.ibm.cloud.datastage.v3.model.MigrationGetOptions;
 import com.ibm.cloud.datastage.v3.model.PipelineJson;
 import com.ibm.cloud.datastage.v3.model.Pipelines;
+import com.ibm.cloud.datastage.v3.model.UpdateDatastageFlowsOptions;
+import com.ibm.cloud.datastage.v3.model.UpdateDatastageSubflowsOptions;
 import com.ibm.cloud.datastage.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
@@ -74,10 +89,16 @@ public class DatastageIT extends SdkIntegrationTestBase {
   private static String DATASTAGE_FLOW_ID = null;
   private static String DATASTAGE_FLOW_ID_CLONE = null;
   private static String DATASTAGE_FLOW_ID_MIGRATION = null;
+  private static String DATASTAGE_SUBFLOW_ID = null;
+  private static String DATASTAGE_SUBFLOW_ID_CLONE = null;
   private static List<Object> nodes = null;
   private static Object appData = null;
   private static List<Object> schemas = null;
   private static List<Object> schemasUpdated = null;
+  private static List<Object> nodesSubFlow = null;
+  private static Object appDataSubFlow = null;
+  private static List<Object> schemasSubFlow = null;
+  private static List<Object> schemasSubFlowUpdated = null;
   private InputStream rowGenIsx = null;
   private static String importId = null;
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
@@ -122,19 +143,32 @@ public class DatastageIT extends SdkIntegrationTestBase {
     appData = mapper.readValue(appDataStr, Object.class);
     schemas = mapper.readValue(schemaStr, new TypeReference<List<Object>>(){});
     schemasUpdated = mapper.readValue(schemaStrForUpdate, new TypeReference<List<Object>>(){});
+
+    InputStream nodeSubFlowStream = this.getClass().getClassLoader().getResourceAsStream("nodes_subflow.json");
+    InputStream appDataSubFlowStream = this.getClass().getClassLoader().getResourceAsStream("appdata_subflow.json");
+    InputStream schemaSubFlowStream = this.getClass().getClassLoader().getResourceAsStream("schemas_subflow.json");
+    InputStream schemaSubFlowStreamForUpdate = this.getClass().getClassLoader().getResourceAsStream("schemas_subflow_updated.json");
+    String nodesSubFlowStr = IOUtils.toString(nodeSubFlowStream, StandardCharsets.UTF_8);
+    String appDataSubFlowStr = IOUtils.toString(appDataSubFlowStream, StandardCharsets.UTF_8);
+    String schemaSubFlowStr = IOUtils.toString(schemaSubFlowStream, StandardCharsets.UTF_8);
+    String schemaSubFlowStrForUpdate = IOUtils.toString(schemaSubFlowStreamForUpdate, StandardCharsets.UTF_8);
+    nodesSubFlow = mapper.readValue(nodesSubFlowStr, new TypeReference<List<Object>>(){});
+    appDataSubFlow = mapper.readValue(appDataSubFlowStr, Object.class);
+    schemasSubFlow = mapper.readValue(schemaSubFlowStr, new TypeReference<List<Object>>(){});
+    schemasSubFlowUpdated = mapper.readValue(schemaSubFlowStrForUpdate, new TypeReference<List<Object>>(){});
     System.out.println("Setup complete.");
   }
 
   @Test
   public void test01DatastageFlowsList() throws Exception {
     try {
-      DatastageFlowsListOptions datastageFlowsListOptions = new DatastageFlowsListOptions.Builder()
+      ListDatastageFlowsOptions datastageFlowsListOptions = new ListDatastageFlowsOptions.Builder()
       .projectId(PROJECT_ID)
       .limit(Long.valueOf("100"))
       .build();
 
       // Invoke operation
-      Response<DataFlowPagedCollection> response = service.datastageFlowsList(datastageFlowsListOptions).execute();
+      Response<DataFlowPagedCollection> response = service.listDatastageFlows(datastageFlowsListOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -168,14 +202,14 @@ public class DatastageIT extends SdkIntegrationTestBase {
       .schemas(schemas)
       .build();
 
-      DatastageFlowsCreateOptions datastageFlowsCreateOptions = new DatastageFlowsCreateOptions.Builder()
+      CreateDatastageFlowsOptions datastageFlowsCreateOptions = new CreateDatastageFlowsOptions.Builder()
       .dataIntgFlowName("testIntegrationFlow" + UUID.randomUUID().toString())
       .pipelineFlows(pipelineJsonModel)
       .projectId(PROJECT_ID)
       .assetCategory("system")
       .build();
       // Invoke operation
-      Response<DataIntgFlow> response = service.datastageFlowsCreate(datastageFlowsCreateOptions).execute();
+      Response<DataIntgFlow> response = service.createDatastageFlows(datastageFlowsCreateOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 201);
@@ -195,13 +229,13 @@ public class DatastageIT extends SdkIntegrationTestBase {
   @Test
   public void test03DatastageFlowsGet() throws Exception {
     try {
-      DatastageFlowsGetOptions datastageFlowsGetOptions = new DatastageFlowsGetOptions.Builder()
+      GetDatastageFlowsOptions datastageFlowsGetOptions = new GetDatastageFlowsOptions.Builder()
       .dataIntgFlowId(DATASTAGE_FLOW_ID)
       .projectId(PROJECT_ID)
       .build();
 
       // Invoke operation
-      Response<DataIntgFlowJson> response = service.datastageFlowsGet(datastageFlowsGetOptions).execute();
+      Response<DataIntgFlowJson> response = service.getDatastageFlows(datastageFlowsGetOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -236,14 +270,14 @@ public class DatastageIT extends SdkIntegrationTestBase {
       .schemas(schemasUpdated)
       .build();
 
-      DatastageFlowsUpdateOptions datastageFlowsUpdateOptions = new DatastageFlowsUpdateOptions.Builder()
+      UpdateDatastageFlowsOptions datastageFlowsUpdateOptions = new UpdateDatastageFlowsOptions.Builder()
       .dataIntgFlowId(DATASTAGE_FLOW_ID)
       .dataIntgFlowName("testString" + UUID.randomUUID().toString())
       .pipelineFlows(pipelineJsonModel)
       .projectId(PROJECT_ID)
       .build();
       // Invoke operation
-      Response<DataIntgFlow> response = service.datastageFlowsUpdate(datastageFlowsUpdateOptions).execute();
+      Response<DataIntgFlow> response = service.updateDatastageFlows(datastageFlowsUpdateOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 201);
@@ -260,13 +294,13 @@ public class DatastageIT extends SdkIntegrationTestBase {
   @Test
   public void test05DatastageFlowsClone() throws Exception {
     try {
-      DatastageFlowsCloneOptions datastageFlowsCloneOptions = new DatastageFlowsCloneOptions.Builder()
+      CloneDatastageFlowsOptions datastageFlowsCloneOptions = new CloneDatastageFlowsOptions.Builder()
       .dataIntgFlowId(DATASTAGE_FLOW_ID)
       .projectId(PROJECT_ID)
       .build();
 
       // Invoke operation
-      Response<DataIntgFlow> response = service.datastageFlowsClone(datastageFlowsCloneOptions).execute();
+      Response<DataIntgFlow> response = service.cloneDatastageFlows(datastageFlowsCloneOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -286,13 +320,13 @@ public class DatastageIT extends SdkIntegrationTestBase {
   @Test
   public void test06DatastageFlowsCompile() throws Exception {
     try {
-      DatastageFlowsCompileOptions datastageFlowsCompileOptions = new DatastageFlowsCompileOptions.Builder()
+      CompileDatastageFlowsOptions datastageFlowsCompileOptions = new CompileDatastageFlowsOptions.Builder()
       .dataIntgFlowId(DATASTAGE_FLOW_ID)
       .projectId(PROJECT_ID)
       .build();
 
       // Invoke operation
-      Response<FlowCompileResponse> response = service.datastageFlowsCompile(datastageFlowsCompileOptions).execute();
+      Response<FlowCompileResponse> response = service.compileDatastageFlows(datastageFlowsCompileOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -309,7 +343,7 @@ public class DatastageIT extends SdkIntegrationTestBase {
   @Test
   public void test07MigrationCreate() throws Exception {
     try {
-      MigrationCreateOptions migrationCreateOptions = new MigrationCreateOptions.Builder()
+      CreateMigrationOptions migrationCreateOptions = new CreateMigrationOptions.Builder()
       .body(rowGenIsx)
       .projectId(PROJECT_ID)
       .onFailure("continue")
@@ -319,7 +353,7 @@ public class DatastageIT extends SdkIntegrationTestBase {
       .build();
 
       // Invoke operation
-      Response<ImportResponse> response = service.migrationCreate(migrationCreateOptions).execute();
+      Response<ImportResponse> response = service.createMigration(migrationCreateOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 202);
@@ -342,13 +376,13 @@ public class DatastageIT extends SdkIntegrationTestBase {
     while (importStatus.equalsIgnoreCase(IN_PROGRESS)) {
       Thread.sleep(5000);
       try {
-        MigrationGetOptions migrationGetOptions = new MigrationGetOptions.Builder()
+        GetMigrationOptions migrationGetOptions = new GetMigrationOptions.Builder()
                 .importId(importId)
                 .projectId(PROJECT_ID)
                 .build();
 
         // Invoke operation
-        Response<ImportResponse> response = service.migrationGet(migrationGetOptions).execute();
+        Response<ImportResponse> response = service.getMigration(migrationGetOptions).execute();
         // Validate response
         assertNotNull(response);
         assertEquals(response.getStatusCode(), 200);
@@ -372,13 +406,13 @@ public class DatastageIT extends SdkIntegrationTestBase {
   @Test
   public void test09MigrationDelete() throws Exception {
     try {
-      MigrationDeleteOptions migrationDeleteOptions = new MigrationDeleteOptions.Builder()
+      DeleteMigrationOptions migrationDeleteOptions = new DeleteMigrationOptions.Builder()
       .importId(importId)
       .projectId(PROJECT_ID)
       .build();
 
       // Invoke operation
-      Response<Void> response = service.migrationDelete(migrationDeleteOptions).execute();
+      Response<Void> response = service.deleteMigration(migrationDeleteOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 202);
@@ -392,14 +426,170 @@ public class DatastageIT extends SdkIntegrationTestBase {
   public void test10DatastageFlowsDelete() throws Exception  {
     String ids[] = new String[] {DATASTAGE_FLOW_ID, DATASTAGE_FLOW_ID_CLONE, DATASTAGE_FLOW_ID_MIGRATION};
     try {
-      DatastageFlowsDeleteOptions datastageFlowsDeleteOptions = new DatastageFlowsDeleteOptions.Builder()
+      DeleteDatastageFlowsOptions datastageFlowsDeleteOptions = new DeleteDatastageFlowsOptions.Builder()
               .id(Arrays.asList(ids))
               .projectId(PROJECT_ID)
               .force(true)
               .build();
 
       // Invoke operation
-      Response<Void> response = service.datastageFlowsDelete(datastageFlowsDeleteOptions).execute();
+      Response<Void> response = service.deleteDatastageFlows(datastageFlowsDeleteOptions).execute();
+
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
+    } catch (ServiceResponseException e) {
+      fail(String.format("Service returned status code %d: %s\nError details: %s",
+              e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void test11DatastageSubFlowsList() throws Exception {
+    try {
+      ListDatastageSubflowsOptions datastageSubFlowsListOptions = new ListDatastageSubflowsOptions.Builder()
+              .projectId(PROJECT_ID)
+              .limit(Long.valueOf("100"))
+              .build();
+
+      // Invoke operation
+      Response<DataFlowPagedCollection> response = service.listDatastageSubflows(datastageSubFlowsListOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      DataFlowPagedCollection dataFlowPagedCollectionResult = response.getResult();
+      assertNotNull(dataFlowPagedCollectionResult);
+    } catch (ServiceResponseException e) {
+      fail(String.format("Service returned status code %d: %s\nError details: %s",
+              e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void test12DataStageSubFlowsCreate() {
+    try {
+      Pipelines pipelinesModel = new Pipelines.Builder()
+              .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+              .description("A test DataStage subflow")
+              .runtimeRef("pxOsh")
+              .nodes(nodes)
+              .appData((Map<String, Object>) appDataSubFlow)
+              .build();
+
+      PipelineJson pipelineJsonModel = new PipelineJson.Builder()
+              .docType("subpipeline")
+              .version("3.0")
+              .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
+              .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
+              .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+              .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
+              .schemas(schemas)
+              .build();
+
+      CreateDatastageSubflowsOptions datastageSubFlowsCreateOptions = new CreateDatastageSubflowsOptions.Builder()
+              .dataIntgSubflowName("testIntegrationSubFlow" + UUID.randomUUID().toString())
+              .pipelineFlows(pipelineJsonModel)
+              .projectId(PROJECT_ID)
+              .assetCategory("system")
+              .build();
+      // Invoke operation
+      Response<DataIntgFlow> response = service.createDatastageSubflows(datastageSubFlowsCreateOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      DataIntgFlow dataIntgFlowResult = response.getResult();
+
+      assertNotNull(dataIntgFlowResult);
+      assertNotNull(dataIntgFlowResult.getMetadata());
+      DATASTAGE_SUBFLOW_ID = dataIntgFlowResult.getMetadata().getAssetId();
+      assertNotNull(DATASTAGE_SUBFLOW_ID);
+    } catch (ServiceResponseException e) {
+      fail(String.format("Service returned status code %d: %s\nError details: %s",
+              e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void test13DatastageSubFlowsUpdate() throws Exception {
+    try {
+      Pipelines pipelinesModel = new Pipelines.Builder()
+              .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+              .description("A test DataStage subflow updated")
+              .runtimeRef("pxOsh")
+              .nodes(nodesSubFlow)
+              .appData((Map<String, Object>) appDataSubFlow)
+              .build();
+
+      PipelineJson pipelineJsonModel = new PipelineJson.Builder()
+              .docType("subpipeline")
+              .version("3.0")
+              .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
+              .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
+              .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
+              .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
+              .schemas(schemasSubFlowUpdated)
+              .build();
+
+      UpdateDatastageSubflowsOptions datastageSubFlowsUpdateOptions = new UpdateDatastageSubflowsOptions.Builder()
+              .dataIntgSubflowId(DATASTAGE_SUBFLOW_ID)
+              .dataIntgSubflowName("testSubFlowString" + UUID.randomUUID())
+              .pipelineFlows(pipelineJsonModel)
+              .projectId(PROJECT_ID)
+              .build();
+      // Invoke operation
+      Response<DataIntgFlow> response = service.updateDatastageSubflows(datastageSubFlowsUpdateOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      DataIntgFlow dataIntgFlowResult = response.getResult();
+
+      assertNotNull(dataIntgFlowResult);
+    } catch (ServiceResponseException e) {
+      fail(String.format("Service returned status code %d: %s\nError details: %s",
+              e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void test14DatastageSubFlowsClone() throws Exception {
+    try {
+      CloneDatastageSubflowsOptions datastageSubFlowsCloneOptions = new CloneDatastageSubflowsOptions.Builder()
+              .dataIntgSubflowId(DATASTAGE_SUBFLOW_ID)
+              .projectId(PROJECT_ID)
+              .build();
+
+      // Invoke operation
+      Response<DataIntgFlow> response = service.cloneDatastageSubflows(datastageSubFlowsCloneOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      DataIntgFlow dataIntgFlowResult = response.getResult();
+
+      assertNotNull(dataIntgFlowResult);
+      assertNotNull(dataIntgFlowResult.getMetadata());
+      DATASTAGE_SUBFLOW_ID_CLONE = dataIntgFlowResult.getMetadata().getAssetId();
+      assertNotNull(DATASTAGE_SUBFLOW_ID_CLONE);
+    } catch (ServiceResponseException e) {
+      fail(String.format("Service returned status code %d: %s\nError details: %s",
+              e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void test15DatastageSubFlowsDelete() throws Exception  {
+    String ids[] = new String[] {DATASTAGE_SUBFLOW_ID, DATASTAGE_SUBFLOW_ID_CLONE};
+    try {
+      DeleteDatastageSubflowsOptions datastageSubFlowsDeleteOptions = new DeleteDatastageSubflowsOptions.Builder()
+              .id(Arrays.asList(ids))
+              .projectId(PROJECT_ID)
+              .build();
+
+      // Invoke operation
+      Response<Void> response = service.deleteDatastageSubflows(datastageSubFlowsDeleteOptions).execute();
 
       // Validate response
       assertNotNull(response);

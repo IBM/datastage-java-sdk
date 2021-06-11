@@ -17,6 +17,7 @@ import com.ibm.cloud.datastage.v3.model.DataImportError;
 import com.ibm.cloud.datastage.v3.model.ImportCount;
 import com.ibm.cloud.datastage.v3.model.ImportFlow;
 import com.ibm.cloud.datastage.v3.model.ImportFlowWarning;
+import com.ibm.cloud.datastage.v3.model.ImportNotification;
 import com.ibm.cloud.datastage.v3.model.ImportResponse;
 import com.ibm.cloud.datastage.v3.model.ImportResponseEntity;
 import com.ibm.cloud.datastage.v3.model.ImportResponseMetadata;

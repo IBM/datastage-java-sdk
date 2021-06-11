@@ -17,6 +17,7 @@ import com.ibm.cloud.datastage.v3.model.DataImportError;
 import com.ibm.cloud.datastage.v3.model.ImportCount;
 import com.ibm.cloud.datastage.v3.model.ImportFlow;
 import com.ibm.cloud.datastage.v3.model.ImportFlowWarning;
+import com.ibm.cloud.datastage.v3.model.ImportNotification;
 import com.ibm.cloud.datastage.v3.model.ImportResponseEntity;
 import com.ibm.cloud.datastage.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
@@ -44,6 +45,7 @@ public class ImportResponseEntityTest {
     assertNull(importResponseEntityModel.getEndTime());
     assertNull(importResponseEntityModel.getImportDataFlows());
     assertNull(importResponseEntityModel.getName());
+    assertNull(importResponseEntityModel.getNotifications());
     assertNull(importResponseEntityModel.getOnFailure());
     assertNull(importResponseEntityModel.getRemainingTime());
     assertNull(importResponseEntityModel.getStartTime());

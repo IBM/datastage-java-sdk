@@ -27,8 +27,22 @@ public class ImportFlowWarning extends GenericModel {
     String UNRELEASED_STAGE_TYPE = "unreleased_stage_type";
     /** unreleased_feature. */
     String UNRELEASED_FEATURE = "unreleased_feature";
-    /** unsupported_credentials_file. */
-    String UNSUPPORTED_CREDENTIALS_FILE = "unsupported_credentials_file";
+    /** credentials_file_warning. */
+    String CREDENTIALS_FILE_WARNING = "credentials_file_warning";
+    /** transformer_trigger_unsupported. */
+    String TRANSFORMER_TRIGGER_UNSUPPORTED = "transformer_trigger_unsupported";
+    /** transformer_buildtab_unsupported. */
+    String TRANSFORMER_BUILDTAB_UNSUPPORTED = "transformer_buildtab_unsupported";
+    /** unsupported_secure_gateway. */
+    String UNSUPPORTED_SECURE_GATEWAY = "unsupported_secure_gateway";
+    /** placeholder_connection_parameters. */
+    String PLACEHOLDER_CONNECTION_PARAMETERS = "placeholder_connection_parameters";
+    /** description_truncated. */
+    String DESCRIPTION_TRUNCATED = "description_truncated";
+    /** empty_stage_list. */
+    String EMPTY_STAGE_LIST = "empty_stage_list";
+    /** missing_parameter_set. */
+    String MISSING_PARAMETER_SET = "missing_parameter_set";
   }
 
   protected String description;

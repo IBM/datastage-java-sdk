@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.datastage.v3.model;
 
-import com.ibm.cloud.datastage.v3.model.DataImportError;
+import com.ibm.cloud.datastage.v3.model.GetDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,18 +23,27 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the DataImportError model.
+ * Unit test class for the GetDatastageFlowsOptions model.
  */
-public class DataImportErrorTest {
+public class GetDatastageFlowsOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testDataImportError() throws Throwable {
-    DataImportError dataImportErrorModel = new DataImportError();
-    assertNull(dataImportErrorModel.getDescription());
-    assertNull(dataImportErrorModel.getName());
-    assertNull(dataImportErrorModel.getStageType());
-    assertNull(dataImportErrorModel.getType());
+  public void testGetDatastageFlowsOptions() throws Throwable {
+    GetDatastageFlowsOptions getDatastageFlowsOptionsModel = new GetDatastageFlowsOptions.Builder()
+      .dataIntgFlowId("testString")
+      .catalogId("testString")
+      .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+      .build();
+    assertEquals(getDatastageFlowsOptionsModel.dataIntgFlowId(), "testString");
+    assertEquals(getDatastageFlowsOptionsModel.catalogId(), "testString");
+    assertEquals(getDatastageFlowsOptionsModel.projectId(), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
   }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetDatastageFlowsOptionsError() throws Throwable {
+    new GetDatastageFlowsOptions.Builder().build();
+  }
+
 }

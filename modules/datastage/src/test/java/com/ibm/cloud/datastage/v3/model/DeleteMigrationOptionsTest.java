@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.datastage.v3.model;
 
-import com.ibm.cloud.datastage.v3.model.DataImportError;
+import com.ibm.cloud.datastage.v3.model.DeleteMigrationOptions;
 import com.ibm.cloud.datastage.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,18 +23,27 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the DataImportError model.
+ * Unit test class for the DeleteMigrationOptions model.
  */
-public class DataImportErrorTest {
+public class DeleteMigrationOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testDataImportError() throws Throwable {
-    DataImportError dataImportErrorModel = new DataImportError();
-    assertNull(dataImportErrorModel.getDescription());
-    assertNull(dataImportErrorModel.getName());
-    assertNull(dataImportErrorModel.getStageType());
-    assertNull(dataImportErrorModel.getType());
+  public void testDeleteMigrationOptions() throws Throwable {
+    DeleteMigrationOptions deleteMigrationOptionsModel = new DeleteMigrationOptions.Builder()
+      .importId("cc6dbbfd-810d-4f0e-b0a9-228c328aff29")
+      .catalogId("testString")
+      .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+      .build();
+    assertEquals(deleteMigrationOptionsModel.importId(), "cc6dbbfd-810d-4f0e-b0a9-228c328aff29");
+    assertEquals(deleteMigrationOptionsModel.catalogId(), "testString");
+    assertEquals(deleteMigrationOptionsModel.projectId(), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
   }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDeleteMigrationOptionsError() throws Throwable {
+    new DeleteMigrationOptions.Builder().build();
+  }
+
 }

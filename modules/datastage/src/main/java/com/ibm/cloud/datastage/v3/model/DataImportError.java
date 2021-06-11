@@ -12,6 +12,7 @@
  */
 package com.ibm.cloud.datastage.v3.model;
 
+import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
@@ -87,10 +88,26 @@ public class DataImportError extends GenericModel {
     String DISTRIBUTED_LOCK_ERROR = "distributed_lock_error";
     /** duplicate_object_error. */
     String DUPLICATE_OBJECT_ERROR = "duplicate_object_error";
+    /** unbound_object_reference. */
+    String UNBOUND_OBJECT_REFERENCE = "unbound_object_reference";
+    /** table_def_creation_error. */
+    String TABLE_DEF_CREATION_ERROR = "table_def_creation_error";
+    /** connection_creation_api_error. */
+    String CONNECTION_CREATION_API_ERROR = "connection_creation_api_error";
+    /** connection_patch_api_error. */
+    String CONNECTION_PATCH_API_ERROR = "connection_patch_api_error";
+    /** connection_deletion_api_error. */
+    String CONNECTION_DELETION_API_ERROR = "connection_deletion_api_error";
+    /** sequence_job_creation_error. */
+    String SEQUENCE_JOB_CREATION_ERROR = "sequence_job_creation_error";
+    /** unsupported_stage_type_in_subflow. */
+    String UNSUPPORTED_STAGE_TYPE_IN_SUBFLOW = "unsupported_stage_type_in_subflow";
   }
 
   protected String description;
   protected String name;
+  @SerializedName("stage_type")
+  protected String stageType;
   protected String type;
 
   /**
@@ -113,6 +130,17 @@ public class DataImportError extends GenericModel {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Gets the stageType.
+   *
+   * error stage type.
+   *
+   * @return the stageType
+   */
+  public String getStageType() {
+    return stageType;
   }
 
   /**

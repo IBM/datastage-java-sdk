@@ -15,6 +15,7 @@ package com.ibm.cloud.datastage.v3.model;
 
 import com.ibm.cloud.datastage.v3.model.PipelineJson;
 import com.ibm.cloud.datastage.v3.model.Pipelines;
+import com.ibm.cloud.datastage.v3.model.UpdateDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -26,14 +27,14 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the PipelineJson model.
+ * Unit test class for the UpdateDatastageFlowsOptions model.
  */
-public class PipelineJsonTest {
+public class UpdateDatastageFlowsOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testPipelineJson() throws Throwable {
+  public void testUpdateDatastageFlowsOptions() throws Throwable {
     Pipelines pipelinesModel = new Pipelines.Builder()
       .appData(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .description("A test DataStage flow.")
@@ -74,16 +75,23 @@ public class PipelineJsonTest {
     assertEquals(pipelineJsonModel.schemas(), new java.util.ArrayList<Object>(java.util.Arrays.asList("testString")));
     assertEquals(pipelineJsonModel.version(), "3.0");
 
-    String json = TestUtilities.serialize(pipelineJsonModel);
-
-    PipelineJson pipelineJsonModelNew = TestUtilities.deserialize(json, PipelineJson.class);
-    assertTrue(pipelineJsonModelNew instanceof PipelineJson);
-    assertEquals(pipelineJsonModelNew.appData().toString(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } }.toString());
-    assertEquals(pipelineJsonModelNew.docType(), "pipeline");
-    assertEquals(pipelineJsonModelNew.id(), "84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff");
-    assertEquals(pipelineJsonModelNew.jsonSchema(), "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json");
-    assertEquals(pipelineJsonModelNew.parameters().toString(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } }.toString());
-    assertEquals(pipelineJsonModelNew.primaryPipeline(), "fa1b859a-d592-474d-b56c-2137e4efa4bc");
-    assertEquals(pipelineJsonModelNew.version(), "3.0");
+    UpdateDatastageFlowsOptions updateDatastageFlowsOptionsModel = new UpdateDatastageFlowsOptions.Builder()
+      .dataIntgFlowId("testString")
+      .dataIntgFlowName("testString")
+      .pipelineFlows(pipelineJsonModel)
+      .catalogId("testString")
+      .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+      .build();
+    assertEquals(updateDatastageFlowsOptionsModel.dataIntgFlowId(), "testString");
+    assertEquals(updateDatastageFlowsOptionsModel.dataIntgFlowName(), "testString");
+    assertEquals(updateDatastageFlowsOptionsModel.pipelineFlows(), pipelineJsonModel);
+    assertEquals(updateDatastageFlowsOptionsModel.catalogId(), "testString");
+    assertEquals(updateDatastageFlowsOptionsModel.projectId(), "bd0dbbfd-810d-4f0e-b0a9-228c328a8e23");
   }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUpdateDatastageFlowsOptionsError() throws Throwable {
+    new UpdateDatastageFlowsOptions.Builder().build();
+  }
+
 }
