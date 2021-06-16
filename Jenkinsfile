@@ -30,8 +30,8 @@ pipeline {
         script {
           defaultInit()
           applyCustomizations()
-          //checkoutResult = checkout scm
-          checkourResult = checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: GH_CREDS, url: 'https://github.com/IBM/datastage-java-sdk.git']]])
+          checkoutResult = checkout scm
+          //checkourResult = checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: GH_CREDS, url: 'https://github.com/IBM/datastage-java-sdk.git']]])
           //commitHash = "${checkoutResult.GIT_COMMIT[0..6]}"
             sh '''
               #git config --global user.email $GH_SDKS_AUTOMATION_MAIL
