@@ -35,8 +35,8 @@
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.6" level="project" />
     <orderEntry type="library" name="Maven: io.reactivex.rxjava2:rxjava:2.2.7" level="project" />
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: com.ibm.cloud:datastage-common:0.0.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.ibm.cloud:datastage-common:test-jar:tests:0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.ibm.cloud:datastage-common:0.0.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.ibm.cloud:datastage-common:test-jar:tests:0.0.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.testng:testng:7.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.beust:jcommander:1.72" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.google.inject:guice:no_aop:4.1.0" level="project" />
