@@ -1,5 +1,5 @@
 
-# DataStage Java SDK Version 0.0.1
+# DataStage Java SDK Version 0.0.2
 Java client library to interact with various [IBM Cloud DataStage](https://cloud.ibm.com/apidocs?category=datastage).
 
 Disclaimer: this SDK is being released initially as a **pre-release** version.
@@ -37,7 +37,7 @@ The IBM Cloud DataStage Java SDK allows developers to programmatically interact 
 
 Service Name | Artifact Coordinates
 --- | ---
-[DataStage](https://cloud.ibm.com/apidocs/datastage) | com.ibm.cloud:datastage:0.0.1
+[DataStage](https://cloud.ibm.com/apidocs/datastage) | com.ibm.cloud:datastage:0.0.2
 
 ## Prerequisites
 
@@ -48,7 +48,7 @@ Service Name | Artifact Coordinates
 * Java 8 or above.
 
 ## Installation
-The current version of this SDK is: 0.0.1
+The current version of this SDK is: 0.0.2
 
 Each service's artifact coordinates are listed in the table above.
 
@@ -66,13 +66,13 @@ artifact coordinates (group id, artifact id and version) for the service, like t
 <dependency>
     <groupId>com.ibm.cloud</groupId>
     <artifactId>datastage</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
 ##### Gradle
 ```gradle
-'com.ibm.cloud:datastage:0.0.1'
+'com.ibm.cloud:datastage:0.0.2'
 ```
 
 ## Using the SDK

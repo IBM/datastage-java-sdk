@@ -7,7 +7,7 @@
         <!-- >>> Replace this with the parent pom's artifactId -->
         <artifactId>datastage-sdk</artifactId>
         <groupId>com.ibm.cloud</groupId>
-        <version>0.0.1</version>
+        <version>0.0.2</version>
         <relativePath>../..</relativePath>
     </parent>
 
