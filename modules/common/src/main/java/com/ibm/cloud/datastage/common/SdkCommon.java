@@ -94,12 +94,12 @@ public class SdkCommon {
      *
      * If you plan to gather metrics for your SDK, the User-Agent header value must
      * be a string similar to the following:
-     * my-java-sdk/0.0.1 (lang=java; java.vendor=AdoptOpenJDK; java.version=1.8.0_232; os.arch=x86_64; os.name=Linux; os.version=5.1)
+     * my-java-sdk/0.0.2 (lang=java; java.vendor=AdoptOpenJDK; java.version=1.8.0_232; os.arch=x86_64; os.name=Linux; os.version=5.1)
 
      * In the example above, the analytics tool will parse the user-agent header and
      * use the following properties:
      * "my-java-sdk" - the name of your sdk
-     * "0.0.1"- the version of your sdk
+     * "0.0.2"- the version of your sdk
      * "lang=java" - the language of the current sdk
      * "java.vendor=AdoptOpenJDK; java.version=1.8.0_232; os.arch=x86_64; os.name=Linux; os.version=5.1" - system information
      *
