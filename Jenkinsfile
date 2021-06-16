@@ -1,5 +1,15 @@
 #!groovy
 
+def GH_CREDS = '2c69d250-a91e-4941-a11b-b4c831b59b90'
+//slackChannel = 'ds-nextgen-'
+//slackTeamDomain = 'ibm-analytics'
+//slackTokenCredentialId = '1d960160-45e6-48fe-a99c-66c1e25b4ced'
+def envFileCr = '02ff88fe-0096-42ab-884c-710a70b60be9'
+def afaasCredentialsId = '10a795c2-fc1a-4b35-a0e7-644dcfcacfb8'
+def OSSRH = '9cff6b0c-d10e-42b0-818c-dac103c109c4'
+def SIGNING = '5c0605ac-66ce-4dd7-97d9-ba9f6890ab68'
+def SIGNING_KEYFILE = 'e6473c56-5b7a-4716-aaaf-c199c2ad8d5b'
+
 properties([
    buildDiscarder(logRotator(artifactDaysToKeepStr: '5', artifactNumToKeepStr: '5', daysToKeepStr: '5', numToKeepStr: '5'))
 ])
@@ -13,37 +23,28 @@ pipeline {
     skipDefaultCheckout()
   }
 
-  environment {
-    GH_CREDS = credentials('a20ccdc0-b040-4bb8-b9e7-83ae6235b5e2')
-    //slackChannel = 'ds-nextgen-'
-    //slackTeamDomain = 'ibm-analytics'
-    //slackTokenCredentialId = '1d960160-45e6-48fe-a99c-66c1e25b4ced'
-    afaasCredentialsId = credentials('10a795c2-fc1a-4b35-a0e7-644dcfcacfb8')
-    envFile = credentials('02ff88fe-0096-42ab-884c-710a70b60be9')
-    OSSRH = '9cff6b0c-d10e-42b0-818c-dac103c109c4'
-    SIGNING = '5c0605ac-66ce-4dd7-97d9-ba9f6890ab68'
-  }
-
   stages {
     stage('Checkout') {
       steps {
+        withCredentials([usernamePassword(credentialsId: GH_CREDS, passwordVariable: 'GH_CREDS_PSW', usernameVariable: 'GH_CREDS_USR')]) {
         script {
           defaultInit()
           applyCustomizations()
           //checkoutResult = checkout scm
-          checkourResult = checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'a20ccdc0-b040-4bb8-b9e7-83ae6235b5e2', url: 'https://github.ibm.com/ibmcloud/datastage-java-sdk.git']]])
+          checkourResult = checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: GH_CREDS, url: 'https://github.com/IBM/datastage-java-sdk.git']]])
           //commitHash = "${checkoutResult.GIT_COMMIT[0..6]}"
-          sh '''
-            #git config --global user.email $GH_SDKS_AUTOMATION_MAIL
-            git config --global user.name ${GH_CREDS_USR}
-            git config --global credential.username ${GH_CREDS_USR}
-            git config --global credential.helper '!f() { echo password=\$GH_CREDS_PSW; echo; }; f'
+            sh '''
+              #git config --global user.email $GH_SDKS_AUTOMATION_MAIL
+              git config --global user.name ${GH_CREDS_USR}
+              git config --global credential.username ${GH_CREDS_USR}
+              git config --global credential.helper '!f() { echo password=\$GH_CREDS_PSW; echo; }; f'
 
-            set +e
-              pip3 install --upgrade bump2version
-              bump2version -h
-            set -e
-          '''
+              set +e
+                pip3 install --upgrade bump2version
+                bump2version -h
+              set -e
+            '''
+          }
         }
       }
     }//checkout
@@ -63,7 +64,7 @@ pipeline {
 
     stage('INTG') {
       steps {
-        withCredentials([file(credentialsId: '02ff88fe-0096-42ab-884c-710a70b60be9', variable: 'ENV_CONFIG')]) {
+        withCredentials([file(credentialsId: envFileCr, variable: 'ENV_CONFIG')]) {
             sh'''
               envFile="datastage_v3.env"
               set +e
@@ -93,7 +94,7 @@ pipeline {
       }
       steps {
         bumpVersion(true)
-        publishStaging()
+        //publishStaging()
       }
     }//publishStaging
 
@@ -190,8 +191,8 @@ void runTests() {
 }
 
 void publishStaging() {
-  withCredentials([usernamePassword(credentialsId: '10a795c2-fc1a-4b35-a0e7-644dcfcacfb8', passwordVariable: 'ARTIFACTORY_APIKEY', usernameVariable: 'ARTIFACTORY_USER')]) {
-    publishMaven('-P 10a795c2-fc1a-4b35-a0e7-644dcfcacfb8')
+  withCredentials([usernamePassword(credentialsId: afaasCredentialsId, passwordVariable: 'ARTIFACTORY_APIKEY', usernameVariable: 'ARTIFACTORY_USER')]) {
+    publishMaven('-P afaasCredentialsId')
   }
 }
 
@@ -203,7 +204,7 @@ void publishPublic() {
 
 void publishMaven(mvnArgs='') {
   withCredentials([usernamePassword(credentialsId: SIGNING, passwordVariable: 'SIGNING_PSW', usernameVariable: 'SIGNING_USR'),
-                   file(credentialsId: 'e6473c56-5b7a-4716-aaaf-c199c2ad8d5b', variable: 'SIGNING_KEYFILE')]) {
+                   file(credentialsId: SIGNING_KEYFILE, variable: 'SIGNING_KEYFILE')]) {
     sh "mvn deploy --settings build/.travis.settings.xml -DskipTests ${mvnArgs}"
   }
 }
