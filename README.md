@@ -1,6 +1,5 @@
-
-# DataStage Java SDK Version 0.0.3
-Java client library to interact with various [IBM Cloud DataStage](https://cloud.ibm.com/apidocs/datastage).
+# DataStage Java SDK Version 0.0.2
+Java client library to interact with various [IBM Cloud DataStage](https://cloud.ibm.com/apidocs?category=datastage).
 
 Disclaimer: this SDK is being released initially as a **pre-release** version.
 Changes might occur which impact applications that use this SDK.
