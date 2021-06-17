@@ -15,7 +15,7 @@
     <url>https://github.ibm.com/ibmcloud/datastage-java-sdk</url>
 
     <groupId>com.ibm.cloud</groupId>
-    <version>0.0.3</version>
+    <version>0.0.2</version>
     <packaging>pom</packaging>
 
     <properties>

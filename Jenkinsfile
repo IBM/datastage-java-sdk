@@ -37,8 +37,8 @@ pipeline {
               #git config --global user.email $GH_SDKS_AUTOMATION_MAIL
               git config --global user.name ${GH_CREDS_USR}
               git config --global credential.username ${GH_CREDS_USR}
-              git config --global credential.helper '!f() { echo password=\$GH_CREDS_PSW; echo; }; f'
-
+              git config --global credential.helper "!f() { echo password=${GH_CREDS_PSW}; echo; }; f"
+              git config --global credential.helper store
               set +e
                 pip3 install --upgrade bump2version
                 bump2version -h
@@ -69,7 +69,7 @@ pipeline {
               envFile="datastage_v3.env"
               set +e
                 pwd
-                cd datastage-java-sdk
+                #cd datastage-java-sdk
                 rm -f ${envFile}
               set -e
               touch ${envFile}
@@ -197,7 +197,7 @@ void publishStaging() {
 }
 
 void publishPublic() {
-  withCredentials([usernamePassword(credentialsId: OSSRH, passwordVariable: 'OSSRH_PASSWORD', usernameVariable: 'OSSRH_USERNAME')]) {
+  withCredentials([usernamePassword(credentialsId: '9cff6b0c-d10e-42b0-818c-dac103c109c4', passwordVariable: 'OSSRH_PASSWORD', usernameVariable: 'OSSRH_USERNAME')]) {
     publishMaven('-P central')
   }
 }
