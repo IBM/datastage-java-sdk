@@ -203,8 +203,8 @@ void publishPublic() {
 }
 
 void publishMaven(mvnArgs='') {
-  withCredentials([usernamePassword(credentialsId: SIGNING, passwordVariable: 'SIGNING_PSW', usernameVariable: 'SIGNING_USR'),
-                   file(credentialsId: SIGNING_KEYFILE, variable: 'SIGNING_KEYFILE')]) {
+  withCredentials([usernamePassword(credentialsId: '5c0605ac-66ce-4dd7-97d9-ba9f6890ab68', passwordVariable: 'SIGNING_PSW', usernameVariable: 'SIGNING_USR'),
+                   file(credentialsId: 'e6473c56-5b7a-4716-aaaf-c199c2ad8d5b', variable: 'SIGNING_KEYFILE')]) {
     sh "mvn deploy --settings build/.travis.settings.xml -DskipTests ${mvnArgs}"
   }
 }
