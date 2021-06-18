@@ -104,7 +104,7 @@ pipeline {
           // Publish master branch, but not on the version update commit after just publishing
           branch 'main'
           not {
-            changelog 'Update version.*'
+            changelog 'Update version *'
           }
         }
       }
@@ -125,6 +125,7 @@ pipeline {
               export SIGNING_PSW=${SIGNING_PSW}
               export SIGNING_KEYFILE=${SIGNING_KEYFILE}
               mvn deploy --settings build/.travis.settings.xml -DskipTests
+              mvn deploy -P central -DskipNexusStagingDeployMojo=false
           '''
           //publishDocs()
         }
