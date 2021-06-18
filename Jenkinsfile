@@ -38,7 +38,6 @@ pipeline {
               git config --global user.name ${GH_CREDS_USR}
               git config --global credential.username ${GH_CREDS_USR}
               git config --global credential.helper "!f() { echo password=${GH_CREDS_PSW}; echo; }; f"
-              git config --global credential.helper store
               set +e
                 pip3 install --upgrade bump2version
                 bump2version -h
@@ -110,13 +109,25 @@ pipeline {
         }
       }
       steps {
-        // Throw away any temporary version changes used for stage/test
-        sh 'git reset --hard'
-        bumpVersion(false)
-        // Push the version bump and release tag
-        sh 'git push --tags origin HEAD:main'
-        publishPublic()
-        //publishDocs()
+        withCredentials([usernamePassword(credentialsId: '9cff6b0c-d10e-42b0-818c-dac103c109c4', passwordVariable: 'OSSRH_PASSWORD', usernameVariable: 'OSSRH_USERNAME'),
+                         usernamePassword(credentialsId: '5c0605ac-66ce-4dd7-97d9-ba9f6890ab68', passwordVariable: 'SIGNING_PSW', usernameVariable: 'SIGNING_USR'),
+                         file(credentialsId: 'e6473c56-5b7a-4716-aaaf-c199c2ad8d5b', variable: 'SIGNING_KEYFILE')]) {
+          // Throw away any temporary version changes used for stage/test
+          sh 'git reset --hard'
+          bumpVersion(false)
+          // Push the version bump and release tag
+          sh 'git push --tags origin HEAD:main'
+          //publishPublic()
+          sh'''
+              export OSSRH_USERNAME=${OSSRH_USERNAME}
+              export OSSRH_PASSWORD=${OSSRH_PASSWORD}
+              export SIGNING_USR=${SIGNING_USR}
+              export SIGNING_PSW=${SIGNING_PSW}
+              export SIGNING_KEYFILE=${SIGNING_KEYFILE}
+              mvn deploy --settings build/.travis.settings.xml -DskipTests
+          '''
+          //publishDocs()
+        }
       }
     }//publish repository
   }
