@@ -111,6 +111,7 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: '9cff6b0c-d10e-42b0-818c-dac103c109c4', passwordVariable: 'OSSRH_PASSWORD', usernameVariable: 'OSSRH_USERNAME'),
                          usernamePassword(credentialsId: '5c0605ac-66ce-4dd7-97d9-ba9f6890ab68', passwordVariable: 'SIGNING_PSW', usernameVariable: 'SIGNING_USR'),
+                         usernamePassword(credentialsId: 'e82221fd-260f-46db-b3aa-0cf8bca0de17', passwordVariable: 'GPG_PASSPHRASE', usernameVariable: 'GPG_KEYNAME'),
                          file(credentialsId: 'e6473c56-5b7a-4716-aaaf-c199c2ad8d5b', variable: 'SIGNING_KEYFILE')]) {
           // Throw away any temporary version changes used for stage/test
           sh 'git reset --hard'
@@ -124,6 +125,8 @@ pipeline {
               export SIGNING_USR=${SIGNING_USR}
               export SIGNING_PSW=${SIGNING_PSW}
               export SIGNING_KEYFILE=${SIGNING_KEYFILE}
+              export GPG_KEYNAME=${GPG_KEYNAME}
+              export GPG_PASSPHRASE=${GPG_PASSPHRASE}
               mvn deploy --settings build/.travis.settings.xml -DskipTests
               mvn deploy -P central -DskipNexusStagingDeployMojo=false
           '''
