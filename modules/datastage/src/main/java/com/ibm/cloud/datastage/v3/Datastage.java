@@ -18,7 +18,7 @@
 package com.ibm.cloud.datastage.v3;
 
 import com.google.gson.JsonObject;
-import com.ibm.cloud.common.SdkCommon;
+import com.ibm.cloud.datastage.common.SdkCommon;
 import com.ibm.cloud.datastage.v3.model.CloneDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.model.CloneDatastageSubflowsOptions;
 import com.ibm.cloud.datastage.v3.model.CompileDatastageFlowsOptions;

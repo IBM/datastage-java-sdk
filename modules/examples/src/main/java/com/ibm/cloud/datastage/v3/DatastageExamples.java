@@ -13,6 +13,8 @@
 
 package com.ibm.cloud.datastage.v3;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ibm.cloud.datastage.v3.model.CloneDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.model.CloneDatastageSubflowsOptions;
 import com.ibm.cloud.datastage.v3.model.CompileDatastageFlowsOptions;
@@ -32,31 +34,74 @@ import com.ibm.cloud.datastage.v3.model.GetMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.ImportResponse;
 import com.ibm.cloud.datastage.v3.model.ListDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.model.ListDatastageSubflowsOptions;
+import com.ibm.cloud.datastage.v3.model.PipelineJson;
 import com.ibm.cloud.datastage.v3.model.UpdateDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.model.UpdateDatastageSubflowsOptions;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.UUID;
+
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DatastageExamples {
   private static final Logger logger = LoggerFactory.getLogger(DatastageExamples.class);
+  private static String projectID = null;
+  private static String flowID = null;
+  private static String cloneFlowID = null;
+  private static String importID = null;
+  private static String subflowID = null;
+  private static String cloneSubflowID = null;
+  private static final String flowName = "exampleFlow" + UUID.randomUUID().toString();
+  private static final String subflowName = "exampleSubFlow" + UUID.randomUUID().toString();
+
   protected DatastageExamples() { }
 
   @SuppressWarnings("checkstyle:methodlength")
   public static void main(String[] args) throws Exception {
+    InputStream flowInputStream = DatastageExamples.class.getClassLoader().getResourceAsStream("exampleFlow.json");
+    InputStream updatedFlowInputStream = DatastageExamples.class.getClassLoader().getResourceAsStream("exampleFlowUpdated.json");
+    InputStream subFlowInputStream = DatastageExamples.class.getClassLoader().getResourceAsStream("exampleSubFlow.json");
+    InputStream updatedSubFlowInputStream = DatastageExamples.class.getClassLoader().getResourceAsStream("exampleSubFlowUpdated.json");
+    InputStream rowGenIsx = DatastageExamples.class.getClassLoader().getResourceAsStream("rowgen_peek.isx");
+
+    Gson gson = new GsonBuilder().create();
+    PipelineJson exampleFlow = null;
+    PipelineJson exampleFlowUpdated = null;
+    PipelineJson exampleSubFlow = null;
+    PipelineJson exampleSubFlowUpdated = null;
+    try {
+        String exampleFlowStr = IOUtils.toString(flowInputStream, StandardCharsets.UTF_8);
+        String exampleFlowUpdatedStr = IOUtils.toString(updatedFlowInputStream, StandardCharsets.UTF_8);
+        String exampleSubFlowStr = IOUtils.toString(subFlowInputStream, StandardCharsets.UTF_8);
+        String exampleSubFlowUpdatedStr = IOUtils.toString(updatedSubFlowInputStream, StandardCharsets.UTF_8);
+
+        exampleFlow = gson.fromJson(exampleFlowStr, PipelineJson.class);
+        exampleFlowUpdated = gson.fromJson(exampleFlowUpdatedStr, PipelineJson.class);
+        exampleSubFlow = gson.fromJson(exampleSubFlowStr, PipelineJson.class);
+        exampleSubFlowUpdated = gson.fromJson(exampleSubFlowUpdatedStr, PipelineJson.class);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     Datastage service = Datastage.newInstance();
 
     // Load up our test-specific config properties.
     Map<String, String> config = CredentialUtils.getServiceProperties(Datastage.DEFAULT_SERVICE_NAME);
+    projectID = config.get("PROJECT_ID");
 
     try {
       // begin-list_datastage_flows
       ListDatastageFlowsOptions listDatastageFlowsOptions = new ListDatastageFlowsOptions.Builder()
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
-        .limit(Long.valueOf("100"))
+        .projectId(projectID)
+        .limit(Long.valueOf("10"))
         .build();
 
       Response<DataFlowPagedCollection> response = service.listDatastageFlows(listDatastageFlowsOptions).execute();
@@ -72,13 +117,17 @@ public class DatastageExamples {
     try {
       // begin-create_datastage_flows
       CreateDatastageFlowsOptions createDatastageFlowsOptions = new CreateDatastageFlowsOptions.Builder()
-        .dataIntgFlowName("testString")
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .dataIntgFlowName(flowName)
+        .pipelineFlows(exampleFlow)
+        .projectId(projectID)
         .build();
 
       Response<DataIntgFlow> response = service.createDatastageFlows(createDatastageFlowsOptions).execute();
       DataIntgFlow dataIntgFlow = response.getResult();
-
+      if (dataIntgFlow != null && dataIntgFlow.getMetadata() != null) {
+        flowID = dataIntgFlow.getMetadata().getAssetId();
+      }
+      System.out.println("example flow string " + exampleFlow);
       System.out.println(dataIntgFlow);
       // end-create_datastage_flows
     } catch (ServiceResponseException e) {
@@ -89,8 +138,8 @@ public class DatastageExamples {
     try {
       // begin-get_datastage_flows
       GetDatastageFlowsOptions getDatastageFlowsOptions = new GetDatastageFlowsOptions.Builder()
-        .dataIntgFlowId("testString")
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .dataIntgFlowId(flowID)
+        .projectId(projectID)
         .build();
 
       Response<DataIntgFlowJson> response = service.getDatastageFlows(getDatastageFlowsOptions).execute();
@@ -106,9 +155,10 @@ public class DatastageExamples {
     try {
       // begin-update_datastage_flows
       UpdateDatastageFlowsOptions updateDatastageFlowsOptions = new UpdateDatastageFlowsOptions.Builder()
-        .dataIntgFlowId("testString")
-        .dataIntgFlowName("testString")
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .dataIntgFlowId(flowID)
+        .dataIntgFlowName(flowName)
+        .pipelineFlows(exampleFlowUpdated)
+        .projectId(projectID)
         .build();
 
       Response<DataIntgFlow> response = service.updateDatastageFlows(updateDatastageFlowsOptions).execute();
@@ -124,13 +174,15 @@ public class DatastageExamples {
     try {
       // begin-clone_datastage_flows
       CloneDatastageFlowsOptions cloneDatastageFlowsOptions = new CloneDatastageFlowsOptions.Builder()
-        .dataIntgFlowId("testString")
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .dataIntgFlowId(flowID)
+        .projectId(projectID)
         .build();
 
       Response<DataIntgFlow> response = service.cloneDatastageFlows(cloneDatastageFlowsOptions).execute();
       DataIntgFlow dataIntgFlow = response.getResult();
-
+      if (dataIntgFlow != null && dataIntgFlow.getMetadata() != null) {
+        cloneFlowID = dataIntgFlow.getMetadata().getAssetId();
+      }
       System.out.println(dataIntgFlow);
       // end-clone_datastage_flows
     } catch (ServiceResponseException e) {
@@ -141,8 +193,8 @@ public class DatastageExamples {
     try {
       // begin-compile_datastage_flows
       CompileDatastageFlowsOptions compileDatastageFlowsOptions = new CompileDatastageFlowsOptions.Builder()
-        .dataIntgFlowId("testString")
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .dataIntgFlowId(flowID)
+        .projectId(projectID)
         .build();
 
       Response<FlowCompileResponse> response = service.compileDatastageFlows(compileDatastageFlowsOptions).execute();
@@ -158,7 +210,7 @@ public class DatastageExamples {
     try {
       // begin-list_datastage_subflows
       ListDatastageSubflowsOptions listDatastageSubflowsOptions = new ListDatastageSubflowsOptions.Builder()
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .projectId(projectID)
         .limit(Long.valueOf("100"))
         .build();
 
@@ -175,13 +227,16 @@ public class DatastageExamples {
     try {
       // begin-create_datastage_subflows
       CreateDatastageSubflowsOptions createDatastageSubflowsOptions = new CreateDatastageSubflowsOptions.Builder()
-        .dataIntgSubflowName("testString")
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .dataIntgSubflowName(subflowName)
+        .pipelineFlows(exampleSubFlow)
+        .projectId(projectID)
         .build();
 
       Response<DataIntgFlow> response = service.createDatastageSubflows(createDatastageSubflowsOptions).execute();
       DataIntgFlow dataIntgFlow = response.getResult();
-
+      if (dataIntgFlow != null && dataIntgFlow.getMetadata() != null) {
+        subflowID = dataIntgFlow.getMetadata().getAssetId();
+      }
       System.out.println(dataIntgFlow);
       // end-create_datastage_subflows
     } catch (ServiceResponseException e) {
@@ -192,8 +247,8 @@ public class DatastageExamples {
     try {
       // begin-get_datastage_subflows
       GetDatastageSubflowsOptions getDatastageSubflowsOptions = new GetDatastageSubflowsOptions.Builder()
-        .dataIntgSubflowId("testString")
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .dataIntgSubflowId(subflowID)
+        .projectId(projectID)
         .build();
 
       Response<DataIntgFlowJson> response = service.getDatastageSubflows(getDatastageSubflowsOptions).execute();
@@ -209,9 +264,10 @@ public class DatastageExamples {
     try {
       // begin-update_datastage_subflows
       UpdateDatastageSubflowsOptions updateDatastageSubflowsOptions = new UpdateDatastageSubflowsOptions.Builder()
-        .dataIntgSubflowId("testString")
-        .dataIntgSubflowName("testString")
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .dataIntgSubflowId(subflowID)
+        .dataIntgSubflowName(subflowName)
+        .pipelineFlows(exampleSubFlowUpdated)
+        .projectId(projectID)
         .build();
 
       Response<DataIntgFlow> response = service.updateDatastageSubflows(updateDatastageSubflowsOptions).execute();
@@ -227,13 +283,15 @@ public class DatastageExamples {
     try {
       // begin-clone_datastage_subflows
       CloneDatastageSubflowsOptions cloneDatastageSubflowsOptions = new CloneDatastageSubflowsOptions.Builder()
-        .dataIntgSubflowId("testString")
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .dataIntgSubflowId(subflowID)
+        .projectId(projectID)
         .build();
 
       Response<DataIntgFlow> response = service.cloneDatastageSubflows(cloneDatastageSubflowsOptions).execute();
       DataIntgFlow dataIntgFlow = response.getResult();
-
+      if (dataIntgFlow != null && dataIntgFlow.getMetadata() != null) {
+        cloneSubflowID = dataIntgFlow.getMetadata().getAssetId();
+      }
       System.out.println(dataIntgFlow);
       // end-clone_datastage_subflows
     } catch (ServiceResponseException e) {
@@ -244,17 +302,19 @@ public class DatastageExamples {
     try {
       // begin-create_migration
       CreateMigrationOptions createMigrationOptions = new CreateMigrationOptions.Builder()
-        .body(new java.io.ByteArrayInputStream("This is a mock file.".getBytes()))
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .body(rowGenIsx)
+        .projectId(projectID)
         .onFailure("continue")
         .conflictResolution("rename")
         .attachmentType("isx")
-        .fileName("myFlows.isx")
+        .fileName("rowgen_peek.isx")
         .build();
 
       Response<ImportResponse> response = service.createMigration(createMigrationOptions).execute();
       ImportResponse importResponse = response.getResult();
-
+      if (importResponse != null && importResponse.getMetadata() != null) {
+        importID = importResponse.getMetadata().getId();
+      }
       System.out.println(importResponse);
       // end-create_migration
     } catch (ServiceResponseException e) {
@@ -265,8 +325,8 @@ public class DatastageExamples {
     try {
       // begin-get_migration
       GetMigrationOptions getMigrationOptions = new GetMigrationOptions.Builder()
-        .importId("testString")
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .importId(importID)
+        .projectId(projectID)
         .build();
 
       Response<ImportResponse> response = service.getMigration(getMigrationOptions).execute();
@@ -282,8 +342,8 @@ public class DatastageExamples {
     try {
       // begin-delete_migration
       DeleteMigrationOptions deleteMigrationOptions = new DeleteMigrationOptions.Builder()
-        .importId("cc6dbbfd-810d-4f0e-b0a9-228c328aff29")
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .importId(importID)
+        .projectId(projectID)
         .build();
 
       service.deleteMigration(deleteMigrationOptions).execute();
@@ -295,9 +355,10 @@ public class DatastageExamples {
 
     try {
       // begin-delete_datastage_subflows
+      String[] ids = new String[] {subflowID, cloneSubflowID};
       DeleteDatastageSubflowsOptions deleteDatastageSubflowsOptions = new DeleteDatastageSubflowsOptions.Builder()
-        .id(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .id(Arrays.asList(ids))
+        .projectId(projectID)
         .build();
 
       service.deleteDatastageSubflows(deleteDatastageSubflowsOptions).execute();
@@ -309,9 +370,10 @@ public class DatastageExamples {
 
     try {
       // begin-delete_datastage_flows
+      String[] ids = new String[] {flowID, cloneFlowID};
       DeleteDatastageFlowsOptions deleteDatastageFlowsOptions = new DeleteDatastageFlowsOptions.Builder()
-        .id(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
-        .projectId("bd0dbbfd-810d-4f0e-b0a9-228c328a8e23")
+        .id(Arrays.asList(ids))
+        .projectId(projectID)
         .build();
 
       service.deleteDatastageFlows(deleteDatastageFlowsOptions).execute();

@@ -2,35 +2,21 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- >>> Replace this with your service category (e.g. "platform-services") -->
     <artifactId>datastage-sdk</artifactId>
-
-    <!-- >>> Update this field to reflect your project -->
-    <name>DataStage Java SDK</name>
-
-    <!-- >>> Update this field to reflect your project -->
-    <description>Java Client Library to access the IBM Cloud DataStage</description>
-
-    <!-- >>> Update this field to reflect your project's github URL -->
-    <url>https://github.ibm.com/ibmcloud/datastage-java-sdk</url>
-
     <groupId>com.ibm.cloud</groupId>
     <version>99-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <name>DataStage Java SDK</name>
+
+    <description>Java Client Library to access the IBM Cloud DataStage</description>
+
+    <url>https://github.com/IBM/datastage-java-sdk</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!--
-            This is the version associated with the Java core. The version used here should be compatible with the version
-            of the SDK generator used to generate your SDK code.
-            See this link for details: https://github.ibm.com/CloudEngineering/openapi-sdkgen/wiki/Compatibility-Chart
-        -->
         <sdk-core-version>9.10.3</sdk-core-version>
-
-        <!-- >>> Replace this with the name of your SDK's github repository -->
         <git-repository-name>datastage-java-sdk</git-repository-name>
-
         <testng-version>7.1.0</testng-version>
         <okhttp3-version>4.9.0</okhttp3-version>
         <surefire-version>3.0.0-M3</surefire-version>
@@ -56,16 +42,10 @@
     <modules>
         <!-- This module should always be listed first -->
         <module>modules/common</module>
-
-        <!-- >>> List each service's module here -->
-        <!-- i.e. <module>modules/example-service</module> -->
-
-        <!-- This module should always be listed last -->
-        <!-- >>> Uncomment the following line if you want to build the examples -->
         <module>modules/datastage</module>
-
 	<!-- This module should be listed after all the service-related modules above -->
         <module>modules/coverage-reports</module>
+        <module>modules/examples</module>
     </modules>
 
     <licenses>
@@ -79,17 +59,15 @@
         <name>IBM Cloud</name>
     </organization>
 
-    <!-- >>> Update these values to reflect your project -->
     <scm>
-        <connection>scm:git:https://github.ibm.com/ibmcloud/datastage-java-sdk</connection>
-        <developerConnection>scm:git:https://github.ibm.com/ibmcloud/datastage-java-sdk</developerConnection>
-        <url>https://github.ibm.com/ibmcloud/datastage-java-sdk/tree/main</url>
+        <connection>scm:git:https://github.com/IBM/datastage-java-sdk</connection>
+        <developerConnection>scm:git:https://github.com/IBM/datastage-java-sdk</developerConnection>
+        <url>https://github.com/IBM/datastage-java-sdk/tree/main</url>
     </scm>
 
-    <!-- >>> Update these values to reflect your project -->
     <issueManagement>
         <system>Github</system>
-        <url>https://github.ibm.com/ibmcloud/datastage-java-sdk/issues</url>
+        <url>https://github.com/IBM/datastage-java-sdk/issues</url>
     </issueManagement>
 
     <!-- >>> Update these values to reflect your project -->
@@ -97,14 +75,6 @@
         <system>Travis-CI</system>
         <url>https://travis.ibm.com/ibmcloud/datastage-java-sdk/</url>
     </ciManagement>
-
-    <repositories>
-        <!-- these definitions are useful only for internal SDK projects -->
-        <repository>
-            <id>na-artifactory-ibmcloud-sdks</id>
-            <url>https://na.artifactory.swg-devops.com:443/artifactory/wcp-ibmcloud-sdks-team-maven-local/</url>
-        </repository>
-    </repositories>
 
     <!-- This section is commented out because we use an alternate deploy plugin.
     <distributionManagement>
