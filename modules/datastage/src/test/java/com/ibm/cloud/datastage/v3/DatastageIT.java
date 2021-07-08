@@ -104,7 +104,6 @@ public class DatastageIT extends SdkIntegrationTestBase {
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
 
-//    PipelineFlowHelper pipelineFlowHelper = new PipelineFlowHelper();
     InputStream flowInputStream = this.getClass().getClassLoader().getResourceAsStream("exampleFlow.json");
     InputStream updatedFlowInputStream = this.getClass().getClassLoader().getResourceAsStream("exampleFlowUpdated.json");
     InputStream subFlowInputStream = this.getClass().getClassLoader().getResourceAsStream("exampleSubFlow.json");
@@ -128,7 +127,7 @@ public class DatastageIT extends SdkIntegrationTestBase {
     try {
       ListDatastageFlowsOptions datastageFlowsListOptions = new ListDatastageFlowsOptions.Builder()
       .projectId(PROJECT_ID)
-      .limit(Long.valueOf("1"))
+      .limit(Long.valueOf("100"))
       .build();
 
       // Invoke operation
