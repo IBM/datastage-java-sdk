@@ -13,8 +13,8 @@
 
 package com.ibm.cloud.datastage.v3;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ibm.cloud.datastage.test.SdkIntegrationTestBase;
 import com.ibm.cloud.datastage.v3.model.CloneDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.model.CloneDatastageSubflowsOptions;
@@ -41,7 +41,6 @@ import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 import org.testng.annotations.AfterClass;
@@ -50,6 +49,8 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
@@ -103,22 +104,22 @@ public class DatastageIT extends SdkIntegrationTestBase {
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
 
+//    PipelineFlowHelper pipelineFlowHelper = new PipelineFlowHelper();
     InputStream flowInputStream = this.getClass().getClassLoader().getResourceAsStream("exampleFlow.json");
     InputStream updatedFlowInputStream = this.getClass().getClassLoader().getResourceAsStream("exampleFlowUpdated.json");
     InputStream subFlowInputStream = this.getClass().getClassLoader().getResourceAsStream("exampleSubFlow.json");
     InputStream updatedSubFlowInputStream = this.getClass().getClassLoader().getResourceAsStream("exampleSubFlowUpdated.json");
 
-    String exampleFlowStr = IOUtils.toString(flowInputStream, StandardCharsets.UTF_8);
-    String exampleFlowUpdatedStr = IOUtils.toString(updatedFlowInputStream, StandardCharsets.UTF_8);
-    String exampleSubFlowStr = IOUtils.toString(subFlowInputStream, StandardCharsets.UTF_8);
-    String exampleSubFlowUpdatedStr = IOUtils.toString(updatedSubFlowInputStream, StandardCharsets.UTF_8);
+    JsonObject flowJson = JsonParser.parseReader(new InputStreamReader(flowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
+    JsonObject updatedFlowJson = JsonParser.parseReader(new InputStreamReader(updatedFlowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
+    JsonObject subFlowJson = JsonParser.parseReader(new InputStreamReader(subFlowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
+    JsonObject updatedSubFlowJson = JsonParser.parseReader(new InputStreamReader(updatedSubFlowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
 
+    exampleFlow = PipelineFlowHelper.buildPipelineFlow(flowJson);
+    exampleFlowUpdated = PipelineFlowHelper.buildPipelineFlow(updatedFlowJson);
+    exampleSubFlow = PipelineFlowHelper.buildPipelineFlow(subFlowJson);
+    exampleSubFlowUpdated = PipelineFlowHelper.buildPipelineFlow(updatedSubFlowJson);
     rowGenIsx = this.getClass().getClassLoader().getResourceAsStream("rowgen_peek.isx");
-    Gson gson = new GsonBuilder().create();
-    exampleFlow = gson.fromJson(exampleFlowStr, PipelineJson.class);
-    exampleFlowUpdated = gson.fromJson(exampleFlowUpdatedStr, PipelineJson.class);
-    exampleSubFlow = gson.fromJson(exampleSubFlowStr, PipelineJson.class);
-    exampleSubFlowUpdated = gson.fromJson(exampleSubFlowUpdatedStr, PipelineJson.class);
     System.out.println("Setup complete.");
   }
 
@@ -127,7 +128,7 @@ public class DatastageIT extends SdkIntegrationTestBase {
     try {
       ListDatastageFlowsOptions datastageFlowsListOptions = new ListDatastageFlowsOptions.Builder()
       .projectId(PROJECT_ID)
-      .limit(Long.valueOf("100"))
+      .limit(Long.valueOf("1"))
       .build();
 
       // Invoke operation

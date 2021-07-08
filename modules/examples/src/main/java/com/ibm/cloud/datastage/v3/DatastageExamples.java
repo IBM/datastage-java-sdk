@@ -14,7 +14,8 @@
 package com.ibm.cloud.datastage.v3;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ibm.cloud.datastage.v3.model.CloneDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.model.CloneDatastageSubflowsOptions;
 import com.ibm.cloud.datastage.v3.model.CompileDatastageFlowsOptions;
@@ -43,11 +44,13 @@ import com.ibm.cloud.sdk.core.util.CredentialUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
+import com.ibm.cloud.sdk.core.util.GsonSingleton;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,24 +76,10 @@ public class DatastageExamples {
     InputStream updatedSubFlowInputStream = DatastageExamples.class.getClassLoader().getResourceAsStream("exampleSubFlowUpdated.json");
     InputStream rowGenIsx = DatastageExamples.class.getClassLoader().getResourceAsStream("rowgen_peek.isx");
 
-    Gson gson = new GsonBuilder().create();
-    PipelineJson exampleFlow = null;
-    PipelineJson exampleFlowUpdated = null;
-    PipelineJson exampleSubFlow = null;
-    PipelineJson exampleSubFlowUpdated = null;
-    try {
-        String exampleFlowStr = IOUtils.toString(flowInputStream, StandardCharsets.UTF_8);
-        String exampleFlowUpdatedStr = IOUtils.toString(updatedFlowInputStream, StandardCharsets.UTF_8);
-        String exampleSubFlowStr = IOUtils.toString(subFlowInputStream, StandardCharsets.UTF_8);
-        String exampleSubFlowUpdatedStr = IOUtils.toString(updatedSubFlowInputStream, StandardCharsets.UTF_8);
-
-        exampleFlow = gson.fromJson(exampleFlowStr, PipelineJson.class);
-        exampleFlowUpdated = gson.fromJson(exampleFlowUpdatedStr, PipelineJson.class);
-        exampleSubFlow = gson.fromJson(exampleSubFlowStr, PipelineJson.class);
-        exampleSubFlowUpdated = gson.fromJson(exampleSubFlowUpdatedStr, PipelineJson.class);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+    JsonObject flowJson = JsonParser.parseReader(new InputStreamReader(flowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
+    JsonObject updatedFlowJson = JsonParser.parseReader(new InputStreamReader(updatedFlowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
+    JsonObject subFlowJson = JsonParser.parseReader(new InputStreamReader(subFlowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
+    JsonObject updatedSubFlowJson = JsonParser.parseReader(new InputStreamReader(updatedSubFlowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
     Datastage service = Datastage.newInstance();
 
     // Load up our test-specific config properties.
@@ -116,6 +105,7 @@ public class DatastageExamples {
 
     try {
       // begin-create_datastage_flows
+      PipelineJson exampleFlow = PipelineFlowHelper.buildPipelineFlow(flowJson);
       CreateDatastageFlowsOptions createDatastageFlowsOptions = new CreateDatastageFlowsOptions.Builder()
         .dataIntgFlowName(flowName)
         .pipelineFlows(exampleFlow)
@@ -154,6 +144,7 @@ public class DatastageExamples {
 
     try {
       // begin-update_datastage_flows
+      PipelineJson exampleFlowUpdated = PipelineFlowHelper.buildPipelineFlow(updatedFlowJson);
       UpdateDatastageFlowsOptions updateDatastageFlowsOptions = new UpdateDatastageFlowsOptions.Builder()
         .dataIntgFlowId(flowID)
         .dataIntgFlowName(flowName)
@@ -226,6 +217,7 @@ public class DatastageExamples {
 
     try {
       // begin-create_datastage_subflows
+      PipelineJson exampleSubFlow = PipelineFlowHelper.buildPipelineFlow(subFlowJson);
       CreateDatastageSubflowsOptions createDatastageSubflowsOptions = new CreateDatastageSubflowsOptions.Builder()
         .dataIntgSubflowName(subflowName)
         .pipelineFlows(exampleSubFlow)
@@ -263,6 +255,7 @@ public class DatastageExamples {
 
     try {
       // begin-update_datastage_subflows
+      PipelineJson exampleSubFlowUpdated = PipelineFlowHelper.buildPipelineFlow(updatedSubFlowJson);
       UpdateDatastageSubflowsOptions updateDatastageSubflowsOptions = new UpdateDatastageSubflowsOptions.Builder()
         .dataIntgSubflowId(subflowID)
         .dataIntgSubflowName(subflowName)
