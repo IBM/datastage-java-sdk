@@ -11,7 +11,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-class PipelineFlowHelper {
+final class PipelineFlowHelper {
+    private PipelineFlowHelper() {
+
+    }
     public static PipelineJson buildPipelineFlow(JsonObject pipelineFlow) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonArray pipelines = pipelineFlow.getAsJsonArray("pipelines");
