@@ -5,7 +5,7 @@
     <parent>
         <artifactId>datastage-sdk</artifactId>
         <groupId>com.ibm.cloud</groupId>
-        <version>99-SNAPSHOT</version>
+        <version>0.0.7</version>
         <relativePath>../..</relativePath>
     </parent>
 

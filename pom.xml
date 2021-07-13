@@ -4,7 +4,7 @@
 
     <artifactId>datastage-sdk</artifactId>
     <groupId>com.ibm.cloud</groupId>
-    <version>99-SNAPSHOT</version>
+    <version>0.0.7</version>
     <packaging>pom</packaging>
 
     <name>DataStage Java SDK</name>
