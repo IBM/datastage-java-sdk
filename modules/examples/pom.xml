@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>my-services</artifactId>
+        <artifactId>datastage-sdk</artifactId>
         <groupId>com.ibm.cloud</groupId>
-        <version>99-SNAPSHOT</version>
+        <version>0.0.7</version>
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>my-services-examples</artifactId>
+    <artifactId>datastage-examples</artifactId>
     <packaging>jar</packaging>
     <name>Code Examples</name>
 
@@ -23,7 +23,11 @@
             below should reflect the "artifactId" value specified in each module's pom.xml file (i.e. not the module's directory name). -->
         <dependency>
             <groupId>com.ibm.cloud</groupId>
-            <artifactId>example-service</artifactId>
+            <artifactId>sdk-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>datastage</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -45,7 +49,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.ibm.cloud.my_services.example_service.v1.ExampleServiceExamples</mainClass>
+                            <mainClass>com.ibm.cloud.datastage.v3.DatastageExamples</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

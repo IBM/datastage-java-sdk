@@ -13,9 +13,8 @@
 
 package com.ibm.cloud.datastage.v3;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ibm.cloud.datastage.test.SdkIntegrationTestBase;
 import com.ibm.cloud.datastage.v3.model.CloneDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.model.CloneDatastageSubflowsOptions;
@@ -26,13 +25,6 @@ import com.ibm.cloud.datastage.v3.model.CreateMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.DataFlowPagedCollection;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlow;
 import com.ibm.cloud.datastage.v3.model.DataIntgFlowJson;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsCloneOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsCompileOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsCreateOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsDeleteOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsGetOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsListOptions;
-import com.ibm.cloud.datastage.v3.model.DatastageFlowsUpdateOptions;
 import com.ibm.cloud.datastage.v3.model.DeleteDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.model.DeleteDatastageSubflowsOptions;
 import com.ibm.cloud.datastage.v3.model.DeleteMigrationOptions;
@@ -42,39 +34,28 @@ import com.ibm.cloud.datastage.v3.model.GetMigrationOptions;
 import com.ibm.cloud.datastage.v3.model.ImportResponse;
 import com.ibm.cloud.datastage.v3.model.ListDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.model.ListDatastageSubflowsOptions;
-import com.ibm.cloud.datastage.v3.model.MigrationCreateOptions;
-import com.ibm.cloud.datastage.v3.model.MigrationDeleteOptions;
-import com.ibm.cloud.datastage.v3.model.MigrationGetOptions;
 import com.ibm.cloud.datastage.v3.model.PipelineJson;
-import com.ibm.cloud.datastage.v3.model.Pipelines;
 import com.ibm.cloud.datastage.v3.model.UpdateDatastageFlowsOptions;
 import com.ibm.cloud.datastage.v3.model.UpdateDatastageSubflowsOptions;
-import com.ibm.cloud.datastage.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
-import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static java.lang.Thread.sleep;
 import static org.testng.Assert.*;
 
 /**
@@ -91,18 +72,12 @@ public class DatastageIT extends SdkIntegrationTestBase {
   private static String DATASTAGE_FLOW_ID_MIGRATION = null;
   private static String DATASTAGE_SUBFLOW_ID = null;
   private static String DATASTAGE_SUBFLOW_ID_CLONE = null;
-  private static List<Object> nodes = null;
-  private static Object appData = null;
-  private static List<Object> schemas = null;
-  private static List<Object> schemasUpdated = null;
-  private static List<Object> nodesSubFlow = null;
-  private static Object appDataSubFlow = null;
-  private static List<Object> schemasSubFlow = null;
-  private static List<Object> schemasSubFlowUpdated = null;
+  private PipelineJson exampleFlow = null;
+  private PipelineJson exampleFlowUpdated = null;
+  private PipelineJson exampleSubFlow = null;
+  private PipelineJson exampleSubFlowUpdated = null;
   private InputStream rowGenIsx = null;
   private static String importId = null;
-  final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
-  final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
   /**
    * This method provides our config filename to the base class.
    */
@@ -129,33 +104,21 @@ public class DatastageIT extends SdkIntegrationTestBase {
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
 
-    ObjectMapper mapper = new ObjectMapper();
-    InputStream nodeStream = this.getClass().getClassLoader().getResourceAsStream("nodes.json");
-    InputStream appDataStream = this.getClass().getClassLoader().getResourceAsStream("appdata.json");
-    InputStream schemaStream = this.getClass().getClassLoader().getResourceAsStream("schemas.json");
-    InputStream schemaStreamForUpdate = this.getClass().getClassLoader().getResourceAsStream("schemas_updated.json");
-    rowGenIsx = this.getClass().getClassLoader().getResourceAsStream("rowgen_peek.isx");
-    String nodesStr = IOUtils.toString(nodeStream, StandardCharsets.UTF_8);
-    String appDataStr = IOUtils.toString(appDataStream, StandardCharsets.UTF_8);
-    String schemaStr = IOUtils.toString(schemaStream, StandardCharsets.UTF_8);
-    String schemaStrForUpdate = IOUtils.toString(schemaStreamForUpdate, StandardCharsets.UTF_8);
-    nodes = mapper.readValue(nodesStr, new TypeReference<List<Object>>(){});
-    appData = mapper.readValue(appDataStr, Object.class);
-    schemas = mapper.readValue(schemaStr, new TypeReference<List<Object>>(){});
-    schemasUpdated = mapper.readValue(schemaStrForUpdate, new TypeReference<List<Object>>(){});
+    InputStream flowInputStream = this.getClass().getClassLoader().getResourceAsStream("exampleFlow.json");
+    InputStream updatedFlowInputStream = this.getClass().getClassLoader().getResourceAsStream("exampleFlowUpdated.json");
+    InputStream subFlowInputStream = this.getClass().getClassLoader().getResourceAsStream("exampleSubFlow.json");
+    InputStream updatedSubFlowInputStream = this.getClass().getClassLoader().getResourceAsStream("exampleSubFlowUpdated.json");
 
-    InputStream nodeSubFlowStream = this.getClass().getClassLoader().getResourceAsStream("nodes_subflow.json");
-    InputStream appDataSubFlowStream = this.getClass().getClassLoader().getResourceAsStream("appdata_subflow.json");
-    InputStream schemaSubFlowStream = this.getClass().getClassLoader().getResourceAsStream("schemas_subflow.json");
-    InputStream schemaSubFlowStreamForUpdate = this.getClass().getClassLoader().getResourceAsStream("schemas_subflow_updated.json");
-    String nodesSubFlowStr = IOUtils.toString(nodeSubFlowStream, StandardCharsets.UTF_8);
-    String appDataSubFlowStr = IOUtils.toString(appDataSubFlowStream, StandardCharsets.UTF_8);
-    String schemaSubFlowStr = IOUtils.toString(schemaSubFlowStream, StandardCharsets.UTF_8);
-    String schemaSubFlowStrForUpdate = IOUtils.toString(schemaSubFlowStreamForUpdate, StandardCharsets.UTF_8);
-    nodesSubFlow = mapper.readValue(nodesSubFlowStr, new TypeReference<List<Object>>(){});
-    appDataSubFlow = mapper.readValue(appDataSubFlowStr, Object.class);
-    schemasSubFlow = mapper.readValue(schemaSubFlowStr, new TypeReference<List<Object>>(){});
-    schemasSubFlowUpdated = mapper.readValue(schemaSubFlowStrForUpdate, new TypeReference<List<Object>>(){});
+    JsonObject flowJson = JsonParser.parseReader(new InputStreamReader(flowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
+    JsonObject updatedFlowJson = JsonParser.parseReader(new InputStreamReader(updatedFlowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
+    JsonObject subFlowJson = JsonParser.parseReader(new InputStreamReader(subFlowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
+    JsonObject updatedSubFlowJson = JsonParser.parseReader(new InputStreamReader(updatedSubFlowInputStream, StandardCharsets.UTF_8)).getAsJsonObject();
+
+    exampleFlow = PipelineFlowHelper.buildPipelineFlow(flowJson);
+    exampleFlowUpdated = PipelineFlowHelper.buildPipelineFlow(updatedFlowJson);
+    exampleSubFlow = PipelineFlowHelper.buildPipelineFlow(subFlowJson);
+    exampleSubFlowUpdated = PipelineFlowHelper.buildPipelineFlow(updatedSubFlowJson);
+    rowGenIsx = this.getClass().getClassLoader().getResourceAsStream("rowgen_peek.isx");
     System.out.println("Setup complete.");
   }
 
@@ -184,27 +147,9 @@ public class DatastageIT extends SdkIntegrationTestBase {
   @Test
   public void test02DatastageFlowsCreate() throws Exception {
     try {
-      Pipelines pipelinesModel = new Pipelines.Builder()
-      .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-      .description("A test DataStage flow")
-      .runtimeRef("pxOsh")
-      .nodes(nodes)
-      .appData((Map<String, Object>) appData)
-      .build();
-
-      PipelineJson pipelineJsonModel = new PipelineJson.Builder()
-      .docType("pipeline")
-      .version("3.0")
-      .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
-      .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
-      .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-      .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-      .schemas(schemas)
-      .build();
-
       CreateDatastageFlowsOptions datastageFlowsCreateOptions = new CreateDatastageFlowsOptions.Builder()
-      .dataIntgFlowName("testIntegrationFlow" + UUID.randomUUID().toString())
-      .pipelineFlows(pipelineJsonModel)
+      .dataIntgFlowName("exampleFlow" + UUID.randomUUID().toString())
+      .pipelineFlows(exampleFlow)
       .projectId(PROJECT_ID)
       .assetCategory("system")
       .build();
@@ -252,28 +197,10 @@ public class DatastageIT extends SdkIntegrationTestBase {
   @Test
   public void test04DatastageFlowsUpdate() throws Exception {
     try {
-      Pipelines pipelinesModel = new Pipelines.Builder()
-      .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-      .description("A test DataStage flow updated")
-      .runtimeRef("pxOsh")
-      .nodes(nodes)
-      .appData((Map<String, Object>) appData)
-      .build();
-
-      PipelineJson pipelineJsonModel = new PipelineJson.Builder()
-      .docType("pipeline")
-      .version("3.0")
-      .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
-      .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
-      .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-      .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-      .schemas(schemasUpdated)
-      .build();
-
       UpdateDatastageFlowsOptions datastageFlowsUpdateOptions = new UpdateDatastageFlowsOptions.Builder()
       .dataIntgFlowId(DATASTAGE_FLOW_ID)
-      .dataIntgFlowName("testString" + UUID.randomUUID().toString())
-      .pipelineFlows(pipelineJsonModel)
+      .dataIntgFlowName("exampleFlowUpdated" + UUID.randomUUID().toString())
+      .pipelineFlows(exampleFlowUpdated)
       .projectId(PROJECT_ID)
       .build();
       // Invoke operation
@@ -469,27 +396,9 @@ public class DatastageIT extends SdkIntegrationTestBase {
   @Test
   public void test12DataStageSubFlowsCreate() {
     try {
-      Pipelines pipelinesModel = new Pipelines.Builder()
-              .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-              .description("A test DataStage subflow")
-              .runtimeRef("pxOsh")
-              .nodes(nodes)
-              .appData((Map<String, Object>) appDataSubFlow)
-              .build();
-
-      PipelineJson pipelineJsonModel = new PipelineJson.Builder()
-              .docType("subpipeline")
-              .version("3.0")
-              .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
-              .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
-              .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-              .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-              .schemas(schemas)
-              .build();
-
       CreateDatastageSubflowsOptions datastageSubFlowsCreateOptions = new CreateDatastageSubflowsOptions.Builder()
-              .dataIntgSubflowName("testIntegrationSubFlow" + UUID.randomUUID().toString())
-              .pipelineFlows(pipelineJsonModel)
+              .dataIntgSubflowName("exampleSubFlow" + UUID.randomUUID().toString())
+              .pipelineFlows(exampleSubFlow)
               .projectId(PROJECT_ID)
               .assetCategory("system")
               .build();
@@ -514,28 +423,10 @@ public class DatastageIT extends SdkIntegrationTestBase {
   @Test
   public void test13DatastageSubFlowsUpdate() throws Exception {
     try {
-      Pipelines pipelinesModel = new Pipelines.Builder()
-              .id("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-              .description("A test DataStage subflow updated")
-              .runtimeRef("pxOsh")
-              .nodes(nodesSubFlow)
-              .appData((Map<String, Object>) appDataSubFlow)
-              .build();
-
-      PipelineJson pipelineJsonModel = new PipelineJson.Builder()
-              .docType("subpipeline")
-              .version("3.0")
-              .jsonSchema("http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json")
-              .id("84c2b6fb-1dd5-4114-b4ba-9bb2cb364fff")
-              .primaryPipeline("fa1b859a-d592-474d-b56c-2137e4efa4bc")
-              .pipelines(new java.util.ArrayList<Pipelines>(java.util.Arrays.asList(pipelinesModel)))
-              .schemas(schemasSubFlowUpdated)
-              .build();
-
       UpdateDatastageSubflowsOptions datastageSubFlowsUpdateOptions = new UpdateDatastageSubflowsOptions.Builder()
               .dataIntgSubflowId(DATASTAGE_SUBFLOW_ID)
-              .dataIntgSubflowName("testSubFlowString" + UUID.randomUUID())
-              .pipelineFlows(pipelineJsonModel)
+              .dataIntgSubflowName("exampleSubFlowUpdated" + UUID.randomUUID())
+              .pipelineFlows(exampleSubFlowUpdated)
               .projectId(PROJECT_ID)
               .build();
       // Invoke operation

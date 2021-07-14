@@ -1,8 +1,0 @@
-{
-  "datastage": {
-    "runtimecolumnpropagation": "true"
-  },
-  "ui_data": {
-    "comments": []
-  }
-}
